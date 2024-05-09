@@ -18,11 +18,12 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.11'
+        python-version: '3.12'
     - name: Install Dependencies
       run: |
+        cd Django-Shop
         python -m pip install --upgrade pip
-        pip install -r Django-Shop/requirements.txt
+        pip install -r requirements.txt
     - name: Run Tests
       run: |
         python manage.py test
