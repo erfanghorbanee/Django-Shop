@@ -43,6 +43,9 @@ INSTALLED_APPS = [
     "allauth.account",
     "allauth.socialaccount",
     'allauth.socialaccount.providers.google',
+
+    # custom apps
+    "home",
 ]
 
 MIDDLEWARE = [
@@ -77,7 +80,7 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / 'templates'],  # Project-level templates
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -88,6 +91,10 @@ TEMPLATES = [
             ],
         },
     },
+]
+
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',  # Project-level static files
 ]
 
 AUTHENTICATION_BACKENDS = [
