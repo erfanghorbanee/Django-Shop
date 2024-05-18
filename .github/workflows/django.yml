@@ -21,12 +21,10 @@ jobs:
         python-version: '3.12'
     - name: Install Dependencies
       run: |
-        cd Django-Shop
-        pwd
+        cd requirements
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        pip install -r local.txt
     - name: Run Tests
       run: |
         cd Django-Shop
-        pwd
         python manage.py test
