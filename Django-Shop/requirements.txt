@@ -1,4 +1,0 @@
-black==24.4.2
-Django==5.0.6
-django-allauth[socialaccount]==0.62.1
-isort==5.13.2

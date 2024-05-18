@@ -1,0 +1,8 @@
+python-slugify==8.0.4
+pillow==10.3.0
+whitenoise==6.6.0
+
+# Django
+# ------------------------------------------------------------------------------
+Django==5.0.6
+django-allauth[socialaccount]==0.62.1
