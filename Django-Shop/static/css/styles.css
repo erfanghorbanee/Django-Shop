@@ -36,7 +36,7 @@ body {
 }
 
 .navbar .nav-link:hover,
-.navbar .dropdown-toggle:hover {
+.navbar:hover {
     color: var(--primary-color);
 }
 
