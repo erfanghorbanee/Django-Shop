@@ -130,11 +130,6 @@ body {
     color: var(--text-color);
 }
 
-.hero-section {
-    padding: 100px 20px;
-    background-color: var(--secondary-color);
-}
-
 /* Custom Dropdown Submenu Behavior */
 .dropdown-submenu:hover > .dropdown-menu {
     display: block;
