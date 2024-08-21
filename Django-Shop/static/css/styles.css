@@ -1,0 +1,110 @@
+/* Light Theme */
+.light-theme {
+    --bg-color: #F7FBFC;
+    --text-color: #1B262C;
+    --primary-color: #769FCD;
+    --secondary-color: #D6E6F2;
+}
+
+/* Dark Theme */
+.dark-theme {
+    --bg-color: #1B262C;
+    --text-color: #F7FBFC;
+    --primary-color: #3282B8;
+    --secondary-color: #0F4C75;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+.navbar {
+    background-color: var(--secondary-color);
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border: none;
+}
+
+.btn-secondary {
+    background-color: var(--secondary-color);
+    border: none;
+}
+
+.search-input {
+    border-radius: 0;
+    border: none;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    width: 100%;
+    display: inline-block;
+}
+
+.search-btn {
+    border-radius: 0;
+    border: none;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    display: inline-block;
+    height: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.banner-section .carousel-item img {
+    height: 300px;
+    object-fit: cover;
+}
+
+.card {
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+}
+
+.brand-logo {
+    max-height: 80px;
+}
+
+.footer {
+    background-color: var(--text-color);
+    color: var(--bg-color);
+}
+
+.footer a {
+    color: var(--bg-color);
+    text-decoration: none;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+#supportIcon button {
+    background-color: var(--primary-color);
+    color: var(--text-color);
+}
+
+.hero-section {
+    padding: 100px 20px;
+    background-color: var(--secondary-color);
+}
+
+.dropdown-submenu:hover > .dropdown-menu {
+    display: block;
+}
+
+.dropdown-submenu .dropdown-menu {
+    margin-top: -1px; /* Align submenus properly */
+    left: 100%;
+    margin-left: 0;
+}
+
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 50px 10px;
+    }
+}
