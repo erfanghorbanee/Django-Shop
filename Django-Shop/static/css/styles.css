@@ -15,7 +15,7 @@
     --text-color: #F7FBFC;
     --primary-color: #3282B8;
     --secondary-color: #0F4C75;
-    --link-color: #F7FBFC; /* Default link color for dark theme */
+    --link-color: #F7FBFC; /* Ensure link color is visible in dark mode */
     --dropdown-bg: #2C3E50; /* Dark theme dropdown background */
     --dropdown-text-color: #F7FBFC; /* Dark theme dropdown text color */
 }
@@ -25,19 +25,29 @@ body {
     color: var(--text-color);
 }
 
+/* Navbar */
 .navbar {
     background-color: var(--secondary-color);
+    padding: 0.5rem 1rem;
 }
 
-/* Navbar links (including Categories, FAQ, About Us) */
 .navbar .nav-link,
 .navbar .dropdown-toggle {
     color: var(--link-color);
 }
 
 .navbar .nav-link:hover,
-.navbar:hover {
+.navbar .dropdown-toggle:hover {
     color: var(--primary-color);
+}
+
+.navbar .navbar-nav {
+    align-items: center;
+}
+
+/* Fix Spacing between Buttons */
+.navbar .btn {
+    margin-left: 0.5rem;
 }
 
 /* Dropdown Menu Styles */
@@ -88,7 +98,7 @@ body {
 }
 
 .banner-section .carousel-item img {
-    height: 500px;
+    height: 320px;
     object-fit: cover;
 }
 
@@ -125,6 +135,7 @@ body {
     background-color: var(--secondary-color);
 }
 
+/* Custom Dropdown Submenu Behavior */
 .dropdown-submenu:hover > .dropdown-menu {
     display: block;
 }
@@ -133,10 +144,4 @@ body {
     margin-top: -1px; /* Align submenus properly */
     left: 100%;
     margin-left: 0;
-}
-
-@media (max-width: 768px) {
-    .hero-section {
-        padding: 50px 10px;
-    }
 }
