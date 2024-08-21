@@ -4,6 +4,9 @@
     --text-color: #1B262C;
     --primary-color: #769FCD;
     --secondary-color: #D6E6F2;
+    --link-color: #1B262C; /* Default link color for light theme */
+    --dropdown-bg: #ffffff; /* Light theme dropdown background */
+    --dropdown-text-color: #1B262C; /* Light theme dropdown text color */
 }
 
 /* Dark Theme */
@@ -12,6 +15,9 @@
     --text-color: #F7FBFC;
     --primary-color: #3282B8;
     --secondary-color: #0F4C75;
+    --link-color: #F7FBFC; /* Default link color for dark theme */
+    --dropdown-bg: #2C3E50; /* Dark theme dropdown background */
+    --dropdown-text-color: #F7FBFC; /* Dark theme dropdown text color */
 }
 
 body {
@@ -21,6 +27,32 @@ body {
 
 .navbar {
     background-color: var(--secondary-color);
+}
+
+/* Navbar links (including Categories, FAQ, About Us) */
+.navbar .nav-link,
+.navbar .dropdown-toggle {
+    color: var(--link-color);
+}
+
+.navbar .nav-link:hover,
+.navbar .dropdown-toggle:hover {
+    color: var(--primary-color);
+}
+
+/* Dropdown Menu Styles */
+.navbar .dropdown-menu {
+    background-color: var(--dropdown-bg);
+    color: var(--dropdown-text-color);
+}
+
+.navbar .dropdown-item {
+    color: var(--dropdown-text-color);
+}
+
+.navbar .dropdown-item:hover {
+    background-color: var(--primary-color);
+    color: var(--text-color);
 }
 
 .btn-primary {
@@ -56,7 +88,7 @@ body {
 }
 
 .banner-section .carousel-item img {
-    height: 300px;
+    height: 500px;
     object-fit: cover;
 }
 
