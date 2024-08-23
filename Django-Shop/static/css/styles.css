@@ -23,6 +23,11 @@
 body {
     background-color: var(--bg-color);
     color: var(--text-color);
+    font-family: 'Open Sans', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Montserrat', sans-serif;
 }
 
 /* Navbar */
@@ -163,6 +168,12 @@ body {
 #supportIcon button {
     background-color: var(--primary-color);
     color: var(--text-color);
+    animation: float 3s infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
 }
 
 /* Custom Dropdown Submenu Behavior */
