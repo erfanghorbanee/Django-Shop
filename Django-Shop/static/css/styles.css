@@ -102,13 +102,48 @@ body {
     object-fit: cover;
 }
 
+.carousel-control-prev,
+.carousel-control-next {
+    z-index: 1; /* Lower the z-index so they don't overlap with the buttons */
+    width: 5%; /* Reduce the clickable area */
+}
+
 .card {
     background-color: var(--secondary-color);
     color: var(--text-color);
+    text-align: center; /* Center-aligns the text within the card */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for the transform and box-shadow properties */
+}
+
+.card:hover {
+    transform: translateY(-10px); /* Moves the card up by 10px */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Adds a shadow to make the card appear lifted */
+}
+
+.card .card-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centers the content vertically */
+    justify-content: center; /* Centers the content horizontally */
+}
+
+.card .btn-primary {
+    margin-top: auto; /* Pushes the button to the bottom of the card */
+    z-index: 2; /* Ensures the button is on top */
+    position: relative; /* Keeps the button in its normal document flow */
+}
+
+.brands-section .row {
+    display: flex;
+    justify-content: center; /* Centers the brand logos horizontally */
+    align-items: center; /* Centers the brand logos vertically */
+    flex-wrap: wrap; /* Ensures the logos wrap properly on smaller screens */
 }
 
 .brand-logo {
     max-height: 80px;
+    margin: 10px; /* Adds some space between logos */
+    display: block; /* Ensures the image behaves like a block element */
 }
 
 .footer {
