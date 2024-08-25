@@ -119,6 +119,7 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--text-color);
     text-align: center; /* Center-aligns the text within the card */
     transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for the transform and box-shadow properties */
+    margin-bottom: 20px;
 }
 
 .card:hover {
