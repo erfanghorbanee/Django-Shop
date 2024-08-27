@@ -26,13 +26,12 @@ class CustomUser(AbstractUser):
 
     # TODO: Process image before saving
     profile_picture = models.ImageField(
-        upload_to="profile_pics/",
+        upload_to="profile_pictures/",
+        default='profile_pictures/default1.png',
         validators=[
             FileExtensionValidator(["jpg", "jpeg", "png"]),
             validate_image_size,
         ],
-        null=True,
-        blank=True,
     )
 
     MALE = "M"

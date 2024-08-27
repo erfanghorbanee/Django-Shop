@@ -72,8 +72,17 @@
                     </button>
                 </li>
                 <li class="nav-item">
-                    <a href="/login" class="btn btn-primary">Login/Signup</a>
+                    {% if user.is_authenticated %}
+                        <!-- Show profile picture icon -->
+                        <a href="/profile" class="nav-link profile-icon">
+                            <img src="{{ user.profile_picture.url }}" alt="Profile" class="profile-picture">
+                        </a>
+                    {% else %}
+                        <!-- Show login button -->
+                        <a href="{% url 'account_login' %}" class="btn btn-primary login-button">Login</a>
+                    {% endif %}
                 </li>
+                
             </ul>
         </div>
     </div>

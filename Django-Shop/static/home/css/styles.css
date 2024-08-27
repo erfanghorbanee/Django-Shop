@@ -103,6 +103,20 @@ h1, h2, h3, h4, h5, h6 {
     padding-right: 10px;
 }
 
+/* Style for the profile picture icon */
+.profile-picture {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+/* Hover effect for the profile picture */
+.profile-icon:hover .profile-picture {
+    transform: scale(1.1); /* Slightly enlarges the profile picture on hover */
+}
+
 .banner-section .carousel-item img {
     height: 320px;
     object-fit: cover;
