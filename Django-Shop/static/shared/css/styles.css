@@ -80,6 +80,30 @@ h1, h2, h3, h4, h5, h6 {
     border: none;
 }
 
+/* Search Bar */
+.search-input {
+    border-radius: 0;
+    border: none;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    width: calc(100% - 40px) !important; /* Adjust the width */
+    display: inline-block;
+    margin-right: -1px !important; /* Negative margin to close the gap */
+}
+
+.search-btn {
+    border-radius: 0;
+    border: none;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    display: inline-block;
+    height: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
 /* Style for the profile picture icon */
 .profile-picture {
     width: 40px;
