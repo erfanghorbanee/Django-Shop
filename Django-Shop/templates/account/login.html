@@ -1,48 +1,84 @@
-{% extends "account/base_entrance.html" %}
-{% load i18n %}
+{% extends "base.html" %}
+{% load static %}
 {% load allauth account %}
-{% block head_title %}
-    {% trans "Sign In" %}
-{% endblock head_title %}
+
+{% block title %}Sign In{% endblock %}
+{% block description %}Sign in to your account{% endblock %}
+
+{% block extra_meta %}
+    <meta name="robots" content="noindex, nofollow">
+{% endblock %}
+
+{% block extra_styles %}
+    <link rel="stylesheet" href="{% static 'login/css/styles.css' %}">
+{% endblock %}
+
 {% block content %}
-    {% element h1 %}
-        {% trans "Sign In" %}
-    {% endelement %}
-    {% if not SOCIALACCOUNT_ONLY %}
-        {% setvar link %}
-            <a href="{{ signup_url }}">
-            {% endsetvar %}
-            {% setvar end_link %}
-            </a>
-        {% endsetvar %}
-        {% element p %}
-            {% blocktranslate %}If you have not created an account yet, then please {{ link }}sign up{{ end_link }} first.{% endblocktranslate %}
-        {% endelement %}
-        {% url 'account_login' as login_url %}
-        {% element form form=form method="post" action=login_url tags="entrance,login" %}
-            {% slot body %}
-                {% csrf_token %}
-                {% element fields form=form unlabeled=True %}
-                {% endelement %}
-                {{ redirect_field }}
-            {% endslot %}
-            {% slot actions %}
-                {% element button type="submit" tags="prominent,login" %}
-                    {% trans "Sign In" %}
-                {% endelement %}
-            {% endslot %}
-        {% endelement %}
-    {% endif %}
-    {% if LOGIN_BY_CODE_ENABLED %}
-        {% element hr %}
-        {% endelement %}
-        {% element h2 %}
-            {% element button href=request_login_code_url tags="prominent,login,secondary" %}
-                {% trans "Mail me a sign-in code" %}
-            {% endelement %}
-        {% endelement %}
-    {% endif %}
-    {% if SOCIALACCOUNT_ENABLED %}
-        {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
-    {% endif %}
-{% endblock content %}
+<div class="container-fluid login-container">
+    <div class="row">
+        <!-- Left Side - Image -->
+        <div class="col-md-6 d-none d-md-flex align-items-center justify-content-center">
+            <img src="{% static 'login/images/login-image.png' %}" alt="Login Illustration" class="img-fluid">
+        </div>
+
+        <!-- Right Side - Form -->
+        <div class="col-md-6 d-flex align-items-center justify-content-center">
+            <div class="login-form-container">
+                <h1 class="mb-4 text-center">Sign in</h1>
+
+                {% if not SOCIALACCOUNT_ONLY %}
+                    <form method="post" action="{% url 'account_login' %}" class="login-form">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <input type="email" name="login" class="form-control" placeholder="Email" autocomplete="email" maxlength="320" required="" id="id_login">
+                            <!-- Display errors for email field -->
+                            {% if form.login.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.login.errors %}
+                                        <p>{{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="mb-3">
+                            <input type="password" name="password" class="form-control" placeholder="Password" autocomplete="current-password" required="" aria-describedby="id_password_helptext" id="id_password">
+                            <!-- Display errors for password field -->
+                            {% if form.password.errors %}
+                                <div class="text-danger">
+                                    {% for error in form.password.errors %}
+                                        <p>{{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Remember me checkbox -->
+                        <p>
+                            <label for="id_remember">Remember Me:</label>
+                            <input type="checkbox" name="remember" id="id_remember">
+                        </p>
+
+                        <!-- Redirect field -->
+                        {{ redirect_field }}
+
+                        <button type="submit" class="btn btn-primary btn-block w-100">Log in</button>
+                    </form>
+                    <p class="mt-3 text-center">
+                        <a href="{% url 'account_reset_password' %}" class="forgot-password">Forgot Password?</a>
+                    </p>
+                {% endif %}
+
+                {% if SOCIALACCOUNT_ENABLED %}
+                    <div class="social-login mt-3 text-center">
+                        {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
+                    </div>
+                {% endif %}
+
+                <p class="mt-4 text-center">
+                    Don't have an account? <a href="{{ signup_url }}" class="sign-up-link">Sign up</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

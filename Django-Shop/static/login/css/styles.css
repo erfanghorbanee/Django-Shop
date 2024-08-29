@@ -1,0 +1,59 @@
+.btn-block {
+    display: block;
+}
+
+/* Forgot password link */
+.forgot-password {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+/* Sign-up link */
+.sign-up-link {
+    color: var(--primary-color);
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.sign-up-link:hover,
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+/* Social login */
+.social-login {
+    text-align: center;
+}
+
+.social-login a {
+    display: inline-block;
+    margin: 5px;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+/* Remove list-style (bullets) and center the links */
+.social-login ul {
+    list-style: none; /* Removes the bullet points */
+    padding: 0; /* Removes default padding */
+    display: flex; /* Aligns the items horizontally */
+    justify-content: center; /* Centers the items horizontally */
+}
+
+/* Style each social login item */
+.social-login li {
+    margin: 0 10px; /* Adds space between items */
+}
+
+.login-form p {
+    margin-bottom: 1rem;
+    font-size: 14px;
+}
+
+/* Style for the login illustration image */
+.login-container img.img-fluid {
+    max-width: 80%; /* Ensure the image is responsive */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 10px; /* Optional: Add rounded corners */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Optional: Add a soft shadow */
+}
