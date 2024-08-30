@@ -108,6 +108,8 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 WSGI_APPLICATION = "config.wsgi.application"
 
 
@@ -183,3 +185,9 @@ ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = "/?verification=1"
 ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = "/?verification=1"
 LOGIN_REDIRECT_URL = "/"
 ACCOUNT_LOGIN_ON_PASSWORD_RESET = True
+ACCOUNT_FORMS = {
+    'signup': 'users.forms.CustomSignupForm',
+}
+
+# phonenumber_field settings
+PHONENUMBER_DEFAULT_REGION = 'IT'

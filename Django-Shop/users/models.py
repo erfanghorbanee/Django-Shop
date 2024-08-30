@@ -23,7 +23,7 @@ class CustomUser(AbstractUser):
     REQUIRED_FIELDS = ["first_name", "last_name"]
 
     objects = CustomUserManager()
-    phone = PhoneNumberField(null=False, blank=False)
+    phone = PhoneNumberField()
 
     # TODO: Process image before saving
     profile_picture = models.ImageField(

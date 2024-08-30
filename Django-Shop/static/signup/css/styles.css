@@ -1,0 +1,102 @@
+/* Phone number fields */
+.phone-input-group {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Adjust the spacing between the fields */
+}
+
+#id_phone_0 {
+    flex: 0 0 auto; /* Makes the prefix input field as small as necessary */
+    width: 25%; /* Adjust this percentage as needed to fit your design */
+    max-width: 100px; /* Ensures the prefix field doesn't become too wide */
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    display: inline-block;
+    height: calc(2.25rem + 2px); /* Matches the default height of .form-control */
+    padding: .375rem .75rem; /* Padding consistent with .form-control */
+    font-size: 1rem; /* Font size consistent with .form-control */
+    line-height: 1.5; /* Line height consistent with .form-control */
+    color: #495057; /* Text color */
+    background-color: #fff; /* Background color */
+    background-clip: padding-box; /* Prevents background color from overflowing */
+    border: 1px solid #ced4da; /* Border consistent with .form-control */
+    border-radius: .25rem; /* Border radius */
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out; /* Smooth transition for border and shadow */
+}
+
+#id_phone_1 {
+    display: block;
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+#id_phone_0:focus,
+#id_phone_1:focus {
+    color: #495057;
+    background-color: #fff;
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+
+.btn-block {
+    display: block;
+}
+
+/* Sign in link */
+.signin-link {
+    color: var(--primary-color);
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.signin-link:hover {
+    text-decoration: underline;
+}
+
+/* Social login */
+.social-login {
+    text-align: center;
+}
+
+.social-login a {
+    display: inline-block;
+    margin: 5px;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+/* Remove list-style (bullets) and center the links */
+.social-login ul {
+    list-style: none; /* Removes the bullet points */
+    padding: 0; /* Removes default padding */
+    display: flex; /* Aligns the items horizontally */
+    justify-content: center; /* Centers the items horizontally */
+}
+
+/* Style each social login item */
+.social-login li {
+    margin: 0 10px; /* Adds space between items */
+}
+
+.signup-form p {
+    margin-bottom: 1rem;
+    font-size: 14px;
+}
+
+/* Style for the signup illustration image */
+.signup-container img.img-fluid {
+    max-width: 80%; /* Ensure the image is responsive */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 10px; /* Optional: Add rounded corners */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Optional: Add a soft shadow */
+}
