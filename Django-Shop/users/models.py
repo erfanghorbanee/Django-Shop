@@ -19,11 +19,12 @@ class CustomUser(AbstractUser):
     email = models.EmailField(("email address"), unique=True)
     USERNAME_FIELD = "email"
 
-    # will be required when creating a superuser.
-    REQUIRED_FIELDS = ["first_name", "last_name"]
+    # will be required when creating a superuser and must contain all required fields on your user model.
+    # https://docs.djangoproject.com/en/5.1/topics/auth/customizing/#django.contrib.auth.models.CustomUser.REQUIRED_FIELDS
+    REQUIRED_FIELDS = ["first_name", "last_name", "phone",]
 
     objects = CustomUserManager()
-    phone = PhoneNumberField()
+    phone = PhoneNumberField(unique=True)
 
     # TODO: Process image before saving
     profile_picture = models.ImageField(
