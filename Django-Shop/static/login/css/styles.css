@@ -26,10 +26,16 @@
 }
 
 .social-login a {
+    color: var(--primary-color);
     display: inline-block;
     margin: 5px;
     padding: 10px;
     border-radius: 4px;
+    text-decoration: none;
+}
+
+.social-login a:hover {
+    text-decoration: underline;
 }
 
 /* Remove list-style (bullets) and center the links */
