@@ -1,0 +1,16 @@
+.btn-block {
+    display: block;
+}
+
+.reset-password-form p {
+    margin-bottom: 1rem;
+    font-size: 14px;
+}
+
+/* Style for the login illustration image */
+.reset-password-container img.img-fluid {
+    max-width: 80%; /* Ensure the image is responsive */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 10px; /* Optional: Add rounded corners */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Optional: Add a soft shadow */
+}
