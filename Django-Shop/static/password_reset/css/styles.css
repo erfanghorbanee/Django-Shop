@@ -12,3 +12,13 @@
     max-width: 80%; /* Ensure the image is responsive */
     height: auto; /* Maintain aspect ratio */
 }
+
+.reset-password-link {
+    color: var(--primary-color);
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.reset-password-link:hover {
+    text-decoration: underline;
+}
