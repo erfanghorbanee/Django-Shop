@@ -26,6 +26,13 @@
             <div class="signup-form-container">
                 <h1 class="mb-4 text-center">Sign up</h1>
 
+                <!-- Display non-field errors -->
+                {% for error in form.non_field_errors %}
+                    <div class="text-danger">
+                        <p>{{ error|escape }}</p>
+                    </div>
+                {% endfor %}
+
                 {% if not SOCIALACCOUNT_ONLY %}
                     <form method="post" action="{% url 'account_signup' %}" class="signup-form">
                         {% csrf_token %}
@@ -36,7 +43,7 @@
                             {% if form.email.errors %}
                                 <div class="text-danger">
                                     {% for error in form.email.errors %}
-                                        <p>{{ error }}</p>
+                                        <p>{{ error|escape }}</p>
                                     {% endfor %}
                                 </div>
                             {% endif %}
@@ -51,7 +58,7 @@
                             {% if form.phone.errors %}
                                 <div class="text-danger">
                                     {% for error in form.phone.errors %}
-                                        <p>{{ error }}</p>
+                                        <p>{{ error|escape }}</p>
                                     {% endfor %}
                                 </div>
                             {% endif %}
@@ -64,7 +71,7 @@
                             {% if form.password1.errors %}
                                 <div class="text-danger">
                                     {% for error in form.password1.errors %}
-                                        <p>{{ error }}</p>
+                                        <p>{{ error|escape }}</p>
                                     {% endfor %}
                                 </div>
                             {% endif %}
@@ -77,7 +84,7 @@
                             {% if form.password2.errors %}
                                 <div class="text-danger">
                                     {% for error in form.password2.errors %}
-                                        <p>{{ error }}</p>
+                                        <p>{{ error|escape }}</p>
                                     {% endfor %}
                                 </div>
                             {% endif %}

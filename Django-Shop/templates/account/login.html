@@ -26,6 +26,13 @@
             <div class="login-form-container">
                 <h1 class="mb-4 text-center">Sign in</h1>
 
+                <!-- Display non-field errors -->
+                {% for error in form.non_field_errors %}
+                    <div class="text-danger">
+                        <p>{{ error|escape }}</p>
+                    </div>
+                {% endfor %}
+
                 {% if not SOCIALACCOUNT_ONLY %}
                     <form method="post" action="{% url 'account_login' %}" class="login-form">
                         {% csrf_token %}
@@ -35,7 +42,7 @@
                             {% if form.login.errors %}
                                 <div class="text-danger">
                                     {% for error in form.login.errors %}
-                                        <p>{{ error }}</p>
+                                        <p>{{ error|escape }}</p>
                                     {% endfor %}
                                 </div>
                             {% endif %}
@@ -46,7 +53,7 @@
                             {% if form.password.errors %}
                                 <div class="text-danger">
                                     {% for error in form.password.errors %}
-                                        <p>{{ error }}</p>
+                                        <p>{{ error|escape }}</p>
                                     {% endfor %}
                                 </div>
                             {% endif %}
