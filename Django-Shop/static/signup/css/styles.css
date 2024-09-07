@@ -1,3 +1,14 @@
+/* Input fields and buttons */
+.form-control {
+    width: 100%; /* Ensure inputs are always full width within the form */
+    box-sizing: border-box; /* Ensure padding doesn’t affect the width */
+}
+
+.btn-block {
+    display: block;
+    width: 100%;
+}
+
 /* Phone number fields */
 .phone-input-group {
     display: flex;
@@ -47,9 +58,12 @@
     box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
-
-.btn-block {
-    display: block;
+/* Error message styling */
+.text-danger {
+    font-size: 0.875rem; /* Slightly smaller font size */
+    max-width: 100%; /* Ensure it doesn't exceed the form's width */
+    word-wrap: break-word; /* Ensure long error messages wrap to new lines */
+    color: #d9534f; /* Standard Bootstrap error color */
 }
 
 /* Sign in link */
@@ -94,6 +108,13 @@
     margin: 0 10px; /* Adds space between items */
 }
 
+/* Container for the form to ensure consistent width */
+.signup-form-container {
+    max-width: 400px; /* Define a max width for the form */
+    width: 100%; /* Ensure responsiveness using Bootstrap grid */
+    margin: 0 auto; /* Center the form */
+}
+
 .signup-form p {
     margin-bottom: 1rem;
     font-size: 14px;
@@ -103,4 +124,6 @@
 .signup-container img.img-fluid {
     max-width: 80%; /* Ensure the image is responsive */
     height: auto; /* Maintain aspect ratio */
+    display: block;
+    margin: 0 auto; /* Center the image */
 }
