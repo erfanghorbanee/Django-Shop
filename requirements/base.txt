@@ -6,5 +6,5 @@ babel==2.16.0  # The SplitPhoneNumberField requires the babel package.
 
 # Django
 # ------------------------------------------------------------------------------
-Django==5.1
+Django==5.1.4
 django-allauth[socialaccount]==64.1.0
