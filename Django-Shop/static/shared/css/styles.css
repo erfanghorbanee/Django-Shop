@@ -4,9 +4,9 @@
     --text-color: #1B262C;
     --primary-color: #769FCD;
     --secondary-color: #D6E6F2;
-    --link-color: #1D4E89; /* Default link color for light theme */
-    --dropdown-bg: #ffffff; /* Light theme dropdown background */
-    --dropdown-text-color: #1B262C; /* Light theme dropdown text color */
+    --link-color: #1D4E89;
+    --dropdown-bg: #ffffff;
+    --dropdown-text-color: #1B262C;
 }
 
 /* Dark Theme */
@@ -15,9 +15,9 @@
     --text-color: #F7FBFC;
     --primary-color: #5D9DFF;
     --secondary-color: #0F4C75;
-    --link-color: #F7FBFC; /* Ensure link color is visible in dark mode */
-    --dropdown-bg: #2C3E50; /* Dark theme dropdown background */
-    --dropdown-text-color: #F7FBFC; /* Dark theme dropdown text color */
+    --link-color: #F7FBFC;
+    --dropdown-bg: #2C3E50;
+    --dropdown-text-color: #F7FBFC;
 }
 
 body {
@@ -86,9 +86,9 @@ h1, h2, h3, h4, h5, h6 {
     border: none;
     border-top-left-radius: 4px;
     border-bottom-left-radius: 4px;
-    width: calc(100% - 40px) !important; /* Adjust the width */
+    width: calc(100% - 40px) !important;
     display: inline-block;
-    margin-right: -1px !important; /* Negative margin to close the gap */
+    margin-right: -1px !important;
 }
 
 .search-btn {
@@ -133,15 +133,27 @@ h1, h2, h3, h4, h5, h6 {
     text-decoration: underline;
 }
 
-/* Custom Dropdown Submenu Behavior */
-.dropdown-submenu:hover > .dropdown-menu {
+/* Dropdown Submenu Behavior */
+.navbar .dropdown-submenu {
+    position: relative;
+}
+
+/* Ensures the submenu appears right next to the parent category */
+.navbar .dropdown-submenu > .dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: 0;
+    display: none;
+}
+
+/* Display submenu on hover of the parent item */
+.navbar .dropdown-submenu:hover > .dropdown-menu {
     display: block;
 }
 
-.dropdown-submenu .dropdown-menu {
-    margin-top: -1px; /* Align submenus properly */
-    left: 100%;
-    margin-left: 0;
+/* Optional: Smooth transition for submenu */
+.navbar .dropdown-menu {
+    transition: all 0.3s ease;
 }
 
 /* Support Icon Animation */
