@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Products - Django Shop{% endblock %}
+{% block description %}Explore our wide range of products{% endblock %}
+{% block extra_styles %}<link rel="stylesheet" href="{% static 'products/css/styles.css' %}">{% endblock %}
+
+{% block content %}
+<section class="products-section mb-5">
+    <h2 class="mb-4">All Products</h2>
+    <div class="row" id="products-container">
+        {% for product in products %}
+        <div class="col-12 col-md-6 col-lg-3 product-item">
+            <div class="card">
+                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <p class="card-text">Price: ${{ product.price }}</p>
+                    <a href="/" class="btn btn-primary">View Details</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Infinite Scroll Loading Spinner -->
+    <div id="loading-spinner" class="text-center my-4 d-none">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let loading = false;
+window.addEventListener('scroll', function() {
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500 && !loading) {
+        loading = true;
+        loadMoreProducts();
+    }
+});
+
+function loadMoreProducts() {
+    const url = '{% url "products_list" %}?page=' + (parseInt(new URLSearchParams(window.location.search).get('page') || 1) + 1);
+    fetch(url).then(response => response.text()).then(html => {
+        document.getElementById('products-container').insertAdjacentHTML('beforeend', html);
+        loading = false;
+    }).catch(error => {
+        console.error(error);
+        loading = false;
+    });
+}
+</script>
+{% endblock %}
