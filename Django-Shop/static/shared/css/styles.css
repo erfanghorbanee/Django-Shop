@@ -70,6 +70,53 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--text-color);
 }
 
+/* Navbar Brand Text Style */
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.25rem; /* Adjust size as needed */
+    color: var(--navbar-brand-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+/* Light Theme Brand Color */
+.light-theme .navbar-brand {
+    --navbar-brand-color: #1D4E89; /* Dark blue for light theme */
+}
+
+/* Dark Theme Brand Color */
+.dark-theme .navbar-brand {
+    --navbar-brand-color: #F7FBFC; /* Light color for dark theme */
+}
+
+/* Hover Effect */
+.navbar-brand:hover {
+    opacity: 0.8;
+}
+
+/* Dropdown Submenu Behavior */
+.navbar .dropdown-submenu {
+    position: relative;
+}
+
+/* Ensures the submenu appears right next to the parent category */
+.navbar .dropdown-submenu > .dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: 0;
+    display: none;
+}
+
+/* Display submenu on hover of the parent item */
+.navbar .dropdown-submenu:hover > .dropdown-menu {
+    display: block;
+}
+
+/* Optional: Smooth transition for submenu */
+.navbar .dropdown-menu {
+    transition: all 0.3s ease;
+}
+
 .btn-primary {
     background-color: var(--primary-color);
     border: none;
@@ -131,29 +178,6 @@ h1, h2, h3, h4, h5, h6 {
 
 .footer a:hover {
     text-decoration: underline;
-}
-
-/* Dropdown Submenu Behavior */
-.navbar .dropdown-submenu {
-    position: relative;
-}
-
-/* Ensures the submenu appears right next to the parent category */
-.navbar .dropdown-submenu > .dropdown-menu {
-    top: 0;
-    left: 100%;
-    margin-top: 0;
-    display: none;
-}
-
-/* Display submenu on hover of the parent item */
-.navbar .dropdown-submenu:hover > .dropdown-menu {
-    display: block;
-}
-
-/* Optional: Smooth transition for submenu */
-.navbar .dropdown-menu {
-    transition: all 0.3s ease;
 }
 
 /* Support Icon Animation */
