@@ -69,6 +69,7 @@ Django Shop is a modern, responsive e-commerce platform built with [Django](http
 - [ ] Optimize for SEO
 - [ ] Optimize caching
 - [ ] Improve security (2fa, ...)
+- [ ] Support other languages (French, German, ...)
 
 ## License
 This project is licensed under the GNU General Public License v3.0. You can read more about it [here](LICENSE).
