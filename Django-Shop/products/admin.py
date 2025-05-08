@@ -4,6 +4,9 @@ from .models import Category, Product, ProductImage
 class ProductImageInline(admin.TabularInline):
     model = ProductImage
     extra = 1  # Allows uploading multiple images
+    min_num = 1 # At least one image is required
+    verbose_name = "Product Image"
+    verbose_name_plural = "Product Images"
 
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('name', 'category', 'price', 'stock', 'is_available', 'created_at', 'updated_at')
@@ -11,6 +14,7 @@ class ProductAdmin(admin.ModelAdmin):
     search_fields = ('name', 'description')
     prepopulated_fields = {'slug': ('name',)}
     inlines = [ProductImageInline]
+    ordering = ['-created_at', 'name']
 
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug')
