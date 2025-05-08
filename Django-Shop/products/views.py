@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import ListView
 from .models import Product
+from django.core.paginator import EmptyPage
 
 class ProductListView(ListView):
     model = Product
@@ -9,6 +10,22 @@ class ProductListView(ListView):
     paginate_by = 12  # Set number of products per page
 
     def get_context_data(self, **kwargs):
+        """Provide context data including pagination info."""
         context = super().get_context_data(**kwargs)
-        context["is_paginated"] = self.paginate_by < self.get_queryset().count()
+        context["has_more"] = self.has_next_page(context['page_obj'])
         return context
+
+    def has_next_page(self, page_obj):
+        """
+        Check if there is a next page available.
+        
+        Args:
+            page_obj (Page): The current page object.
+        
+        Returns:
+            bool: True if there is a next page, False otherwise.
+        """
+        try:
+            return page_obj.has_next()
+        except (AttributeError, EmptyPage):
+            return False

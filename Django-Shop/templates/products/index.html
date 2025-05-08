@@ -3,6 +3,7 @@
 
 {% block title %}Products - Django Shop{% endblock %}
 {% block description %}Explore our wide range of products{% endblock %}
+{% block extra_meta%}{% endblock %}
 {% block extra_styles %}<link rel="stylesheet" href="{% static 'products/css/styles.css' %}">{% endblock %}
 
 {% block content %}
@@ -12,7 +13,9 @@
         {% for product in products %}
         <div class="col-12 col-md-6 col-lg-3 product-item">
             <div class="card">
-                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                <!-- Display only the first image (Guaranteed to exist) -->
+                <img src="{{ product.images.first.image.url }}" class="card-img-top" alt="{{ product.name }}" loading="lazy">
+                
                 <div class="card-body">
                     <h5 class="card-title">{{ product.name }}</h5>
                     <p class="card-text">Price: ${{ product.price }}</p>
@@ -32,25 +35,4 @@
 </section>
 {% endblock %}
 
-{% block extra_js %}
-<script>
-let loading = false;
-window.addEventListener('scroll', function() {
-    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500 && !loading) {
-        loading = true;
-        loadMoreProducts();
-    }
-});
-
-function loadMoreProducts() {
-    const url = '{% url "products_list" %}?page=' + (parseInt(new URLSearchParams(window.location.search).get('page') || 1) + 1);
-    fetch(url).then(response => response.text()).then(html => {
-        document.getElementById('products-container').insertAdjacentHTML('beforeend', html);
-        loading = false;
-    }).catch(error => {
-        console.error(error);
-        loading = false;
-    });
-}
-</script>
-{% endblock %}
+{% block extra_js %}<script src="{% static 'products/js/script.js' %}"></script>{% endblock %}

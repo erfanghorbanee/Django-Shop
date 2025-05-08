@@ -1,0 +1,10 @@
+/* Carousel Controls Customization */
+.carousel-control-prev, .carousel-control-next {
+    background-color: rgba(0, 0, 0, 0.5); /* Dark translucent background */
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+.carousel-control-prev-icon, .carousel-control-next-icon {
+    filter: invert(1); /* Makes the icon white */
+}
