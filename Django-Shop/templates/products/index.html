@@ -13,9 +13,9 @@
         {% for product in products %}
         <div class="col-12 col-md-6 col-lg-3 product-item">
             <div class="card">
-                <!-- Display only the first image (Guaranteed to exist) -->
-                <img src="{{ product.images.first.image.url }}" class="card-img-top" alt="{{ product.name }}" loading="lazy">
-                
+                <div class="image-container">
+                    <img src="{{ product.images.first.image.url }}" alt="{{ product.name }}" class="card-img-top product-image">
+                </div>
                 <div class="card-body">
                     <h5 class="card-title">{{ product.name }}</h5>
                     <p class="card-text">Price: ${{ product.price }}</p>
