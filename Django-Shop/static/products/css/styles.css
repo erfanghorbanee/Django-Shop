@@ -6,7 +6,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #f5f5f5; /* Optional: Light background for loading */
+}
+
+.card {
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    text-align: center; /* Center-aligns the text within the card */
+    margin-bottom: 20px;
 }
 
 .product-image {
@@ -19,9 +25,4 @@
 /* Optional: Hover effect for a polished look */
 .product-image:hover {
     transform: scale(1.05); /* Slight zoom on hover */
-}
-
-/* Consistent Spacing Between Cards */
-.product-item {
-    margin-bottom: 20px; /* Adds space below each card */
 }
