@@ -45,6 +45,11 @@ class Product(models.Model):
             self.slug = slugify(self.name)
         super().save(*args, **kwargs)
 
+    def clean(self):
+        """Ensure that each product has at least one image."""
+        if not self.images.exists():
+            raise ValidationError("A product must have at least one image.")
+
     def __str__(self):
         return self.name
 
@@ -54,8 +59,10 @@ class Product(models.Model):
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="images")
-    image = models.ImageField(upload_to=product_image_upload_path, 
-                              validators=[FileExtensionValidator(["jpg", "jpeg", "png"]), validate_image_size])
+    image = models.ImageField(
+        upload_to=product_image_upload_path, 
+        validators=[FileExtensionValidator(["jpg", "jpeg", "png"]), validate_image_size],
+    )
 
     def __str__(self):
         return f"{self.product.name} Image"
