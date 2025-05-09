@@ -54,9 +54,7 @@ Django Shop is a modern, responsive e-commerce platform built with [Django](http
 4. Open your browser and go to `http://127.0.0.1:8000`.
 
 ## To-Do List
-- [ ] Add products page
-- [ ] Implement infinite loading on the products page
-- [ ] Add single product page
+
 - [ ] Implement product reviews and ratings
 - [ ] Add profile page
 - [ ] Add order and order history page
@@ -72,4 +70,5 @@ Django Shop is a modern, responsive e-commerce platform built with [Django](http
 - [ ] Support other languages (French, German, ...)
 
 ## License
+
 This project is licensed under the GNU General Public License v3.0. You can read more about it [here](LICENSE).
