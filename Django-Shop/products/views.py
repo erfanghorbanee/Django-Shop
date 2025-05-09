@@ -1,7 +1,7 @@
-from django.shortcuts import render
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from .models import Product
 from django.core.paginator import EmptyPage
+
 
 class ProductListView(ListView):
     model = Product
@@ -29,3 +29,11 @@ class ProductListView(ListView):
             return page_obj.has_next()
         except (AttributeError, EmptyPage):
             return False
+
+
+class ProductDetailView(DetailView):
+    model = Product
+    template_name = 'products/product_detail.html'
+    context_object_name = 'product'
+    slug_field = 'slug'
+    slug_url_kwarg = 'slug'
