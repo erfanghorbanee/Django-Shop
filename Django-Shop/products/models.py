@@ -19,6 +19,8 @@ def product_image_upload_path(instance, filename):
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=120, unique=True, blank=True, null=True)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
+    is_active = models.BooleanField(default=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -26,7 +28,23 @@ class Category(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
+        if self.parent:
+            return f"{self.parent.name} > {self.name}"
         return self.name
+    
+    class Meta:
+        verbose_name_plural = "Categories"
+        ordering = ['name']
+    
+    @property
+    def is_parent(self):
+        """Check if this category is a parent category (has no parent)"""
+        return self.parent is None
+    
+    @property
+    def has_children(self):
+        """Check if this category has child categories"""
+        return self.children.exists()
 
 
 class Product(models.Model):

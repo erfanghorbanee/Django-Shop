@@ -20,21 +20,26 @@
                         Categories
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="dropdownCategories">
-                        <li class="dropdown-submenu">
-                            <a class="dropdown-item dropdown-toggle" href="#">Category 1</a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Sub-category 1.1</a></li>
-                                <li><a class="dropdown-item" href="#">Sub-category 1.2</a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown-submenu">
-                            <a class="dropdown-item dropdown-toggle" href="#">Category 2</a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Sub-category 2.1</a></li>
-                                <li><a class="dropdown-item" href="#">Sub-category 2.2</a></li>
-                            </ul>
-                        </li>
-                        <li><a class="dropdown-item" href="#">Category 3</a></li>
+                        <li><a class="dropdown-item fw-bold" href="{% url 'products:index' %}">All Products</a></li>
+                        {% if categories_menu %}
+                            <li><hr class="dropdown-divider"></li>
+                        {% endif %}
+                        {% for parent_category, subcategories in categories_menu.items %}
+                            {% if subcategories.exists %}
+                                <li class="dropdown-submenu">
+                                    <a class="dropdown-item dropdown-toggle" href="{% url 'products:index' %}?category={{ parent_category.slug }}">{{ parent_category.name }}</a>
+                                    <ul class="dropdown-menu">
+                                        {% for subcategory in subcategories %}
+                                            <li><a class="dropdown-item" href="{% url 'products:index' %}?category={{ subcategory.slug }}">{{ subcategory.name }}</a></li>
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                            {% else %}
+                                <li><a class="dropdown-item" href="{% url 'products:index' %}?category={{ parent_category.slug }}">{{ parent_category.name }}</a></li>
+                            {% endif %}
+                        {% empty %}
+                            <!-- No categories in the system -->
+                        {% endfor %}
                     </ul>
                 </li>
                 <li class="nav-item">

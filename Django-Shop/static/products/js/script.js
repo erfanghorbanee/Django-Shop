@@ -26,13 +26,28 @@ document.addEventListener('DOMContentLoaded', () => {
         return window.innerHeight + window.scrollY >= document.body.offsetHeight - 500;
     }
 
+    function getUrlWithUpdatedParams(page) {
+        // Get current URL and parse its query parameters
+        const url = new URL(window.location.href);
+        const searchParams = url.searchParams;
+        
+        // Update or add the page parameter
+        searchParams.set('page', page);
+        
+        // Return only the path and query params (not the full URL)
+        return `${url.pathname}${url.search}`;
+    }
+
     async function fetchMoreProducts() {
         loading = true;
         spinner.classList.remove('d-none');
         currentPage++;
 
         try {
-            const response = await fetch(`/products/?page=${currentPage}`);
+            // Get URL with all current query parameters plus updated page
+            const url = getUrlWithUpdatedParams(currentPage);
+            const response = await fetch(url);
+            
             if (!response.ok) throw new Error(`Failed to load page ${currentPage}.`);
 
             const html = await response.text();

@@ -1,14 +1,70 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Products - Django Shop{% endblock %}
-{% block description %}Explore our wide range of products{% endblock %}
+{% block title %}{% if current_category %}{{ current_category.name }} - {% endif %}Products - Django Shop{% endblock %}
+{% block description %}{% if current_category %}Browse our {{ current_category.name }} collection{% else %}Explore our wide range of products{% endif %}{% endblock %}
 {% block extra_meta%}{% endblock %}
 {% block extra_styles %}<link rel="stylesheet" href="{% static 'products/css/styles.css' %}">{% endblock %}
 
 {% block content %}
 <section class="products-section mb-5">
-    <h2 class="mb-4">All Products</h2>
+    {% if current_category %}
+        <div class="category-header mb-4">
+            {% if parent_category %}
+                <!-- If viewing a subcategory, show parent > child navigation -->
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'products:index' %}">All Products</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'products:index' %}?category={{ parent_category.slug }}">{{ parent_category.name }}</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ current_category.name }}</li>
+                    </ol>
+                </nav>
+                <h2 class="mb-2">{{ current_category.name }}</h2>
+                
+                {% if sibling_categories.exists %}
+                <div class="related-subcategories mb-3">
+                    <span>Other {{ parent_category.name }}:</span>
+                    {% for subcategory in sibling_categories %}
+                        <a href="{% url 'products:index' %}?category={{ subcategory.slug }}" class="badge bg-secondary text-decoration-none me-1">{{ subcategory.name }}</a>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                
+            {% else %}
+                <!-- If viewing a parent category -->
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'products:index' %}">All Products</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ current_category.name }}</li>
+                    </ol>
+                </nav>
+                <h2 class="mb-2">{{ current_category.name }}</h2>
+                
+                {% if subcategories.exists %}
+                <div class="subcategories-container mb-4">
+                    <div class="row">
+                        {% for subcategory in subcategories %}
+                        <div class="col-6 col-md-4 col-lg-3 mb-3">
+                            <a href="{% url 'products:index' %}?category={{ subcategory.slug }}" class="subcategory-card">
+                                <div class="card h-100">
+                                    <div class="card-body text-center">
+                                        <h5 class="card-title">{{ subcategory.name }}</h5>
+                                        <span class="badge bg-primary">Browse</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <h3 class="mb-3">All {{ current_category.name }} Products</h3>
+                {% endif %}
+            {% endif %}
+        </div>
+    {% else %}
+        <h2 class="mb-4">All Products</h2>
+    {% endif %}
+    
     <div class="row" id="products-container">
         {% for product in products %}
         <div class="col-12 col-md-6 col-lg-3 product-item">

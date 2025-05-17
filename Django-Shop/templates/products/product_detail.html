@@ -12,7 +12,10 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{% url 'home:index' %}">Home</a></li>
             <li class="breadcrumb-item"><a href="{% url 'products:index' %}">Products</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'products:index' %}?category={{ product.category.slug }}">{{ product.category.name }}</a></li>
+            {% if parent_category %}
+                <li class="breadcrumb-item"><a href="{% url 'products:index' %}?category={{ parent_category.slug }}">{{ parent_category.name }}</a></li>
+            {% endif %}
+            <li class="breadcrumb-item"><a href="{% url 'products:index' %}?category={{ category.slug }}">{{ category.name }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ product.name }}</li>
         </ol>
     </nav>
@@ -43,7 +46,13 @@
             <div class="col-lg-6">
                 <div class="product-info">
                     <h1 class="product-title">{{ product.name }}</h1>
-                    <div class="category-badge">{{ product.category.name }}</div>
+                    
+                    <div class="category-badges">
+                        {% if parent_category %}
+                            <a href="{% url 'products:index' %}?category={{ parent_category.slug }}" class="category-badge parent-category">{{ parent_category.name }}</a>
+                        {% endif %}
+                        <a href="{% url 'products:index' %}?category={{ category.slug }}" class="category-badge">{{ category.name }}</a>
+                    </div>
                     
                     <div class="product-price-container">
                         <span class="product-price">${{ product.price }}</span>
