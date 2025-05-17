@@ -2,43 +2,112 @@
 {% load static %}
 
 {% block title %}{{ product.name }} - Django Shop{% endblock %}
-{% block description %}Explore details of {{ product.name }}{% endblock %}
+{% block description %}{{ product.name }} - {{ product.description|truncatechars:160 }}{% endblock %}
 {% block extra_styles %}<link rel="stylesheet" href="{% static 'products/css/product_detail.css' %}">{% endblock %}
 
 {% block content %}
-<section class="product-detail-section container mt-4">
-    <div class="row">
-        <!-- Product Image -->
-        <div class="col-md-6">
-            <div class="image-container">
-                <img src="{{ product.images.first.image.url }}" alt="{{ product.name }}" class="product-main-image" id="mainImage">
-            </div>
-            <div class="image-thumbnails mt-3 d-flex gap-2">
-                {% for image in product.images.all %}
-                <img src="{{ image.image.url }}" class="thumbnail" onclick="changeMainImage('{{ image.image.url }}')">
-                {% endfor %}
-            </div>
-        </div>
-
-        <!-- Product Details -->
-        <div class="col-md-6">
-            <h2>{{ product.name }}</h2>
-            <p class="text-muted">{{ product.category.name }}</p>
-            <p class="product-price">Price: ${{ product.price }}</p>
-            <p class="product-description">{{ product.description }}</p>
-            <div class="d-flex align-items-center gap-2 mt-2">
-                {% if product.is_available %}
-                    <i class="bi bi-check-circle-fill text-success"></i>
-                    <span class="text-success">Available</span>
-                {% else %}
-                    <i class="bi bi-x-circle-fill text-danger"></i>
-                    <span class="text-danger">Out of Stock</span>
+<div class="container mt-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home:index' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'products:index' %}">Products</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'products:index' %}?category={{ product.category.slug }}">{{ product.category.name }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ product.name }}</li>
+        </ol>
+    </nav>
+    
+    <section class="product-detail-section">
+        <div class="row">
+            <!-- Product Images -->
+            <div class="col-lg-6">
+                <div class="image-container">
+                    <img src="{{ product.images.first.image.url }}" alt="{{ product.name }}" class="product-main-image" id="mainImage">
+                    {% if product.is_available == False %}
+                    <div class="out-of-stock-badge">Out of Stock</div>
+                    {% endif %}
+                </div>
+                
+                {% if product.images.count > 1 %}
+                <div class="image-thumbnails mt-3">
+                    {% for image in product.images.all %}
+                    <div class="thumbnail-wrapper" onclick="changeMainImage('{{ image.image.url }}')">
+                        <img src="{{ image.image.url }}" class="thumbnail {% if forloop.first %}active{% endif %}" alt="{{ product.name }} - Image {{ forloop.counter }}">
+                    </div>
+                    {% endfor %}
+                </div>
                 {% endif %}
             </div>
-            <button class="btn btn-primary mt-3" id="addToCartButton">Add to Cart</button>
+            
+            <!-- Product Details -->
+            <div class="col-lg-6">
+                <div class="product-info">
+                    <h1 class="product-title">{{ product.name }}</h1>
+                    <div class="category-badge">{{ product.category.name }}</div>
+                    
+                    <div class="product-price-container">
+                        <span class="product-price">${{ product.price }}</span>
+                    </div>
+                    
+                    <div class="availability-container">
+                        {% if product.is_available %}
+                            <div class="availability in-stock">
+                                <i class="bi bi-check-circle-fill"></i> In Stock
+                                {% if product.stock > 0 %}
+                                <span class="stock-count">({{ product.stock }} available)</span>
+                                {% endif %}
+                            </div>
+                        {% else %}
+                            <div class="availability out-of-stock">
+                                <i class="bi bi-x-circle-fill"></i> Out of Stock
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="product-description">
+                        <h5>Description</h5>
+                        <p>{{ product.description|linebreaks }}</p>
+                    </div>
+                    
+                    <div class="product-actions">
+                        <div class="quantity-selector">
+                            <button class="quantity-btn" id="decreaseQuantity" {% if not product.is_available %}disabled{% endif %}>-</button>
+                            <input type="number" id="productQuantity" value="1" min="1" max="{{ product.stock }}" {% if not product.is_available %}disabled{% endif %}>
+                            <button class="quantity-btn" id="increaseQuantity" {% if not product.is_available %}disabled{% endif %}>+</button>
+                        </div>
+                        
+                        <button class="btn btn-primary btn-lg add-to-cart-btn" id="addToCartButton" {% if not product.is_available %}disabled{% endif %}>
+                            <i class="bi bi-cart-plus"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
+    
+    <!-- Related Products -->
+    {% if related_products %}
+    <section class="related-products mt-5">
+        <h2 class="section-title">Related Products</h2>
+        <div class="row">
+            {% for related in related_products %}
+            <div class="col-md-3">
+                <div class="card product-card">
+                    <a href="{% url 'products:product_detail' related.slug %}">
+                        <img src="{{ related.images.first.image.url }}" class="card-img-top" alt="{{ related.name }}">
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ related.name }}</h5>
+                        <p class="card-text product-price">${{ related.price }}</p>
+                        <a href="{% url 'products:product_detail' related.slug %}" class="btn btn-outline-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+</div>
 {% endblock %}
 
 {% block extra_js %}
