@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Privacy Settings - Django Shop{% endblock %}
+{% block content %}
+<div class="container py-5">
+    <h2 class="mb-4">Privacy Settings</h2>
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Privacy Options</h5>
+            <p class="card-text">Here you can manage your privacy settings. (Add your privacy options here, e.g., email visibility, data download, etc.)</p>
+            <a href="{% url 'users:profile' %}" class="btn btn-outline-primary">Back to Profile</a>
+        </div>
+    </div>
+</div>
+{% endblock %} 

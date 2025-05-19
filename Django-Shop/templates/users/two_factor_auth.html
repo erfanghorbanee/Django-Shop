@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Two-Factor Authentication - Django Shop{% endblock %}
+{% block content %}
+<div class="container py-5">
+    <h2 class="mb-4">Two-Factor Authentication</h2>
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Security Settings</h5>
+            <p class="card-text">Here you can manage your two-factor authentication settings. (Add your 2FA options here, e.g., enable/disable 2FA, backup codes, etc.)</p>
+            <a href="{% url 'users:profile' %}" class="btn btn-outline-primary">Back to Profile</a>
+        </div>
+    </div>
+</div>
+{% endblock %} 

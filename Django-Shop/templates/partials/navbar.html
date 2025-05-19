@@ -58,9 +58,23 @@
                 </li>
                 <li class="nav-item">
                     {% if user.is_authenticated %}
-                        <a href="/profile" class="nav-link profile-icon">
-                            <img src="{{ user.profile_picture.url }}" alt="Profile" class="profile-picture">
-                        </a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle profile-icon" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="{{ user.profile_picture.url }}" alt="Profile" class="profile-picture">
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                                <li><a class="dropdown-item" href="{% url 'users:profile' %}"><i class="bi bi-person"></i> Profile</a></li>
+                                <li><a class="dropdown-item" href="{% url 'orders:order_list' %}"><i class="bi bi-bag"></i> Orders</a></li>
+                                <li><a class="dropdown-item" href="{% url 'users:wishlist' %}"><i class="bi bi-heart"></i> Wishlist</a></li>
+                                <li><a class="dropdown-item" href="{% url 'users:addresses' %}"><i class="bi bi-geo-alt"></i> Addresses</a></li>
+                                <li><a class="dropdown-item" href="{% url 'orders:payment_methods' %}"><i class="bi bi-credit-card"></i> Payment Methods</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{% url 'users:privacy_settings' %}"><i class="bi bi-shield-lock"></i> Privacy Settings</a></li>
+                                <li><a class="dropdown-item" href="{% url 'account_change_password' %}"><i class="bi bi-key"></i> Change Password</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-danger" href="{% url 'account_logout' %}"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+                            </ul>
+                        </li>
                     {% else %}
                         <a href="{% url 'account_login' %}" class="btn btn-primary login-button">Login</a>
                     {% endif %}

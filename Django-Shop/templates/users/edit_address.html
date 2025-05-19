@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}Edit Address - Django Shop{% endblock %}
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title mb-4">Edit Address</h2>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="street_address" class="form-label">Street Address</label>
+                            <input type="text" class="form-control" id="street_address" name="street_address" value="{{ address.street_address }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="apartment_address" class="form-label">Apartment, suite, etc. (optional)</label>
+                            <input type="text" class="form-control" id="apartment_address" name="apartment_address" value="{{ address.apartment_address }}">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="city" class="form-label">City</label>
+                                <input type="text" class="form-control" id="city" name="city" value="{{ address.city }}" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="state" class="form-label">State/Province</label>
+                                <input type="text" class="form-control" id="state" name="state" value="{{ address.state }}" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="zip_code" class="form-label">ZIP/Postal Code</label>
+                                <input type="text" class="form-control" id="zip_code" name="zip_code" value="{{ address.zip_code }}" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="country" class="form-label">Country</label>
+                                <input type="text" class="form-control" id="country" name="country" value="{{ address.country }}" required>
+                            </div>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="is_primary" name="is_primary" {% if address.is_primary %}checked{% endif %}>
+                            <label class="form-check-label" for="is_primary">Set as primary address</label>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'users:addresses' %}" class="btn btn-outline-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

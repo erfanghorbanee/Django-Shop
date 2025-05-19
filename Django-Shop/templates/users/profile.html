@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}Profile - Django Shop{% endblock %}
+{% block content %}
+<div class="container py-5">
+    <h2 class="mb-4">My Profile</h2>
+    
+    <!-- Personal Information -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Personal Information</h5>
+            <form method="post" action="{% url 'users:profile' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-3 text-center mb-3">
+                        <img src="{{ user.profile_picture.url }}" alt="Profile Picture" class="img-fluid rounded-circle mb-2" style="max-width: 150px;">
+                        <div class="mb-3">
+                            <input type="file" name="profile_picture" class="form-control" accept="image/*">
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="id_first_name" class="form-label">First Name</label>
+                                <input type="text" name="first_name" id="id_first_name" class="form-control" value="{{ user.first_name }}">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="id_last_name" class="form-label">Last Name</label>
+                                <input type="text" name="last_name" id="id_last_name" class="form-control" value="{{ user.last_name }}">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_email" class="form-label">Email</label>
+                            <input type="email" name="email" id="id_email" class="form-control" value="{{ user.email }}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_phone" class="form-label">Phone</label>
+                            <input type="tel" name="phone" id="id_phone" class="form-control" value="{{ user.phone }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_gender" class="form-label">Gender</label>
+                            <select name="gender" id="id_gender" class="form-select">
+                                {% for value, label in user.GENDER_CHOICES %}
+                                    <option value="{{ value }}" {% if user.gender == value %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-bag"></i> Orders</h5>
+                    <p class="card-text">View your order history and track current orders.</p>
+                    <a href="{% url 'orders:order_list' %}" class="btn btn-outline-primary">View Orders</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-heart"></i> Wishlist</h5>
+                    <p class="card-text">Manage your saved items and wishlist.</p>
+                    <a href="{% url 'users:wishlist' %}" class="btn btn-outline-primary">View Wishlist</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-geo-alt"></i> Addresses</h5>
+                    <p class="card-text">Manage your shipping and billing addresses.</p>
+                    <a href="{% url 'users:addresses' %}" class="btn btn-outline-primary">Manage Addresses</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Security Settings -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Security Settings</h5>
+            <div class="list-group">
+                <a href="{% url 'account_change_password' %}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-key"></i> Change Password
+                </a>
+                <a href="{% url 'users:two_factor_auth' %}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-shield-check"></i> Two-Factor Authentication
+                </a>
+                <a href="{% url 'users:privacy_settings' %}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-shield-lock"></i> Privacy Settings
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Methods -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Payment Methods</h5>
+            <p class="card-text">Manage your saved payment methods for faster checkout.</p>
+            <a href="{% url 'orders:payment_methods' %}" class="btn btn-outline-primary">Manage Payment Methods</a>
+        </div>
+    </div>
+</div>
+{% endblock %} 
