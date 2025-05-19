@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+{% load allauth account %}
+
+{% block title %}{% trans "Sign Out" %}{% endblock %}
+{% block description %}{% trans "Sign out of your account" %}{% endblock %}
+
+{% block extra_meta %}
+    <meta name="robots" content="noindex, nofollow">
+{% endblock %}
+
+{% block extra_styles %}
+    <link rel="stylesheet" href="{% static 'login/css/styles.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid login-container">
+    <div class="row">
+        <!-- Left Side - Image -->
+        <div class="col-md-6 d-none d-md-flex align-items-center justify-content-center">
+            <img src="{% static 'login/images/login-image.svg' %}" alt="Logout Illustration" class="img-fluid">
+        </div>
+        <!-- Right Side - Confirmation -->
+        <div class="col-md-6 d-flex align-items-center justify-content-center">
+            <div class="login-form-container">
+                <h1 class="mb-4 text-center">{% trans "Sign Out" %}</h1>
+                <p class="mb-4 text-center">{% trans "Are you sure you want to sign out?" %}</p>
+                <form method="post" action="{% url 'account_logout' %}" class="logout-form text-center">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-block w-100 mb-2">{% trans "Sign Out" %}</button>
+                </form>
+                <a href="/" class="btn btn-link w-100">{% trans "Cancel" %}</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
