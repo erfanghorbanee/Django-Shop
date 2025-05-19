@@ -1,0 +1,7 @@
+/* Error message styling */
+.text-danger {
+    font-size: 0.875rem;
+    max-width: 100%;
+    word-wrap: break-word;
+    color: #d9534f;
+} 

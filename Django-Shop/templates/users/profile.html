@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
+{% load static %}
 {% load i18n %}
 {% block title %}Profile - Django Shop{% endblock %}
+
+{% block extra_styles %}
+    <link rel="stylesheet" href="{% static 'profile/css/styles.css' %}">
+{% endblock %}
+
 {% block content %}
 <div class="container py-5">
     <h2 class="mb-4">My Profile</h2>
