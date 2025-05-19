@@ -7,6 +7,7 @@ from django.views.decorators.http import require_POST
 from django.utils.decorators import method_decorator
 from django.urls import reverse_lazy
 from .models import CustomUser, Address, Wishlist
+from .forms import ProfileForm
 
 # Create your views here.
 
@@ -14,21 +15,16 @@ class ProfileView(LoginRequiredMixin, View):
     template_name = 'users/profile.html'
 
     def get(self, request):
-        return render(request, self.template_name)
+        form = ProfileForm(instance=request.user)
+        return render(request, self.template_name, {'form': form})
 
     def post(self, request):
-        user = request.user
-        user.first_name = request.POST.get('first_name', user.first_name)
-        user.last_name = request.POST.get('last_name', user.last_name)
-        user.phone = request.POST.get('phone', user.phone)
-        user.gender = request.POST.get('gender', user.gender)
-        
-        if 'profile_picture' in request.FILES:
-            user.profile_picture = request.FILES['profile_picture']
-        
-        user.save()
-        messages.success(request, 'Profile updated successfully!')
-        return redirect('users:profile')
+        form = ProfileForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Profile updated successfully!')
+            return redirect('users:profile')
+        return render(request, self.template_name, {'form': form})
 
 class PrivacySettingsView(LoginRequiredMixin, View):
     template_name = 'users/privacy_settings.html'

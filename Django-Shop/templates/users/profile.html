@@ -17,22 +17,52 @@
             <h5 class="card-title">Personal Information</h5>
             <form method="post" action="{% url 'users:profile' %}" enctype="multipart/form-data">
                 {% csrf_token %}
+                
+                {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {% for error in form.non_field_errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+                {% endif %}
+                
                 <div class="row">
                     <div class="col-md-3 text-center mb-3">
                         <img src="{{ user.profile_picture.url }}" alt="Profile Picture" class="img-fluid rounded-circle mb-2" style="max-width: 150px;">
                         <div class="mb-3">
-                            <input type="file" name="profile_picture" class="form-control" accept="image/*">
+                            <input type="file" name="profile_picture" id="{{ form.profile_picture.id_for_label }}" class="form-control">
+                            {% if form.profile_picture.errors %}
+                            <div class="invalid-feedback d-block">
+                                {% for error in form.profile_picture.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                            {% endif %}
                         </div>
                     </div>
                     <div class="col-md-9">
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="id_first_name" class="form-label">First Name</label>
-                                <input type="text" name="first_name" id="id_first_name" class="form-control" value="{{ user.first_name }}">
+                                <label for="{{ form.first_name.id_for_label }}" class="form-label">First Name</label>
+                                <input type="text" name="first_name" id="{{ form.first_name.id_for_label }}" class="form-control" value="{{ form.first_name.value|default:'' }}">
+                                {% if form.first_name.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.first_name.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="id_last_name" class="form-label">Last Name</label>
-                                <input type="text" name="last_name" id="id_last_name" class="form-control" value="{{ user.last_name }}">
+                                <label for="{{ form.last_name.id_for_label }}" class="form-label">Last Name</label>
+                                <input type="text" name="last_name" id="{{ form.last_name.id_for_label }}" class="form-control" value="{{ form.last_name.value|default:'' }}">
+                                {% if form.last_name.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.last_name.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
                             </div>
                         </div>
                         <div class="mb-3">
@@ -40,16 +70,30 @@
                             <input type="email" name="email" id="id_email" class="form-control" value="{{ user.email }}" readonly>
                         </div>
                         <div class="mb-3">
-                            <label for="id_phone" class="form-label">Phone</label>
-                            <input type="tel" name="phone" id="id_phone" class="form-control" value="{{ user.phone }}">
+                            <label for="{{ form.phone.id_for_label }}" class="form-label">Phone</label>
+                            <input type="tel" name="phone" id="{{ form.phone.id_for_label }}" class="form-control" value="{{ form.phone.value|default:'' }}">
+                            {% if form.phone.errors %}
+                            <div class="invalid-feedback d-block">
+                                {% for error in form.phone.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                            {% endif %}
                         </div>
                         <div class="mb-3">
-                            <label for="id_gender" class="form-label">Gender</label>
-                            <select name="gender" id="id_gender" class="form-select">
+                            <label for="{{ form.gender.id_for_label }}" class="form-label">Gender</label>
+                            <select name="gender" id="{{ form.gender.id_for_label }}" class="form-select">
                                 {% for value, label in user.GENDER_CHOICES %}
-                                    <option value="{{ value }}" {% if user.gender == value %}selected{% endif %}>{{ label }}</option>
+                                    <option value="{{ value }}" {% if form.gender.value == value %}selected{% endif %}>{{ label }}</option>
                                 {% endfor %}
                             </select>
+                            {% if form.gender.errors %}
+                            <div class="invalid-feedback d-block">
+                                {% for error in form.gender.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                            {% endif %}
                         </div>
                         <button type="submit" class="btn btn-primary">Save Changes</button>
                     </div>
