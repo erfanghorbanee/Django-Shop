@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load product_extras %}
 
 {% block title %}{{ product.name }} - Django Shop{% endblock %}
 {% block description %}{{ product.name }} - {{ product.description|truncatechars:160 }}{% endblock %}
@@ -54,8 +55,43 @@
                         <a href="{% url 'products:index' %}?category={{ category.slug }}" class="category-badge">{{ category.name }}</a>
                     </div>
                     
+                    <!-- Product Rating Summary -->
+                    <div class="product-rating mt-2 mb-3">
+                        {% if reviews %}
+                            <div class="d-flex align-items-center">
+                                <div class="rating-stars">
+                                    {% with ''|center:product.average_rating|stringformat:'s' as stars %}
+                                        {% for _ in stars %}
+                                            <i class="bi bi-star-fill text-warning"></i>
+                                        {% endfor %}
+                                    {% endwith %}
+                                    {% with ''|center:5|stringformat:'s' as stars %}
+                                        {% for _ in stars %}
+                                            {% if forloop.counter > product.average_rating %}
+                                                <i class="bi bi-star text-warning"></i>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endwith %}
+                                </div>
+                                <span class="ms-2">{{ product.average_rating|floatformat:1 }} out of 5</span>
+                                <span class="ms-2 text-muted">({{ review_count }} customer reviews)</span>
+                            </div>
+                        {% else %}
+                            <span class="text-muted">No reviews yet</span>
+                        {% endif %}
+                    </div>
+                    
                     <div class="product-price-container">
-                        <span class="product-price">${{ product.price }}</span>
+                        {% if product.has_discount %}
+                            <div class="discount-badge">{{ product.discount_percent|floatformat:0 }}% OFF</div>
+                            <div class="price-wrapper">
+                                <span class="product-price text-danger">${{ product.discounted_price|floatformat:2 }}</span>
+                                <span class="original-price text-muted text-decoration-line-through">${{ product.price|floatformat:2 }}</span>
+                            </div>
+                            <div class="saving-text">You save: ${{ product.price|sub:product.discounted_price|floatformat:2 }}</div>
+                        {% else %}
+                            <span class="product-price">${{ product.price|floatformat:2 }}</span>
+                        {% endif %}
                     </div>
                     
                     <div class="availability-container">
@@ -116,6 +152,94 @@
         </div>
     </section>
     {% endif %}
+    
+    <!-- Reviews Section -->
+    <section class="reviews-section mt-5">
+        <h2 class="section-title mb-4">Customer Reviews ({{ review_count }})</h2>
+        
+        {% if reviews %}
+            <div class="reviews-container">
+                {% for review in reviews %}
+                    <div class="review-card mb-4">
+                        <div class="review-header d-flex justify-content-between">
+                            <div>
+                                <div class="reviewer-name fw-bold">{{ review.user.get_full_name|default:review.user.email }}</div>
+                                <div class="review-date text-muted small">{{ review.created_at|date:"F j, Y" }}</div>
+                            </div>
+                            <div class="rating-stars">
+                                {% with ''|center:review.rating|stringformat:'s' as stars %}
+                                    {% for _ in stars %}
+                                        <i class="bi bi-star-fill text-warning"></i>
+                                    {% endfor %}
+                                {% endwith %}
+                                {% with ''|center:5|stringformat:'s' as stars %}
+                                    {% for _ in stars %}
+                                        {% if forloop.counter > review.rating %}
+                                            <i class="bi bi-star text-warning"></i>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endwith %}
+                            </div>
+                        </div>
+                        <div class="review-content mt-2">
+                            {{ review.comment|linebreaks }}
+                        </div>
+                        
+                        {% if user == review.user %}
+                            <div class="review-actions mt-2">
+                                <form action="{% url 'products:delete_review' review.id %}" method="post" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure you want to delete your review?')">
+                                        <i class="bi bi-trash"></i> Delete
+                                    </button>
+                                </form>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                No reviews yet. Be the first to review this product!
+            </div>
+        {% endif %}
+        
+        <!-- Add Review Form -->
+        {% if user.is_authenticated %}
+            {% if user_review %}
+                <div class="alert alert-info mb-4">
+                    You have already reviewed this product. You can delete your review above to submit a new one.
+                </div>
+            {% else %}
+                <div class="review-form-container mt-5">
+                    <h3 class="mb-3">Write a Review</h3>
+                    <form action="{% url 'products:add_review' product.slug %}" method="post" class="review-form">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="rating" class="form-label">Rating</label>
+                            <div class="rating-input">
+                                <div class="star-rating">
+                                    {% for i in '12345' %}
+                                        <input type="radio" id="rating{{ i }}" name="rating" value="{{ i }}">
+                                        <label for="rating{{ i }}"><i class="bi bi-star-fill"></i></label>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="comment" class="form-label">Review</label>
+                            <textarea class="form-control" id="comment" name="comment" rows="4" required placeholder="Share your experience with this product..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit Review</button>
+                    </form>
+                </div>
+            {% endif %}
+        {% else %}
+            <div class="alert alert-info mt-4">
+                <a href="{% url 'account_login' %}?next={{ request.path }}" class="alert-link">Sign in</a> to leave a review.
+            </div>
+        {% endif %}
+    </section>
 </div>
 {% endblock %}
 

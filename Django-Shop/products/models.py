@@ -1,8 +1,10 @@
 from django.db import models
 from django.utils.text import slugify
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
+from django.conf import settings
+from decimal import Decimal
 import os
 
 # Custom validator for image size
@@ -52,6 +54,13 @@ class Product(models.Model):
     slug = models.SlugField(max_length=160, unique=True, blank=True, null=True)
     description = models.TextField(blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0)])
+    discount_percent = models.DecimalField(
+        max_digits=5, 
+        decimal_places=2, 
+        validators=[MinValueValidator(0), MaxValueValidator(100)],
+        default=0,
+        help_text="Discount percentage (0-100)"
+    )
     stock = models.PositiveIntegerField(default=0)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="products")
     is_available = models.BooleanField(default=True)
@@ -68,6 +77,27 @@ class Product(models.Model):
 
     class Meta:
         ordering = ['-created_at']
+        
+    @property
+    def discounted_price(self):
+        """Calculate the price after discount"""
+        if self.discount_percent > 0:
+            discount_amount = (self.price * Decimal(self.discount_percent / 100))
+            return self.price - discount_amount
+        return self.price
+        
+    @property
+    def has_discount(self):
+        """Check if product has a discount"""
+        return self.discount_percent > 0
+    
+    @property
+    def average_rating(self):
+        """Calculate average rating for this product"""
+        reviews = self.reviews.all()
+        if reviews:
+            return sum(review.rating for review in reviews) / reviews.count()
+        return 0
 
 
 class ProductImage(models.Model):
@@ -79,3 +109,21 @@ class ProductImage(models.Model):
 
     def __str__(self):
         return f"{self.product.name} Image"
+
+
+class Review(models.Model):
+    RATING_CHOICES = [(i, str(i)) for i in range(1, 6)]
+    
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="reviews")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="reviews")
+    rating = models.IntegerField(choices=RATING_CHOICES, validators=[MinValueValidator(1), MaxValueValidator(5)])
+    comment = models.TextField(max_length=2000)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+        unique_together = ('product', 'user')  # One review per user per product
+        
+    def __str__(self):
+        return f"{self.user.email} rated {self.product.name} {self.rating} stars"

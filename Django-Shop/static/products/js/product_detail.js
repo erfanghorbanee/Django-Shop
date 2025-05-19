@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const decreaseBtn = document.getElementById('decreaseQuantity');
     const increaseBtn = document.getElementById('increaseQuantity');
     const thumbnails = document.querySelectorAll('.thumbnail');
+    const starRatingInputs = document.querySelectorAll('.star-rating input');
+    const starRatingLabels = document.querySelectorAll('.star-rating label');
     
     // Change main image on thumbnail click
     window.changeMainImage = function(imageUrl) {
@@ -122,6 +124,68 @@ document.addEventListener('DOMContentLoaded', () => {
         
         mainImage.addEventListener('mouseleave', () => {
             mainImage.style.transform = 'scale(1)';
+        });
+    }
+    
+    // Star Rating functionality
+    if (starRatingInputs.length && starRatingLabels.length) {
+        // Initialize rating UI
+        const updateStarDisplay = (rating) => {
+            starRatingLabels.forEach((label, index) => {
+                // The labels are in reverse order in the HTML (5 to 1)
+                const starValue = 5 - index;
+                if (starValue <= rating) {
+                    label.querySelector('i').classList.add('text-warning');
+                } else {
+                    label.querySelector('i').classList.remove('text-warning');
+                }
+            });
+        };
+        
+        // Handle clicking on stars
+        starRatingLabels.forEach(label => {
+            label.addEventListener('click', () => {
+                const rating = label.getAttribute('for').replace('rating', '');
+                document.getElementById(`rating${rating}`).checked = true;
+                updateStarDisplay(rating);
+            });
+            
+            // Hover effects
+            label.addEventListener('mouseenter', () => {
+                const rating = label.getAttribute('for').replace('rating', '');
+                updateStarDisplay(rating);
+            });
+            
+            label.addEventListener('mouseleave', () => {
+                // When mouse leaves, show the selected rating
+                const selectedRating = Array.from(starRatingInputs).find(input => input.checked)?.value || 0;
+                updateStarDisplay(selectedRating);
+            });
+        });
+    }
+    
+    // Review deletion confirmation
+    const reviewDeleteForms = document.querySelectorAll('form[action*="delete_review"]');
+    reviewDeleteForms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+            if (!confirm('Are you sure you want to delete your review?')) {
+                e.preventDefault();
+            }
+        });
+    });
+    
+    // Show success messages with fade effect
+    const messages = document.querySelectorAll('.alert');
+    if (messages.length) {
+        messages.forEach(message => {
+            setTimeout(() => {
+                message.style.transition = 'opacity 0.5s ease';
+                message.style.opacity = '0';
+                
+                setTimeout(() => {
+                    message.remove();
+                }, 500);
+            }, 5000);
         });
     }
 });
