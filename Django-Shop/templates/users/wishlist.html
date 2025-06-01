@@ -15,9 +15,9 @@
 
     <div class="row">
         {% for item in wishlist_items %}
-            <div class="col-md-4 mb-4">
+            <div class="col-md-4 mb-4" id="wishlist-card-{{ item.id }}">
                 <div class="card h-100">
-                    <img src="{{ item.product.image.url }}" class="card-img-top" alt="{{ item.product.name }}">
+                    <img src="{{ item.product.images.first.image.url }}" class="card-img-top" alt="{{ item.product.name }}">
                     <div class="card-body">
                         <h5 class="card-title">{{ item.product.name }}</h5>
                         <p class="card-text text-muted">{{ item.product.category.name }}</p>

@@ -188,4 +188,52 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 5000);
         });
     }
+
+    // Wishlist Toggle AJAX
+    const wishlistBtn = document.getElementById('wishlistToggleBtn');
+    const wishlistIcon = document.getElementById('wishlistHeartIcon');
+    if (wishlistBtn && wishlistIcon) {
+        wishlistBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            const productId = wishlistBtn.getAttribute('data-product-id');
+            fetch('/users/api/v1/wishlist/toggle/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCSRFToken(),
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+                body: JSON.stringify({ product_id: productId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'added') {
+                    wishlistIcon.classList.remove('bi-heart');
+                    wishlistIcon.classList.add('bi-heart-fill');
+                } else if (data.status === 'removed') {
+                    wishlistIcon.classList.remove('bi-heart-fill');
+                    wishlistIcon.classList.add('bi-heart');
+                }
+            })
+            .catch(error => {
+                console.error('Wishlist toggle failed:', error);
+            });
+        });
+    }
+
+    // Helper to get CSRF token from cookie
+    function getCSRFToken() {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, 10) === 'csrftoken=') {
+                    cookieValue = decodeURIComponent(cookie.substring(10));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
 });

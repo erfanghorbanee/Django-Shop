@@ -8,6 +8,11 @@ from django.utils.decorators import method_decorator
 from django.urls import reverse_lazy
 from .models import CustomUser, Address, Wishlist
 from .forms import ProfileForm
+from products.models import Product
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from rest_framework import status
 
 # Create your views here.
 
@@ -45,19 +50,6 @@ class WishlistView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return Wishlist.objects.filter(user=self.request.user)
-
-@method_decorator(require_POST, name='dispatch')
-class RemoveFromWishlistView(LoginRequiredMixin, DeleteView):
-    model = Wishlist
-    success_url = reverse_lazy('users:wishlist')
-
-    def get_object(self, queryset=None):
-        return get_object_or_404(Wishlist, id=self.kwargs['item_id'], user=self.request.user)
-
-    def delete(self, request, *args, **kwargs):
-        response = super().delete(request, *args, **kwargs)
-        messages.success(request, 'Item removed from wishlist.')
-        return response
 
 class AddressesView(LoginRequiredMixin, ListView):
     model = Address
@@ -128,3 +120,15 @@ class SetPrimaryAddressView(LoginRequiredMixin, View):
         
         messages.success(request, 'Primary address updated successfully!')
         return redirect('users:addresses')
+
+class RemoveFromWishlistView(LoginRequiredMixin, DeleteView):
+    model = Wishlist
+    success_url = reverse_lazy('users:wishlist')
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(Wishlist, id=self.kwargs['item_id'], user=self.request.user)
+
+    def delete(self, request, *args, **kwargs):
+        response = super().delete(request, *args, **kwargs)
+        messages.success(request, 'Item removed from wishlist.')
+        return response

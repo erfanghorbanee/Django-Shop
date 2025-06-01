@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
 
     "phonenumber_field",
+    "rest_framework",
 
     # custom apps
     "home",

@@ -60,6 +60,12 @@ class ProductListView(ListView):
                 context['sibling_categories'] = context['current_category'].parent.children.filter(is_active=True).exclude(
                     id=context['current_category'].id
                 )
+        
+        # Check if products are in the user's wishlist
+        if self.request.user.is_authenticated:
+            # Get all product IDs in the user's wishlist
+            wishlist_product_ids = set(self.request.user.wishlist.values_list('product_id', flat=True))
+            context['wishlist_product_ids'] = wishlist_product_ids
             
         return context
 
@@ -113,6 +119,12 @@ class ProductDetailView(DetailView):
         # Check if current user has already reviewed this product
         if self.request.user.is_authenticated:
             context['user_review'] = product.reviews.filter(user=self.request.user).first()
+            # Check if product is in user's wishlist
+            context['in_wishlist'] = self.request.user.wishlist.filter(product=product).exists()
+            
+            # Also check for related products
+            wishlist_product_ids = set(self.request.user.wishlist.values_list('product_id', flat=True))
+            context['wishlist_product_ids'] = wishlist_product_ids
         
         return context
 
