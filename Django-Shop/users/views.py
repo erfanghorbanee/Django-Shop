@@ -1,18 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
-from django.http import JsonResponse
 from django.views.generic import View, ListView, CreateView, UpdateView, DeleteView
 from django.views.decorators.http import require_POST
 from django.utils.decorators import method_decorator
 from django.urls import reverse_lazy
-from .models import CustomUser, Address, Wishlist
+from .models import Address, Wishlist
 from .forms import ProfileForm
-from products.models import Product
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
-from rest_framework import status
 
 # Create your views here.
 

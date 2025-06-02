@@ -1,13 +1,11 @@
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import ListView, DetailView
 from django.views.decorators.http import require_POST
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
-from django.urls import reverse, reverse_lazy
-from django.http import JsonResponse, HttpResponseForbidden
+from django.http import HttpResponseForbidden
 from django.core.paginator import EmptyPage
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q, Avg
+from django.db.models import Q
 from .models import Product, Category, Review
 
 
