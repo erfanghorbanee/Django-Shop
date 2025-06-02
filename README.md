@@ -55,12 +55,8 @@ Django Shop is a modern, responsive e-commerce platform built with [Django](http
 
 ## To-Do List
 
-- [ ] Implement product reviews and ratings
-- [ ] Add profile page
-- [ ] Add order and order history page
 - [ ] Add payment integration
 - [ ] Implement cart
-- [ ] Implement wishlist feature
 - [ ] Improve overall speed
 - [ ] Customize dashboard for admins
 - [ ] process and optimize pictures(static and media)
