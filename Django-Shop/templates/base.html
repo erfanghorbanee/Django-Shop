@@ -16,12 +16,12 @@
     {% block extra_styles %}{% endblock %}
 </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100">
     <header>
         {% include 'partials/navbar.html' %}
     </header>
 
-    <main class="container my-5">
+    <main class="container my-5 flex-grow-1">
         {% block content %}{% endblock %}
     </main>
 

@@ -43,10 +43,13 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">About Us</a>
+                    <a href="{% url 'home:about' %}" class="nav-link">About Us</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">FAQ</a>
+                    <a href="{% url 'home:faq' %}" class="nav-link">FAQ</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'home:privacy' %}" class="nav-link">Privacy Policy</a>
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link"><i class="bi bi-cart"></i></a>

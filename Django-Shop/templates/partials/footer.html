@@ -4,15 +4,15 @@
             <div class="col-6 col-md-3">
                 <h5>Get to Know Us</h5>
                 <ul class="list-unstyled">
-                    <li><a href="#">About Us</a></li>
+                    <li><a href="{% url 'home:about' %}">About Us</a></li>
                     <li><a href="#">Careers</a></li>
-                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="{% url 'home:privacy' %}">Privacy Policy</a></li>
                 </ul>
             </div>
             <div class="col-6 col-md-3">
                 <h5>Customer Service</h5>
                 <ul class="list-unstyled">
-                    <li><a href="#">FAQ</a></li>
+                    <li><a href="{% url 'home:faq' %}">FAQ</a></li>
                     <li><a href="#">Shipping Info</a></li>
                     <li><a href="#">Returns</a></li>
                 </ul>
