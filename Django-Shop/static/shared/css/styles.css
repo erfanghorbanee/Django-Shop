@@ -379,3 +379,28 @@ a:hover {
     color: #b0b8c1;
     opacity: 1;
 }
+
+.dark-theme label,
+.dark-theme .form-label,
+.dark-theme .form-check-label {
+    color: var(--text-color);
+}
+
+.dark-theme .modal-content {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+}
+
+.dark-theme .card-text {
+    color: #fff;
+}
+
+.dark-theme .alert-link {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+.dark-theme .alert-link:hover {
+    color: #90c2ff;
+    text-decoration: underline;
+}
