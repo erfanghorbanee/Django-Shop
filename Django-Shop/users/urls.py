@@ -14,7 +14,6 @@ from .views import (
 from users.api.views import WishlistToggleAPIView
 
 app_name = 'users'
-
 urlpatterns = [
     path('profile/', ProfileView.as_view(), name='profile'),
     path('privacy-settings/', PrivacySettingsView.as_view(), name='privacy_settings'),

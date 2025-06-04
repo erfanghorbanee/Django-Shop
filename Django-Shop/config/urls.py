@@ -22,10 +22,11 @@ from django.urls import include, path
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('', include('home.urls')),
-    path('products/', include('products.urls')),
-    path('users/', include('users.urls')),
-    path('orders/', include('orders.urls')),
+    path('', include('home.urls', namespace='home')),
+    path('users/', include('users.urls', namespace='users')),
+    path('products/', include('products.urls', namespace='products')),
+    path('orders/', include('orders.urls', namespace='orders')),
+    path('support/', include('support.urls', namespace='support')),
 
     # allauth
     path('accounts/', include('allauth.urls')),
