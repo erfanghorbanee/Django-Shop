@@ -3,13 +3,37 @@ from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
+from PIL import Image
 
 from .managers import CustomUserManager
 
 
-def validate_image_size(value):
-    if value.size > 5 * 1024 * 1024:  # 5MB
-        raise ValidationError('Image size must be no more than 5MB.')
+def validate_image(file):
+    """
+    Validates that an uploaded image:
+    1. Is a readable, non-corrupt image file.
+    2. Is one of the allowed formats (e.g., JPEG or PNG).
+    3. Does not exceed the maximum size.
+    """
+    max_size = 5 * 1024 * 1024  # 5 MB
+
+    # Check file size
+    if file.size > max_size:
+        raise ValidationError("Image size must be no more than 5 MB.")
+
+    # Attempt to open and verify the image
+    try:
+        image = Image.open(file)
+        image.verify()  # Verifies that it's a valid, complete image
+    except Exception:
+        raise ValidationError("Uploaded file is not a valid or readable image.")
+    finally:
+        file.seek(0)  # Reset file pointer after reading
+
+    # Check format after verify() — image.format is preserved in the object
+    allowed_formats = ['JPEG', 'PNG']
+    if image.format not in allowed_formats:
+        raise ValidationError("Unsupported image format. Only JPEG and PNG are allowed.")
 
 
 class CustomUser(AbstractUser):
@@ -30,7 +54,7 @@ class CustomUser(AbstractUser):
         default='profile_pictures/default1.png',
         validators=[
             FileExtensionValidator(["jpg", "jpeg", "png"]),
-            validate_image_size,
+            validate_image,
         ],
     )
 

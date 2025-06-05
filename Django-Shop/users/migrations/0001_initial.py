@@ -98,7 +98,7 @@ class Migration(migrations.Migration):
                             django.core.validators.FileExtensionValidator(
                                 ["jpg", "jpeg", "png"]
                             ),
-                            users.models.validate_image_size,
+                            users.models.validate_image,
                         ],
                     ),
                 ),
