@@ -1,11 +1,55 @@
 {% extends 'base.html' %}
+{% load static %}
+{% block extra_styles %}
+    <link rel="stylesheet" href="{% static 'signup/css/styles.css' %}">
+{% endblock %}
 {% block content %}
-<div class="container mt-5">
-    <h2>Apply for a Career</h2>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Submit Application</button>
-    </form>
+<div class="container-fluid signup-container">
+    <div class="row justify-content-center align-items-center" style="min-height: 80vh;">
+        <div class="col-md-6 d-flex align-items-center justify-content-center">
+            <div class="signup-form-container">
+                <h2 class="mb-4 text-center">Apply for a Career</h2>
+                <form method="post" enctype="multipart/form-data" class="signup-form">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        {{ form.name.label_tag }}
+                        {{ form.name }}
+                        {% if form.name.errors %}
+                            <div class="text-danger">{% for error in form.name.errors %}<p>{{ error|escape }}</p>{% endfor %}</div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.email.label_tag }}
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                            <div class="text-danger">{% for error in form.email.errors %}<p>{{ error|escape }}</p>{% endfor %}</div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.phone.label_tag }}
+                        <div class="phone-input-group">{{ form.phone }}</div>
+                        {% if form.phone.errors %}
+                            <div class="text-danger">{% for error in form.phone.errors %}<p>{{ error|escape }}</p>{% endfor %}</div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.resume.label_tag }}
+                        {{ form.resume }}
+                        {% if form.resume.errors %}
+                            <div class="text-danger">{% for error in form.resume.errors %}<p>{{ error|escape }}</p>{% endfor %}</div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.cover_letter.label_tag }}
+                        {{ form.cover_letter }}
+                        {% if form.cover_letter.errors %}
+                            <div class="text-danger">{% for error in form.cover_letter.errors %}<p>{{ error|escape }}</p>{% endfor %}</div>
+                        {% endif %}
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block w-100">Submit Application</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %} 
