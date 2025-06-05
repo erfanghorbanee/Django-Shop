@@ -24,7 +24,7 @@ def validate_image(file):
     # Attempt to open and verify the image
     try:
         image = Image.open(file)
-        image.verify()  # Verifies that it's a valid, complete image
+        image.verify()
     except Exception:
         raise ValidationError("Uploaded file is not a valid or readable image.")
     finally:
