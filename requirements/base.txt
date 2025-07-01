@@ -1,5 +1,5 @@
 python-slugify==8.0.4
-pillow==11.2.1
+pillow==11.3.0
 python-magic==0.4.27
 whitenoise==6.9.0
 django-phonenumber-field[phonenumbers]==8.1.0
