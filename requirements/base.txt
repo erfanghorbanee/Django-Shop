@@ -1,5 +1,5 @@
 python-slugify==8.0.4
-pillow==11.2.1
+pillow==11.3.0
 python-magic==0.4.27
 whitenoise==6.9.0
 django-phonenumber-field[phonenumbers]==8.1.0
@@ -7,6 +7,6 @@ babel==2.17.0  # The SplitPhoneNumberField requires the babel package.
 
 # Django
 # ------------------------------------------------------------------------------
-Django==5.2.1
-djangorestframework==3.16.0
-django-allauth[socialaccount]==65.7.0
+Django==5.2.5
+djangorestframework==3.16.1
+django-allauth[socialaccount]==65.10.0
