@@ -37,16 +37,13 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-
     # allauth
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
-    'allauth.socialaccount.providers.google',
-
+    "allauth.socialaccount.providers.google",
     "phonenumber_field",
     "rest_framework",
-
     # custom apps
     "home",
     "users",
@@ -64,21 +61,20 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-
     # allauth
     "allauth.account.middleware.AccountMiddleware",
 ]
 
 # allauth provider specific settings
 SOCIALACCOUNT_PROVIDERS = {
-    'google': {
+    "google": {
         # For each OAuth based provider, either add a ``SocialApp``
         # (``socialaccount`` app) containing the required client
         # credentials, or list them here:
-        'APP': {
-            'client_id': '123',
-            'secret': '456',
-            'key': ''
+        "APP": {
+            "client_id": "ID",
+            "secret": "SECRET",
+            "key": "",
         }
     }
 }
@@ -88,7 +84,7 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / 'templates'],  # Project-level templates
+        "DIRS": [BASE_DIR / "templates"],  # Project-level templates
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -103,18 +99,17 @@ TEMPLATES = [
 ]
 
 STATICFILES_DIRS = [
-    BASE_DIR / 'static',  # Project-level static files
+    BASE_DIR / "static",  # Project-level static files
 ]
 
 AUTHENTICATION_BACKENDS = [
     # Needed to login by username in Django admin, regardless of `allauth`
-    'django.contrib.auth.backends.ModelBackend',
-
+    "django.contrib.auth.backends.ModelBackend",
     # `allauth` specific authentication methods, such as login by email
-    'allauth.account.auth_backends.AuthenticationBackend',
+    "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 WSGI_APPLICATION = "config.wsgi.application"
 
@@ -167,8 +162,8 @@ USE_TZ = True
 STATIC_URL = "static/"
 
 # Media files (uploaded by users)
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -181,9 +176,9 @@ AUTH_USER_MODEL = "users.CustomUser"
 # allauth settings
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
-ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
+ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*"]
 ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_LOGIN_METHODS = {'email'}
+ACCOUNT_LOGIN_METHODS = {"email"}
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = "/?verification=1"
@@ -191,8 +186,8 @@ ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = "/?verification=1"
 LOGIN_REDIRECT_URL = "/"
 ACCOUNT_LOGIN_ON_PASSWORD_RESET = True
 ACCOUNT_FORMS = {
-    'signup': 'users.forms.CustomSignupForm',
+    "signup": "users.forms.CustomSignupForm",
 }
 
 # phonenumber_field settings
-PHONENUMBER_DEFAULT_REGION = 'IT'
+PHONENUMBER_DEFAULT_REGION = "IT"
