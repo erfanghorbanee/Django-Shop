@@ -1,17 +1,8 @@
-{% extends 'base.html' %}
-{% block title %}My Orders - Django Shop{% endblock %}
+{% extends "base.html" %}
+{% block title %}My Orders - Django Shop{% endblock title %}
 {% block content %}
 <div class="container py-5">
     <h2 class="mb-4">My Orders</h2>
-
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        {% endfor %}
-    {% endif %}
 
     <div class="accordion" id="ordersAccordion">
         {% for order in orders %}
@@ -49,7 +40,7 @@
                                                 <tr>
                                                     <td>
                                                         <div class="d-flex align-items-center">
-                                                            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="me-2" style="width: 50px; height: 50px; object-fit: cover;">
+                                                            <img src="{{ item.product.images.first.image.url }}" alt="{{ item.product.name }}" class="me-2" width="50" height="50" style="object-fit:cover;border-radius:4px;">
                                                             <a href="{% url 'products:product_detail' item.product.slug %}" class="text-decoration-none">
                                                                 {{ item.product.name }}
                                                             </a>
@@ -98,4 +89,4 @@
         {% endfor %}
     </div>
 </div>
-{% endblock %} 
+{% endblock content %} 
