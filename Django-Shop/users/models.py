@@ -52,7 +52,7 @@ class CustomUser(AbstractUser):
     ]
 
     objects = CustomUserManager()
-    phone = PhoneNumberField(unique=True, null=True, blank=True)
+    phone = PhoneNumberField(unique=True, null=True)
 
     # TODO: Process image before saving
     profile_picture = models.ImageField(
