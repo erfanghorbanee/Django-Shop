@@ -1,17 +1,8 @@
-{% extends 'base.html' %}
-{% block title %}My Wishlist - Django Shop{% endblock %}
+{% extends "base.html" %}
+{% block title %}My Wishlist - Django Shop{% endblock title %}
 {% block content %}
 <div class="container py-5">
     <h2 class="mb-4">My Wishlist</h2>
-
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        {% endfor %}
-    {% endif %}
 
     <div class="row">
         {% for item in wishlist_items %}
@@ -53,4 +44,4 @@
         {% endfor %}
     </div>
 </div>
-{% endblock %} 
+{% endblock content %} 
