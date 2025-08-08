@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
 from django.db import models
+from django.db.models import Q
 from phonenumber_field.modelfields import PhoneNumberField
 from PIL import Image
 
@@ -103,6 +104,19 @@ class Address(models.Model):
     class Meta:
         verbose_name_plural = "Addresses"
         ordering = ["-is_primary", "-created_at"]
+        # Ensure at most one primary address per user at the DB level
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user"],
+                condition=Q(is_primary=True),
+                name="uniq_primary_address_per_user",
+            )
+        ]
+        # Common query patterns: filter by user / primary flag, list recent
+        indexes = [
+            models.Index(fields=["user", "is_primary"]),
+            models.Index(fields=["user", "created_at"]),
+        ]
 
     def __str__(self):
         return f"{self.street_address}, {self.city}"

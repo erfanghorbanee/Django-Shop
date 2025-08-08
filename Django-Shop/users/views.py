@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
@@ -60,7 +61,7 @@ class AddressesView(LoginRequiredMixin, ListView):
         return Address.objects.filter(user=self.request.user)
 
 
-class AddAddressView(LoginRequiredMixin, CreateView):
+class AddAddressView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Address
     template_name = "users/add_address.html"
     fields = [
@@ -73,23 +74,17 @@ class AddAddressView(LoginRequiredMixin, CreateView):
         "is_primary",
     ]
     success_url = reverse_lazy("users:addresses")
+    success_message = "Address added successfully!"
 
     def form_valid(self, form):
         form.instance.user = self.request.user
-        response = super().form_valid(form)
-
-        if form.instance.is_primary:
-            Address.objects.filter(user=self.request.user).exclude(
-                id=form.instance.id
-            ).update(is_primary=False)
-
-        messages.success(self.request, "Address added successfully!")
-        return response
+        return super().form_valid(form)
 
 
-class EditAddressView(LoginRequiredMixin, UpdateView):
+class EditAddressView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Address
     template_name = "users/edit_address.html"
+    pk_url_kwarg = "address_id"
     fields = [
         "street_address",
         "apartment_address",
@@ -100,26 +95,17 @@ class EditAddressView(LoginRequiredMixin, UpdateView):
         "is_primary",
     ]
     success_url = reverse_lazy("users:addresses")
+    success_message = "Address updated successfully!"
 
     def get_queryset(self):
         return Address.objects.filter(user=self.request.user)
-
-    def form_valid(self, form):
-        response = super().form_valid(form)
-
-        if form.instance.is_primary:
-            Address.objects.filter(user=self.request.user).exclude(
-                id=form.instance.id
-            ).update(is_primary=False)
-
-        messages.success(self.request, "Address updated successfully!")
-        return response
 
 
 @method_decorator(require_POST, name="dispatch")
 class DeleteAddressView(LoginRequiredMixin, DeleteView):
     model = Address
     success_url = reverse_lazy("users:addresses")
+    pk_url_kwarg = "address_id"
 
     def get_queryset(self):
         return Address.objects.filter(user=self.request.user)
@@ -134,14 +120,8 @@ class DeleteAddressView(LoginRequiredMixin, DeleteView):
 class SetPrimaryAddressView(LoginRequiredMixin, View):
     def post(self, request, address_id):
         address = get_object_or_404(Address, id=address_id, user=request.user)
-
-        # Set all addresses as non-primary
-        Address.objects.filter(user=request.user).update(is_primary=False)
-
-        # Set the selected address as primary
-        address.is_primary = True
+        address.is_primary = True  # model save() will demote others
         address.save()
-
         messages.success(request, "Primary address updated successfully!")
         return redirect("users:addresses")
 
