@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.db import IntegrityError
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
@@ -110,8 +111,15 @@ class SetPrimaryAddressView(LoginRequiredMixin, View):
     def post(self, request, address_id):
         address = get_object_or_404(Address, id=address_id, user=request.user)
         address.is_primary = True  # model save() will demote others
-        address.save()
-        messages.success(request, "Primary address updated successfully!")
+        try:
+            address.save()
+            messages.success(request, "Primary address updated successfully!")
+        except IntegrityError:
+            # Handle rare race or DB constraint violation gracefully
+            messages.error(
+                request,
+                "Could not set address as primary due to a conflict. Please try again.",
+            )
         return redirect("users:addresses")
 
 
