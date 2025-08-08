@@ -10,8 +10,6 @@ from django.views.generic import CreateView, DeleteView, ListView, UpdateView, V
 from .forms import ProfileForm
 from .models import Address, Wishlist
 
-# Create your views here.
-
 
 class ProfileView(LoginRequiredMixin, View):
     template_name = "users/profile.html"
@@ -41,15 +39,6 @@ class TwoFactorAuthView(LoginRequiredMixin, View):
 
     def get(self, request):
         return render(request, self.template_name)
-
-
-class WishlistView(LoginRequiredMixin, ListView):
-    model = Wishlist
-    template_name = "users/wishlist.html"
-    context_object_name = "wishlist_items"
-
-    def get_queryset(self):
-        return Wishlist.objects.filter(user=self.request.user)
 
 
 class AddressesView(LoginRequiredMixin, ListView):
@@ -124,6 +113,15 @@ class SetPrimaryAddressView(LoginRequiredMixin, View):
         address.save()
         messages.success(request, "Primary address updated successfully!")
         return redirect("users:addresses")
+
+
+class WishlistView(LoginRequiredMixin, ListView):
+    model = Wishlist
+    template_name = "users/wishlist.html"
+    context_object_name = "wishlist_items"
+
+    def get_queryset(self):
+        return Wishlist.objects.filter(user=self.request.user)
 
 
 class RemoveFromWishlistView(LoginRequiredMixin, View):
