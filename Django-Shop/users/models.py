@@ -31,9 +31,11 @@ def validate_image(file):
         file.seek(0)  # Reset file pointer after reading
 
     # Check format after verify() — image.format is preserved in the object
-    allowed_formats = ['JPEG', 'PNG']
+    allowed_formats = ["JPEG", "PNG"]
     if image.format not in allowed_formats:
-        raise ValidationError("Unsupported image format. Only JPEG and PNG are allowed.")
+        raise ValidationError(
+            "Unsupported image format. Only JPEG and PNG are allowed."
+        )
 
 
 class CustomUser(AbstractUser):
@@ -43,15 +45,19 @@ class CustomUser(AbstractUser):
 
     # will be required when creating a superuser and must contain all required fields on your user model.
     # https://docs.djangoproject.com/en/5.1/topics/auth/customizing/#django.contrib.auth.models.CustomUser.REQUIRED_FIELDS
-    REQUIRED_FIELDS = ["first_name", "last_name", "phone",]
+    REQUIRED_FIELDS = [
+        "first_name",
+        "last_name",
+        "phone",
+    ]
 
     objects = CustomUserManager()
-    phone = PhoneNumberField(unique=True)
+    phone = PhoneNumberField(unique=True, null=True, blank=True)
 
     # TODO: Process image before saving
     profile_picture = models.ImageField(
         upload_to="profile_pictures/",
-        default='profile_pictures/default1.png',
+        default="profile_pictures/default1.png",
         validators=[
             FileExtensionValidator(["jpg", "jpeg", "png"]),
             validate_image,
@@ -81,7 +87,9 @@ class CustomUser(AbstractUser):
 
 
 class Address(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='addresses')
+    user = models.ForeignKey(
+        CustomUser, on_delete=models.CASCADE, related_name="addresses"
+    )
     street_address = models.CharField(max_length=255)
     apartment_address = models.CharField(max_length=255, blank=True)
     city = models.CharField(max_length=100)
@@ -93,8 +101,8 @@ class Address(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        verbose_name_plural = 'Addresses'
-        ordering = ['-is_primary', '-created_at']
+        verbose_name_plural = "Addresses"
+        ordering = ["-is_primary", "-created_at"]
 
     def __str__(self):
         return f"{self.street_address}, {self.city}"
@@ -102,18 +110,22 @@ class Address(models.Model):
     def save(self, *args, **kwargs):
         if self.is_primary:
             # Set all other addresses as non-primary
-            Address.objects.filter(user=self.user).exclude(id=self.id).update(is_primary=False)
+            Address.objects.filter(user=self.user).exclude(id=self.id).update(
+                is_primary=False
+            )
         super().save(*args, **kwargs)
 
 
 class Wishlist(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='wishlist')
-    product = models.ForeignKey('products.Product', on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        CustomUser, on_delete=models.CASCADE, related_name="wishlist"
+    )
+    product = models.ForeignKey("products.Product", on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ['user', 'product']
-        ordering = ['-created_at']
+        unique_together = ["user", "product"]
+        ordering = ["-created_at"]
 
     def __str__(self):
         return f"{self.user.email}'s wishlist - {self.product.name}"

@@ -13,8 +13,10 @@ Django Shop is a modern, responsive e-commerce platform built with [Django](http
   - [Features](#features)
   - [Demo](#demo)
   - [Installation](#installation)
-    - [Steps](#steps)
   - [Running the Project](#running-the-project)
+  - [Google OAuth Setup (Login with Google)](#google-oauth-setup-login-with-google)
+    - [1. Register your app with Google](#1-register-your-app-with-google)
+    - [2. Configure Django settings](#2-configure-django-settings)
   - [To-Do List](#to-do-list)
   - [License](#license)
 
@@ -38,8 +40,6 @@ Django Shop is a modern, responsive e-commerce platform built with [Django](http
 *Demo GIF goes here*
 
 ## Installation
-
-### Steps
 
 1. Clone the repository:
 
@@ -77,6 +77,38 @@ Django Shop is a modern, responsive e-commerce platform built with [Django](http
     ```
 
 4. Open your browser and go to `http://127.0.0.1:8000`.
+
+## Google OAuth Setup (Login with Google)
+
+To enable users to log in or register using their Google account, follow these steps:
+
+### 1. Register your app with Google
+
+- Go to the [Google Cloud Console](https://console.developers.google.com/).
+- Create a new project (or select an existing one).
+- Navigate to **APIs & Services > Credentials**.
+- Click **Create Credentials > OAuth client ID**.
+- Set the application type to **Web application**.
+- Add the following to **Authorized redirect URIs**:
+  - `http://127.0.0.1:8000/accounts/google/login/callback/`
+  - This is for when we run the app locally.
+- Save and copy the **Client ID** and **Client Secret**.
+
+### 2. Configure Django settings
+
+In `Django-Shop/config/settings.py`, update the `SOCIALACCOUNT_PROVIDERS` section:
+
+```python
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'APP': {
+            'client_id': 'YOUR_GOOGLE_CLIENT_ID',
+            'secret': 'YOUR_GOOGLE_CLIENT_SECRET',
+            'key': ''
+        }
+    }
+}
+```
 
 ## To-Do List
 
