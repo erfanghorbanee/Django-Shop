@@ -14,13 +14,3 @@ def user(db):
         first_name="Test",
         last_name="User",
     )
-
-
-@pytest.fixture
-def address(user):
-    return baker.make("users.Address", user=user, is_primary=True)
-
-
-@pytest.fixture
-def another_address(user):
-    return baker.make("users.Address", user=user, is_primary=False)
