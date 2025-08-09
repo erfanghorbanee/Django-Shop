@@ -120,6 +120,8 @@ SOCIALACCOUNT_PROVIDERS = {
 - [ ] Optimize for SEO
 - [ ] Optimize caching
 - [ ] Improve security (2fa, ...)
+- [ ] Add tests for core functionalities
+- [ ] stress-test server and database under heavy load with concurrent requests
 - [ ] Support other languages (French, German, ...)
 
 ## License
