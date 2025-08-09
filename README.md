@@ -34,6 +34,13 @@ Django Shop is a modern, responsive e-commerce platform built with [Django](http
 - User wishlist functionality
 - Customer support page
 - Career application page
+- Advanced address management:
+  - Multiple addresses per user with exactly one primary (DB-enforced partial unique constraint)
+  - First address auto-set as primary
+  - Safe primary switching (atomic demotion of previous primary)
+  - Cannot unset the only primary address (form validation)
+  - Cannot delete the only remaining address (domain exception)
+  - Automatic promotion of a new primary (most recent address) after deleting the current one
 
 ## Demo
 
