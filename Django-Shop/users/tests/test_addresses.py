@@ -1,5 +1,7 @@
 from django.contrib.auth import get_user_model
+from django.db import transaction
 from django.test import TestCase
+
 from users.exceptions import (
     CannotDeleteOnlyAddress,
     CannotDemoteOnlyPrimary,
@@ -84,8 +86,10 @@ class AddressInvariantTests(TestCase):
         """Cannot delete the only address of a user."""
 
         a1 = self.create_address()
+        # Wrap in nested atomic so rollback is localized and outer TestCase transaction stays usable.
         with self.assertRaises(CannotDeleteOnlyAddress):
-            a1.delete()
+            with transaction.atomic():
+                a1.delete()
         self.assertEqual(
             1,
             Address.objects.filter(user=self.user).count(),
