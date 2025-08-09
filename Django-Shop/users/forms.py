@@ -3,6 +3,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from phonenumber_field.formfields import SplitPhoneNumberField
 
+from .exceptions import CannotDemoteOnlyPrimary
 from .models import Address, CustomUser
 
 
@@ -84,9 +85,7 @@ class AddressForm(forms.ModelForm):
                 .exists()
             )
             if not other_exists:
-                raise ValidationError(
-                    {"is_primary": "You must have at least one primary address."}
-                )
+                raise ValidationError({"is_primary": CannotDemoteOnlyPrimary().args[0]})
         return cleaned
 
     def save(self, commit=True):

@@ -8,7 +8,7 @@ from django.dispatch import receiver
 from phonenumber_field.modelfields import PhoneNumberField
 from PIL import Image
 
-from .exceptions import CannotDeleteOnlyAddress
+from .exceptions import CannotDeleteOnlyAddress, CannotDemoteOnlyPrimary
 from .managers import CustomUserManager
 
 
@@ -129,6 +129,8 @@ class Address(models.Model):
 
         - First address for a user becomes primary.
         - Prevent unmarking the only existing primary (keeps at least one primary).
+                - If a primary is explicitly demoted while other addresses exist, automatically
+                    promote another address to remain primary.
         - When saving a primary, demote any other primaries inside an atomic block.
         - Any IntegrityError (rare concurrent promotion) is allowed to bubble up for the view
           to handle gracefully.
@@ -138,17 +140,30 @@ class Address(models.Model):
         if self._state.adding and not Address.objects.filter(user=self.user).exists():
             self.is_primary = True
 
-        # 2. Prevent unsetting the last remaining primary (would leave zero primaries).
-        if (
-            not self._state.adding
-            and not self.is_primary
-            and Address.objects.filter(pk=self.pk, is_primary=True).exists()
-        ):
-            has_other = (
-                Address.objects.filter(user=self.user).exclude(pk=self.pk).exists()
-            )
-            if not has_other:
-                self.is_primary = True  # enforce invariant
+        # Determine prior primary status (before current changes)
+        was_primary = False
+        if self.pk:
+            was_primary = Address.objects.filter(pk=self.pk, is_primary=True).exists()
+
+        # 2. Prevent unsetting the last remaining primary (would leave zero primaries) OR
+        #    auto-promote another address if demoting this primary while others exist.
+        if not self._state.adding and was_primary and not self.is_primary:
+            # Are there other addresses?
+            qs_others = Address.objects.filter(user=self.user).exclude(pk=self.pk)
+            if not qs_others.exists():
+                # No others: cannot demote; raise explicit domain error so caller can show message.
+                raise CannotDemoteOnlyPrimary()
+            else:
+                # There are others: we will demote this one and promote a candidate.
+                with transaction.atomic():
+                    # Save this instance as non-primary first.
+                    super(Address, self).save(*args, **kwargs)
+                    candidate = qs_others.order_by("-is_primary", "-created_at").first()
+                    if candidate and not candidate.is_primary:
+                        candidate.is_primary = True
+                        # candidate.save will demote others (already demoted current).
+                        candidate.save()
+                return
 
         # 3. Demote existing primary rows if this is (or stays) primary.
         with transaction.atomic():
@@ -191,7 +206,7 @@ def prevent_deleting_only_address(sender, instance, **kwargs):
         Address.objects.filter(user=instance.user).exclude(pk=instance.pk).exists()
     )
     if not siblings_exist:
-        raise CannotDeleteOnlyAddress("You cannot delete your only address.")
+        raise CannotDeleteOnlyAddress()
 
 
 @receiver(post_delete, sender=Address)
