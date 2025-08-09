@@ -6,9 +6,10 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.http import require_POST
-from django.views.generic import CreateView, DeleteView, ListView, UpdateView, View
+from django.views.generic import CreateView, ListView, UpdateView, View
 
-from .forms import ProfileForm
+from .exceptions import CannotDeleteOnlyAddress
+from .forms import AddressForm, ProfileForm
 from .models import Address, Wishlist
 
 
@@ -52,58 +53,45 @@ class AddressesView(LoginRequiredMixin, ListView):
 
 
 class AddAddressView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
-    model = Address
     template_name = "users/add_address.html"
-    fields = [
-        "street_address",
-        "apartment_address",
-        "city",
-        "state",
-        "zip_code",
-        "country",
-        "is_primary",
-    ]
+    form_class = AddressForm
     success_url = reverse_lazy("users:addresses")
     success_message = "Address added successfully!"
 
-    def form_valid(self, form):
-        form.instance.user = self.request.user
-        return super().form_valid(form)
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["user"] = self.request.user
+        return kwargs
 
 
 class EditAddressView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
-    model = Address
     template_name = "users/edit_address.html"
     pk_url_kwarg = "address_id"
-    fields = [
-        "street_address",
-        "apartment_address",
-        "city",
-        "state",
-        "zip_code",
-        "country",
-        "is_primary",
-    ]
+    form_class = AddressForm
     success_url = reverse_lazy("users:addresses")
     success_message = "Address updated successfully!"
 
     def get_queryset(self):
         return Address.objects.filter(user=self.request.user)
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["user"] = self.request.user
+        return kwargs
+
 
 @method_decorator(require_POST, name="dispatch")
-class DeleteAddressView(LoginRequiredMixin, DeleteView):
-    model = Address
-    success_url = reverse_lazy("users:addresses")
-    pk_url_kwarg = "address_id"
-
-    def get_queryset(self):
-        return Address.objects.filter(user=self.request.user)
-
-    def delete(self, request, *args, **kwargs):
-        response = super().delete(request, *args, **kwargs)
-        messages.success(request, "Address deleted successfully!")
-        return response
+class DeleteAddressView(LoginRequiredMixin, View):
+    def post(self, request, address_id):
+        address = get_object_or_404(Address, pk=address_id, user=request.user)
+        try:
+            address.delete()
+            messages.success(request, "Address deleted successfully.")
+        except CannotDeleteOnlyAddress as e:
+            messages.error(request, str(e))
+        except Exception:
+            messages.error(request, "Could not delete address.")
+        return redirect("users:addresses")
 
 
 @method_decorator(require_POST, name="dispatch")

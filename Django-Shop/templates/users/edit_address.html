@@ -9,37 +9,52 @@
                     <h2 class="card-title mb-4">Edit Address</h2>
                     <form method="post">
                         {% csrf_token %}
+
+                        {# Non-field errors #}
+                        {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {% for error in form.non_field_errors %}{{ error }}<br>{% endfor %}
+                        </div>
+                        {% endif %}
+
                         <div class="mb-3">
-                            <label for="street_address" class="form-label">Street Address</label>
-                            <input type="text" class="form-control" id="street_address" name="street_address" value="{{ address.street_address }}" required>
+                            {{ form.street_address.label_tag }}
+                            {{ form.street_address }}
+                            {% for error in form.street_address.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
                         </div>
                         <div class="mb-3">
-                            <label for="apartment_address" class="form-label">Apartment, suite, etc. (optional)</label>
-                            <input type="text" class="form-control" id="apartment_address" name="apartment_address" value="{{ address.apartment_address }}">
+                            {{ form.apartment_address.label_tag }}
+                            {{ form.apartment_address }}
+                            {% for error in form.apartment_address.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="city" class="form-label">City</label>
-                                <input type="text" class="form-control" id="city" name="city" value="{{ address.city }}" required>
+                                {{ form.city.label_tag }}
+                                {{ form.city }}
+                                {% for error in form.city.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="state" class="form-label">State/Province</label>
-                                <input type="text" class="form-control" id="state" name="state" value="{{ address.state }}" required>
+                                {{ form.state.label_tag }}
+                                {{ form.state }}
+                                {% for error in form.state.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="zip_code" class="form-label">ZIP/Postal Code</label>
-                                <input type="text" class="form-control" id="zip_code" name="zip_code" value="{{ address.zip_code }}" required>
+                                {{ form.zip_code.label_tag }}
+                                {{ form.zip_code }}
+                                {% for error in form.zip_code.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="country" class="form-label">Country</label>
-                                <input type="text" class="form-control" id="country" name="country" value="{{ address.country }}" required>
+                                {{ form.country.label_tag }}
+                                {{ form.country }}
+                                {% for error in form.country.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
                             </div>
                         </div>
                         <div class="mb-3 form-check">
-                            <input type="checkbox" class="form-check-input" id="is_primary" name="is_primary" {% if address.is_primary %}checked{% endif %}>
-                            <label class="form-check-label" for="is_primary">Set as primary address</label>
+                            {{ form.is_primary }}
+                            <label class="form-check-label" for="id_is_primary">Set as primary address</label><br>
+                            {% for error in form.is_primary.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
                         </div>
                         <div class="d-flex justify-content-between">
                             <a href="{% url 'users:addresses' %}" class="btn btn-outline-secondary">Cancel</a>
@@ -51,4 +66,4 @@
         </div>
     </div>
 </div>
-{% endblock %} 
+{% endblock content %} 

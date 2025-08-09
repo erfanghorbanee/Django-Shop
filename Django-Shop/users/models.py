@@ -1,11 +1,14 @@
 from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
-from django.db import IntegrityError, models, transaction
+from django.db import models, transaction
 from django.db.models import Q
+from django.db.models.signals import post_delete, pre_delete
+from django.dispatch import receiver
 from phonenumber_field.modelfields import PhoneNumberField
 from PIL import Image
 
+from .exceptions import CannotDeleteOnlyAddress
 from .managers import CustomUserManager
 
 
@@ -122,46 +125,41 @@ class Address(models.Model):
         return f"{self.street_address}, {self.city}"
 
     def save(self, *args, **kwargs):
-        """Enforce single primary with DB constraint + transactional demotion.
+        """Maintain primary address invariants and rely on DB constraint for uniqueness.
 
-        We optimistically (and atomically) demote any existing primary before saving this
-        address as primary. Concurrency considerations:
-        - Two requests might try to promote different addresses concurrently.
-        - We lock the *current* primaries for the user (SELECT ... FOR UPDATE) inside a
-          transaction so only one transaction can proceed with demotion at a time.
-        - The partial unique constraint (user, condition=is_primary=True) in the DB is the
-          final guard. If a race still slips through (extremely rare window), we retry once.
-        - A bounded retry avoids infinite loops while providing a clean resolution path.
+        - First address for a user becomes primary.
+        - Prevent unmarking the only existing primary (keeps at least one primary).
+        - When saving a primary, demote any other primaries inside an atomic block.
+        - Any IntegrityError (rare concurrent promotion) is allowed to bubble up for the view
+          to handle gracefully.
         """
 
-        # Only need special handling if attempting / keeping primary state. Non-primary saves
-        # can proceed normally (but we still go through unified logic for simplicity).
-        attempts = 2  # initial try + 1 retry on IntegrityError
-        while attempts:
-            try:
-                with transaction.atomic():
-                    if self.is_primary:
-                        # Lock any existing primary rows for this user to prevent a concurrent
-                        # transaction from reading stale state and also trying to promote.
-                        (
-                            Address.objects.select_for_update()
-                            .filter(user=self.user, is_primary=True)
-                            .exclude(id=self.id)
-                            .update(is_primary=False)
-                        )
-                    # Perform the actual insert/update. The partial unique constraint will
-                    # raise IntegrityError if another transaction committed a primary first.
-                    super().save(*args, **kwargs)
-                # Success path: break out of retry loop.
-                break
-            except IntegrityError:
-                attempts -= 1
-                # Retry only if: (a) we were setting primary, (b) we still have a retry left.
-                if not self.is_primary or attempts == 0:
-                    raise
-                # Loop to retry: another transaction won the race; on next iteration we will
-                # lock and demote again based on the now-current state.
-                continue
+        # 1. First address automatically primary.
+        if self._state.adding and not Address.objects.filter(user=self.user).exists():
+            self.is_primary = True
+
+        # 2. Prevent unsetting the last remaining primary (would leave zero primaries).
+        if (
+            not self._state.adding
+            and not self.is_primary
+            and Address.objects.filter(pk=self.pk, is_primary=True).exists()
+        ):
+            has_other = (
+                Address.objects.filter(user=self.user).exclude(pk=self.pk).exists()
+            )
+            if not has_other:
+                self.is_primary = True  # enforce invariant
+
+        # 3. Demote existing primary rows if this is (or stays) primary.
+        with transaction.atomic():
+            if self.is_primary:
+                (
+                    Address.objects.select_for_update()
+                    .filter(user=self.user, is_primary=True)
+                    .exclude(pk=self.pk)
+                    .update(is_primary=False)
+                )
+            super().save(*args, **kwargs)
 
 
 class Wishlist(models.Model):
@@ -177,3 +175,40 @@ class Wishlist(models.Model):
 
     def __str__(self):
         return f"{self.user.email}'s wishlist - {self.product.name}"
+
+
+# --- Signals for Address invariants (model-centric deletion handling) ---
+
+
+@receiver(pre_delete, sender=Address)
+def prevent_deleting_only_address(sender, instance, **kwargs):
+    """Block deletion if this is the user's only address.
+
+    Keeps invariant: user always has at least one address (and therefore a primary).
+    Raises a domain-specific exception so the view can present a tailored message.
+    """
+    siblings_exist = (
+        Address.objects.filter(user=instance.user).exclude(pk=instance.pk).exists()
+    )
+    if not siblings_exist:
+        raise CannotDeleteOnlyAddress("You cannot delete your only address.")
+
+
+@receiver(post_delete, sender=Address)
+def promote_new_primary_after_deletion(sender, instance, **kwargs):
+    """After deleting a primary address, promote another if needed.
+
+    Runs only if the deleted address was primary and others remain. Chooses the most
+    recently created (ordering already -is_primary, -created_at) non-primary candidate.
+    """
+    if not instance.is_primary:
+        return
+    candidate = (
+        Address.objects.filter(user=instance.user)
+        .order_by("-is_primary", "-created_at")
+        .first()
+    )
+    if candidate and not candidate.is_primary:
+        candidate.is_primary = True
+        # Use save() to reuse demotion logic (safe—only one will become primary).
+        candidate.save()
