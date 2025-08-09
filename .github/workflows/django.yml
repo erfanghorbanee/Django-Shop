@@ -27,4 +27,4 @@ jobs:
     - name: Run Tests
       run: |
         cd Django-Shop
-        python manage.py test
+        pytest
