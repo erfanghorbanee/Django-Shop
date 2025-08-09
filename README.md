@@ -22,10 +22,10 @@ Django Shop is a modern, responsive e-commerce platform built with [Django](http
 
 ## Features
 
-- User Authentication, Registration, Account management, and Social login (via [Django Allauth](https://docs.allauth.org/))
-- Phone number validation (via [Django-PhoneNumberField](https://django-phonenumber-field.readthedocs.io/))
+- User Authentication, Registration, Account management, and Social login (via [`Django Allauth`](https://docs.allauth.org/))
+- Phone number validation (via [`Django-PhoneNumberField`](https://django-phonenumber-field.readthedocs.io/))
 - Validating uploaded Files
-- Responsive design using [Bootstrap](https://getbootstrap.com/)
+- Responsive design using [`Bootstrap`](https://getbootstrap.com/)
 - Clean UI with light/dark mode switcher
 - Product listing and details
 - Product Rating and Reviews
@@ -41,6 +41,7 @@ Django Shop is a modern, responsive e-commerce platform built with [Django](http
   - Cannot unset the only primary address (form validation)
   - Cannot delete the only remaining address (domain exception)
   - Automatic promotion of a new primary (most recent address) after deleting the current one
+- Use `pytest` + `pytest-django` and `model-bakery` for fast, expressive tests.
 
 ## Demo
 
@@ -133,4 +134,4 @@ SOCIALACCOUNT_PROVIDERS = {
 
 ## License
 
-This project is licensed under the GNU General Public License v3.0. You can read more about it [here](LICENSE).
+This project is licensed under the GNU General Public License v3.0. See the full text in the [LICENSE file](LICENSE).
