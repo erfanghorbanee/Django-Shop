@@ -28,8 +28,8 @@ def test_first_address_auto_primary(user):
 def test_second_address_non_primary_then_promote(user):
     a1 = make_address(user)
     a2 = make_address(user, is_primary=False)
-    a2.is_primary = True
-    a2.save()
+    # Use model method to switch primary explicitly
+    Address.switch_primary(user, a2.pk)
     a1.refresh_from_db()
     a2.refresh_from_db()
     assert a2.is_primary, "Second address should be primary after promotion"
@@ -37,18 +37,15 @@ def test_second_address_non_primary_then_promote(user):
 
 
 def test_demote_primary_with_other_address_auto_promotes_other(user):
-    """Demoting current primary should auto-promote another existing address."""
-    a1 = make_address(user)  # primary
+    """Switching primary explicitly moves primary flag to another address."""
+    a1 = make_address(user)  # initial primary
     a2 = make_address(user, is_primary=False)
-    a1.is_primary = False
-    a1.save()
+    Address.switch_primary(user, a2.pk)
     a1.refresh_from_db()
     a2.refresh_from_db()
-    assert not a1.is_primary, "Demoted address should no longer be primary"
-    assert a2.is_primary, "Other address should have been auto-promoted"
-    assert Address.objects.filter(user=user, is_primary=True).count() == 1, (
-        "There must still be exactly one primary address"
-    )
+    assert not a1.is_primary, "Original primary should have been demoted"
+    assert a2.is_primary, "New address should now be primary"
+    assert Address.objects.filter(user=user, is_primary=True).count() == 1
 
 
 def test_cannot_demote_primary_when_only_address(user):

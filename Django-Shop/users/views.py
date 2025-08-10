@@ -98,9 +98,8 @@ class DeleteAddressView(LoginRequiredMixin, View):
 class SetPrimaryAddressView(LoginRequiredMixin, View):
     def post(self, request, address_id):
         address = get_object_or_404(Address, id=address_id, user=request.user)
-        address.is_primary = True  # model save() will demote others
         try:
-            address.save()
+            Address.switch_primary(request.user, address.pk)
             messages.success(request, "Primary address updated successfully!")
         except IntegrityError:
             # Handle rare race or DB constraint violation gracefully
