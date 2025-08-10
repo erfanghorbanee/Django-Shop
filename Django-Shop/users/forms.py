@@ -3,7 +3,6 @@ from django import forms
 from django.core.exceptions import ValidationError
 from phonenumber_field.formfields import SplitPhoneNumberField
 
-from .exceptions import CannotDemoteOnlyPrimary
 from .models import Address, CustomUser
 
 
@@ -54,7 +53,6 @@ class AddressForm(forms.ModelForm):
             "state",
             "zip_code",
             "country",
-            "is_primary",
         ]
         widgets = {
             "street_address": forms.TextInput(attrs={"class": "form-control"}),
@@ -63,7 +61,6 @@ class AddressForm(forms.ModelForm):
             "state": forms.TextInput(attrs={"class": "form-control"}),
             "zip_code": forms.TextInput(attrs={"class": "form-control"}),
             "country": forms.TextInput(attrs={"class": "form-control"}),
-            "is_primary": forms.CheckboxInput(attrs={"class": "form-check-input"}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -72,25 +69,12 @@ class AddressForm(forms.ModelForm):
 
     def clean(self):
         cleaned = super().clean()
-        is_primary = cleaned.get("is_primary")
-        # Existing instance trying to uncheck its primary state while being the only address
-        if (
-            self.instance.pk
-            and not is_primary
-            and Address.objects.filter(pk=self.instance.pk, is_primary=True).exists()
-        ):
-            other_exists = (
-                Address.objects.filter(user=self.instance.user)
-                .exclude(pk=self.instance.pk)
-                .exists()
-            )
-            if not other_exists:
-                raise ValidationError({"is_primary": CannotDemoteOnlyPrimary().args[0]})
+        # is_primary removed from form; no direct demotion via form.
         return cleaned
 
     def save(self, commit=True):
         obj = super().save(commit=False)
-        if not obj.pk:  # assign user on create
+        if not obj.pk:
             obj.user = self.user
         if commit:
             obj.save()

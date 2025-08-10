@@ -37,7 +37,7 @@ def test_second_address_non_primary_then_promote(user):
 
 
 def test_demote_primary_with_other_address_auto_promotes_other(user):
-    """Switching primary explicitly moves primary flag to another address."""
+    """Switching primary explicitly moves primary flag to another address (no implicit demotion)."""
     a1 = make_address(user)  # initial primary
     a2 = make_address(user, is_primary=False)
     Address.switch_primary(user, a2.pk)
@@ -48,14 +48,15 @@ def test_demote_primary_with_other_address_auto_promotes_other(user):
     assert Address.objects.filter(user=user, is_primary=True).count() == 1
 
 
-def test_cannot_demote_primary_when_only_address(user):
-    """Attempting to demote the only address should raise domain exception."""
-    a1 = make_address(user)
+def test_cannot_demote_primary_even_if_other_exists(user):
+    """Directly unchecking primary (without choosing another via switch) is blocked."""
+    a1 = make_address(user)  # primary
+    make_address(user, is_primary=False)
     a1.is_primary = False
     with pytest.raises(CannotDemoteOnlyPrimary):
         a1.save()
     a1.refresh_from_db()
-    assert a1.is_primary, "Single address must remain primary"
+    assert a1.is_primary, "Primary should remain until explicit switch_primary()"
 
 
 def test_delete_only_address_blocked(user):

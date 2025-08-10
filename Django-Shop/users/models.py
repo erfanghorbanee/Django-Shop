@@ -126,10 +126,7 @@ class Address(models.Model):
         """
         Responsibilities kept here (fat model, explicit logic):
         - First address auto primary.
-        - Disallow demoting the only address (raise domain error).
-
-        Promotion of another address after deleting or demoting a primary address
-        is handled by dedicated methods (switch_primary / delete override).
+        - Disallow demoting an existing primary via a direct save() (force explicit switch).
         """
 
         # Automatically set first address as primary
@@ -139,13 +136,9 @@ class Address(models.Model):
         # Check if we are updating an existing address
         if self.pk:
             was_primary = Address.objects.filter(pk=self.pk, is_primary=True).exists()
-            # Prevent leaving user with zero primaries by demoting the only one directly.
+            # Block any attempt to demote a primary through direct save.
             if was_primary and not self.is_primary:
-                others_exist = (
-                    Address.objects.filter(user=self.user).exclude(pk=self.pk).exists()
-                )
-                if not others_exist:
-                    raise CannotDemoteOnlyPrimary()
+                raise CannotDemoteOnlyPrimary()
 
         with transaction.atomic():
             if self.is_primary:

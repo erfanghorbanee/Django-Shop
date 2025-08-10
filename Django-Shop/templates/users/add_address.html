@@ -50,11 +50,7 @@
                                 {% for error in form.country.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
                             </div>
                         </div>
-                        <div class="mb-3 form-check">
-                            {{ form.is_primary }}
-                            <label class="form-check-label" for="id_is_primary">Set as primary address</label><br>
-                            {% for error in form.is_primary.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
-                        </div>
+                        {# Primary checkbox removed: primary selection handled elsewhere #}
                         <div class="d-flex justify-content-between">
                             <a href="{% url 'users:addresses' %}" class="btn btn-outline-secondary">Cancel</a>
                             <button type="submit" class="btn btn-primary">Save Address</button>
