@@ -6,7 +6,7 @@ from django.db.models import Q
 from phonenumber_field.modelfields import PhoneNumberField
 from PIL import Image
 
-from .exceptions import CannotDeleteOnlyAddress, CannotDemoteOnlyPrimary
+from .exceptions import CannotDeleteOnlyAddress
 from .managers import CustomUserManager
 
 
@@ -124,9 +124,10 @@ class Address(models.Model):
 
     def save(self, *args, **kwargs):
         """
-        Responsibilities kept here (fat model, explicit logic):
+            Responsibilities kept here (fat model, explicit logic):
+            - First address auto primary.
         - First address auto primary.
-        - Disallow demoting an existing primary via a direct save() (force explicit switch).
+        - Uniqueness of primary enforced (at most one); admin may demote leaving none.
         """
 
         # Automatically set first address as primary
@@ -134,11 +135,7 @@ class Address(models.Model):
             self.is_primary = True
 
         # Check if we are updating an existing address
-        if self.pk:
-            was_primary = Address.objects.filter(pk=self.pk, is_primary=True).exists()
-            # Block any attempt to demote a primary through direct save.
-            if was_primary and not self.is_primary:
-                raise CannotDemoteOnlyPrimary()
+        # If demoting a primary via admin, allow it (system tolerates zero primaries).
 
         with transaction.atomic():
             if self.is_primary:

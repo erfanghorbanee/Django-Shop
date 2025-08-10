@@ -1,7 +1,7 @@
 import pytest
 from django.db import transaction
 
-from users.exceptions import CannotDeleteOnlyAddress, CannotDemoteOnlyPrimary
+from users.exceptions import CannotDeleteOnlyAddress
 from users.models import Address
 
 
@@ -48,15 +48,15 @@ def test_demote_primary_with_other_address_auto_promotes_other(user):
     assert Address.objects.filter(user=user, is_primary=True).count() == 1
 
 
-def test_cannot_demote_primary_even_if_other_exists(user):
-    """Directly unchecking primary (without choosing another via switch) is blocked."""
+def test_can_demote_primary_leaving_none_primary(user):
+    """Admin style direct demotion allowed: possible to have zero primaries until one is set explicitly."""
     a1 = make_address(user)  # primary
     make_address(user, is_primary=False)
     a1.is_primary = False
-    with pytest.raises(CannotDemoteOnlyPrimary):
-        a1.save()
+    a1.save(update_fields=["is_primary"])  # demote
     a1.refresh_from_db()
-    assert a1.is_primary, "Primary should remain until explicit switch_primary()"
+    assert not a1.is_primary
+    assert Address.objects.filter(user=user, is_primary=True).count() == 0
 
 
 def test_delete_only_address_blocked(user):

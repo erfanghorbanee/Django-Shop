@@ -67,11 +67,6 @@ class AddressForm(forms.ModelForm):
         self.user = kwargs.pop("user", None)
         super().__init__(*args, **kwargs)
 
-    def clean(self):
-        cleaned = super().clean()
-        # is_primary removed from form; no direct demotion via form.
-        return cleaned
-
     def save(self, commit=True):
         obj = super().save(commit=False)
         if not obj.pk:
