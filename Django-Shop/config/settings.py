@@ -179,6 +179,10 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Custom user model
 AUTH_USER_MODEL = "users.CustomUser"
 
+# Cart settings
+# Maximum quantity allowed per single cart line item to avoid abuse / overflow.
+CART_MAX_ITEM_QTY = 50
+
 # allauth settings
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1

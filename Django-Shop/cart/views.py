@@ -1,9 +1,12 @@
 from django.contrib import messages
-from django.http import HttpResponseNotAllowed, JsonResponse
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
+from django.utils.decorators import method_decorator
+from django.views.decorators.http import require_POST
 from django.views.generic import TemplateView, View
 from products.models import Product
 
+from .exceptions import CartError
 from .models import Cart
 
 
@@ -16,62 +19,72 @@ class CartDetailView(TemplateView):
         return ctx
 
 
+@method_decorator(require_POST, name="dispatch")
 class CartActionMixin(View):
     """Shared logic for cart-mutating POST views."""
 
     def dispatch(self, request, *args, **kwargs):
-        if request.method.lower() != "post":
-            return HttpResponseNotAllowed(["POST"])
         self.cart = Cart.get_or_create_for_request(request)
         return super().dispatch(request, *args, **kwargs)
 
-    def respond(self, message):
-        request = self.request
-        cart = self.cart
-        # Detect AJAX/JSON intent. HttpRequest has no 'accepts' method; use headers.
-        accept = request.headers.get("Accept", "")
-        is_ajax = request.headers.get("X-Requested-With") == "XMLHttpRequest"
-        wants_json = "application/json" in accept or "json" in accept
-        if request.headers.get("HX-Request") or is_ajax or wants_json:
+    def respond(self, message, *, ok=True):
+        """Return JSON or HTML response based on request."""
+        if self.request.accepts("application/json"):
             return JsonResponse(
                 {
-                    "ok": True,
+                    "ok": ok,
                     "message": message,
-                    "total_quantity": cart.total_quantity,
-                    "subtotal": str(cart.subtotal),
-                }
+                    "total_quantity": self.cart.total_quantity,
+                    "subtotal": str(self.cart.subtotal),
+                },
+                status=400 if not ok else 200,
             )
-        messages.success(request, message)
+
+        if ok:
+            messages.success(self.request, message)
+        else:
+            messages.error(self.request, message)
         return redirect("cart:detail")
 
 
 class AddToCartView(CartActionMixin):
     def post(self, request, product_id):
-        product = get_object_or_404(Product, pk=product_id)
+        product = get_object_or_404(
+            Product.objects.select_related("category"), pk=product_id
+        )
+
         try:
-            qty = int(request.POST.get("quantity", 1))
-        except ValueError:
-            qty = 1
-        self.cart.add(product, quantity=max(1, qty))
-        return self.respond(f"Added {product.name} to cart")
+            quantity = self.cart._parse_quantity(request.POST.get("quantity", 1))
+            item, info = self.cart.add_product(product, quantity)
+            message = f"Added {info['added_quantity']} × {product.name} to cart"
+            return self.respond(message)
+        except CartError as e:
+            return self.respond(str(e), ok=False)
 
 
 class RemoveFromCartView(CartActionMixin):
     def post(self, request, product_id):
         product = get_object_or_404(Product, pk=product_id)
-        self.cart.set(product, 0)
+        self.cart.remove_product(product)
         return self.respond(f"Removed {product.name} from cart")
 
 
 class SetQuantityView(CartActionMixin):
     def post(self, request, product_id):
         product = get_object_or_404(Product, pk=product_id)
+
         try:
-            qty = int(request.POST.get("quantity", 1))
-        except ValueError:
-            qty = 1
-        self.cart.set(product, max(0, qty))
-        return self.respond(f"Updated {product.name} quantity")
+            quantity = self.cart._parse_quantity(
+                request.POST.get("quantity", 0), default=0
+            )
+            item, info = self.cart.set_product_quantity(product, quantity)
+            if info.get("removed"):
+                message = f"Removed {product.name} from cart"
+            else:
+                message = f"Updated {product.name} quantity"
+            return self.respond(message)
+        except CartError as e:
+            return self.respond(str(e), ok=False)
 
 
 class ClearCartView(CartActionMixin):
