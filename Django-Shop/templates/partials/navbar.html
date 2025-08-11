@@ -51,8 +51,15 @@
                 <li class="nav-item">
                     <a href="{% url 'home:privacy' %}" class="nav-link">Privacy Policy</a>
                 </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link"><i class="bi bi-cart"></i></a>
+                <li class="nav-item position-relative me-2">
+                    <a href="{% url 'cart:detail' %}" class="nav-link">
+                        <i class="bi bi-cart" aria-label="Cart"></i>
+                        {% if cart_total_quantity %}
+                        <span id="cartBadgeCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary small">
+                            {{ cart_total_quantity }}
+                        </span>
+                        {% endif %}
+                    </a>
                 </li>
                 <li class="nav-item">
                     <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme">
@@ -63,7 +70,7 @@
                     {% if user.is_authenticated %}
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle profile-icon" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="{{ user.profile_picture.url }}" alt="Profile" class="profile-picture">
+                                <img src="{{ user.profile_picture.url }}" alt="Profile" class="profile-picture" width="40" height="40">
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
                                 <li><a class="dropdown-item" href="{% url 'users:profile' %}"><i class="bi bi-person"></i> Profile</a></li>

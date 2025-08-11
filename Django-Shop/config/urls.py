@@ -22,15 +22,15 @@ from django.urls import include, path
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('', include('home.urls', namespace='home')),
-    path('users/', include('users.urls', namespace='users')),
-    path('products/', include('products.urls', namespace='products')),
-    path('orders/', include('orders.urls', namespace='orders')),
-    path('support/', include('support.urls', namespace='support')),
-    path('careers/', include('careers.urls', namespace='careers')),
-
+    path("", include("home.urls", namespace="home")),
+    path("users/", include("users.urls", namespace="users")),
+    path("products/", include("products.urls", namespace="products")),
+    path("orders/", include("orders.urls", namespace="orders")),
+    path("support/", include("support.urls", namespace="support")),
+    path("careers/", include("careers.urls", namespace="careers")),
+    path("cart/", include("cart.urls", namespace="cart")),
     # allauth
-    path('accounts/', include('allauth.urls')),
+    path("accounts/", include("allauth.urls")),
 ]
 
 if settings.DEBUG:

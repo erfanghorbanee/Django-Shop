@@ -25,7 +25,11 @@ SECRET_KEY = "django-insecure-k%awlb#gsnaf_7r2^tbmlw7q=)i9k9)sii%h)08o8^u7t8b0_q
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    "testserver",  # django test client / shell tests
+]
 
 
 # Application definition
@@ -51,6 +55,7 @@ INSTALLED_APPS = [
     "orders",
     "support",
     "careers",
+    "cart",
 ]
 
 MIDDLEWARE = [
@@ -93,6 +98,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "products.context_processors.categories.categories_processor",
+                "cart.context_processors.cart_summary",
             ],
         },
     },

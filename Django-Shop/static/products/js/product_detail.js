@@ -69,40 +69,58 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Add to Cart functionality
     if (addToCartButton) {
-        addToCartButton.addEventListener('click', () => {
-            // Get product data
-            const productSlug = window.location.pathname.split('/').filter(item => item).pop();
+        const form = document.getElementById('addToCartForm');
+        addToCartButton.addEventListener('click', (e) => {
+            if(!form) return;
+            e.preventDefault();
             const quantity = parseInt(quantityInput?.value || 1);
-            
-            // Prepare feedback to user
-            const originalText = addToCartButton.innerHTML;
+            const originalHTML = addToCartButton.innerHTML;
             addToCartButton.innerHTML = '<i class="bi bi-hourglass-split"></i> Adding...';
             addToCartButton.disabled = true;
-            
-            // Simulate API call (replace with actual fetch when ready)
-            setTimeout(() => {
-                // Show success
-                addToCartButton.innerHTML = '<i class="bi bi-check-lg"></i> Added to Cart';
-                addToCartButton.classList.remove('btn-primary');
-                addToCartButton.classList.add('btn-success');
-                
-                // Reset button after delay
+            // sync hidden qty (server still handles gracefully)
+            const hiddenQty = document.getElementById('addToCartHiddenQty');
+            if (hiddenQty) hiddenQty.value = quantity;
+
+            fetch(form.action, {
+                method: 'POST',
+                headers: { 'X-CSRFToken': getCSRFToken(), 'X-Requested-With': 'XMLHttpRequest' },
+                body: new URLSearchParams(new FormData(form))
+            })
+            .then(r => r.json().catch(() => null))
+            .then(data => {
+                if (data && data.ok) {
+                    addToCartButton.innerHTML = '<i class="bi bi-check-lg"></i> Added';
+                    addToCartButton.classList.remove('btn-primary');
+                    addToCartButton.classList.add('btn-success');
+                    // update badge
+                    const badge = document.getElementById('cartBadgeCount');
+                    if (badge && data.total_quantity !== undefined) {
+                        badge.textContent = data.total_quantity;
+                        if (data.total_quantity > 0) badge.classList.remove('d-none');
+                    }
+                } else {
+                    addToCartButton.innerHTML = '<i class="bi bi-exclamation-triangle"></i> Error';
+                    addToCartButton.classList.remove('btn-primary');
+                    addToCartButton.classList.add('btn-danger');
+                }
                 setTimeout(() => {
-                    addToCartButton.innerHTML = originalText;
-                    addToCartButton.classList.remove('btn-success');
+                    addToCartButton.innerHTML = originalHTML;
+                    addToCartButton.classList.remove('btn-success','btn-danger');
                     addToCartButton.classList.add('btn-primary');
                     addToCartButton.disabled = false;
-                }, 1500);
-                
-                // Here you would integrate with an actual cart API
-                console.log(`Added product ${productSlug} to cart with quantity: ${quantity}`);
-                
-                // Dispatch a custom event that other parts of the app can listen for
-                const cartEvent = new CustomEvent('cart:updated', {
-                    detail: { productSlug, quantity, action: 'add' }
-                });
-                document.dispatchEvent(cartEvent);
-            }, 800);
+                }, 1600);
+            })
+            .catch(() => {
+                addToCartButton.innerHTML = '<i class="bi bi-exclamation-triangle"></i> Error';
+                addToCartButton.classList.remove('btn-primary');
+                addToCartButton.classList.add('btn-danger');
+                setTimeout(() => {
+                    addToCartButton.innerHTML = originalHTML;
+                    addToCartButton.classList.remove('btn-danger');
+                    addToCartButton.classList.add('btn-primary');
+                    addToCartButton.disabled = false;
+                }, 1600);
+            });
         });
     }
     

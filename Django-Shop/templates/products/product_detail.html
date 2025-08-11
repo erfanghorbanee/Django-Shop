@@ -121,17 +121,21 @@
                             <button class="quantity-btn" id="increaseQuantity" {% if not product.is_available %}disabled{% endif %}>+</button>
                         </div>
                         
-                        <div class="d-flex gap-2">
-                            <button class="btn btn-primary btn-lg add-to-cart-btn" id="addToCartButton" {% if not product.is_available %}disabled{% endif %}>
-                                <i class="bi bi-cart-plus"></i> Add to Cart
-                            </button>
+                        <div class="d-flex gap-2 align-items-start">
+                            <form method="post" action="{% url 'cart:add' product.id %}" id="addToCartForm" class="d-flex align-items-center gap-2">
+                                {% csrf_token %}
+                                <input type="hidden" name="quantity" id="addToCartHiddenQty" value="1">
+                                <button type="submit" class="btn btn-primary btn-lg add-to-cart-btn" id="addToCartButton" {% if not product.is_available %}disabled{% endif %}>
+                                    <i class="bi bi-cart-plus"></i> Add to Cart
+                                </button>
+                            </form>
                             
                             {% if user.is_authenticated %}
                                 <button id="wishlistToggleBtn" class="btn-link border-0 bg-transparent p-0 ms-3" style="font-size: 1.75rem;" data-product-id="{{ product.id }}" title="{% if in_wishlist %}Already in Wishlist{% else %}Add to Wishlist{% endif %}">
                                     <i id="wishlistHeartIcon" class="bi {% if in_wishlist %}bi-heart-fill text-danger{% else %}bi-heart text-danger{% endif %}"></i>
                                 </button>
                             {% else %}
-                                <a href="{% url 'account_login' %}?next={{ request.path }}" class="text-decoration-none ms-3" style="font-size: 1.75rem;" title="Add to Wishlist">
+                                <a href="{% url 'account_login' %}?next={{ request.path }}" class="text-decoration-none ms-3 fs-3" title="Add to Wishlist">
                                     <i class="bi bi-heart text-danger"></i>
                                 </a>
                             {% endif %}
@@ -191,12 +195,12 @@
                                 <div class="review-date text-muted small">{{ review.created_at|date:"F j, Y" }}</div>
                             </div>
                             <div class="rating-stars">
-                                {% with ''|center:review.rating|stringformat:'s' as stars %}
+                                {% with ""|center:review.rating|stringformat:'s' as stars %}
                                     {% for _ in stars %}
                                         <i class="bi bi-star-fill text-warning"></i>
                                     {% endfor %}
                                 {% endwith %}
-                                {% with ''|center:5|stringformat:'s' as stars %}
+                                {% with ""|center:5|stringformat:'s' as stars %}
                                     {% for _ in stars %}
                                         {% if forloop.counter > review.rating %}
                                             <i class="bi bi-star text-warning"></i>
@@ -265,8 +269,21 @@
         {% endif %}
     </section>
 </div>
-{% endblock %}
+{% endblock content %}
 
 {% block extra_js %}
 <script src="{% static 'products/js/product_detail.js' %}"></script>
-{% endblock %}
+<script>
+    (function(){
+        const qtyInput = document.getElementById('productQuantity');
+        const hiddenQty = document.getElementById('addToCartHiddenQty');
+        const form = document.getElementById('addToCartForm');
+        if(qtyInput && hiddenQty && form){
+            const sync = () => { hiddenQty.value = qtyInput.value || 1; };
+            qtyInput.addEventListener('change', sync);
+            qtyInput.addEventListener('keyup', sync);
+            form.addEventListener('submit', sync);
+        }
+    })();
+</script>
+{% endblock extra_js %}
