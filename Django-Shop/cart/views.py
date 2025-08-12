@@ -28,11 +28,9 @@ class CartActionMixin(View):
         return super().dispatch(request, *args, **kwargs)
 
     def respond(self, message, *, ok=True):
-        """Return JSON or HTML response based on request.
+        """Return JSON for AJAX requests, or HTML redirect for POST requests."""
 
-        Prefer JSON for AJAX (Accept: application/json or X-Requested-With header).
-        """
-        # Return JSON only for AJAX requests (detected via X-Requested-With)
+        # Check if the request wants JSON (AJAX detected via X-Requested-With)
         wants_json = (
             self.request.headers.get("X-Requested-With", "").lower() == "xmlhttprequest"
         )
