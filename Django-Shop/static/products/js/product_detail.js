@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Change main image on thumbnail click
     window.changeMainImage = function(imageUrl) {
+        if (!mainImage) return;
         // Add fade-out effect
         mainImage.style.opacity = '0.5';
         
@@ -70,6 +71,55 @@ document.addEventListener('DOMContentLoaded', () => {
     // Add to Cart functionality
     if (addToCartButton) {
         const form = document.getElementById('addToCartForm');
+
+        // Helper: inject a Bootstrap alert into the messages area in base.html
+        // If the exact same message (by text) and level already exists, don't duplicate it.
+        function showFlashMessage(message, level = 'info') {
+            // level: 'success' | 'danger' | 'warning' | 'info'
+            const main = document.querySelector('main.container.my-5.flex-grow-1') || document.querySelector('main');
+            if (!main) return;
+
+            const normalizedMsg = String(message).trim();
+            const levelClass = `alert-${level}`;
+
+            // Check for existing identical alert (in server-rendered or dynamic wrapper)
+            const existingAlerts = main.querySelectorAll('.alert');
+            for (const el of existingAlerts) {
+                const text = el.textContent.replace('\
+', ' ').trim();
+                if (text === normalizedMsg && el.classList.contains(levelClass)) {
+                    // Ensure it's visible and scroll into view instead of duplicating
+                    el.classList.add('show');
+                    if (typeof el.scrollIntoView === 'function') {
+                        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                    return;
+                }
+            }
+
+            // Find or create a wrapper (to mirror base.html structure when messages exist)
+            let wrapper = main.querySelector('[data-dynamic-messages]');
+            if (!wrapper) {
+                wrapper = document.createElement('div');
+                wrapper.className = 'mb-4';
+                wrapper.setAttribute('data-dynamic-messages', '1');
+                wrapper.setAttribute('aria-live', 'polite');
+                wrapper.setAttribute('aria-atomic', 'true');
+                // Insert at top of main
+                main.insertBefore(wrapper, main.firstChild);
+            }
+
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${level} alert-dismissible fade show shadow-sm`;
+            alert.setAttribute('role', 'alert');
+            alert.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            `;
+
+            wrapper.prepend(alert);
+        }
+
         addToCartButton.addEventListener('click', (e) => {
             if(!form) return;
             e.preventDefault();
@@ -83,15 +133,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
             fetch(form.action, {
                 method: 'POST',
-                headers: { 'X-CSRFToken': getCSRFToken(), 'X-Requested-With': 'XMLHttpRequest' },
+                headers: {
+                    'X-CSRFToken': getCSRFToken(),
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                },
                 body: new URLSearchParams(new FormData(form))
             })
-            .then(r => r.json().catch(() => null))
-            .then(data => {
-                if (data && data.ok) {
+            .then(async (r) => {
+                let data = null;
+                try { data = await r.json(); } catch (_) {}
+                return { ok: r.ok && (data ? data.ok !== false : true), data };
+            })
+            .then(({ ok, data }) => {
+                if (ok && data) {
                     addToCartButton.innerHTML = '<i class="bi bi-check-lg"></i> Added';
                     addToCartButton.classList.remove('btn-primary');
                     addToCartButton.classList.add('btn-success');
+                    // show success flash message from server
+                    if (data.message) showFlashMessage(data.message, 'success');
                     // update badge
                     const badge = document.getElementById('cartBadgeCount');
                     if (badge && data.total_quantity !== undefined) {
@@ -102,6 +162,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     addToCartButton.innerHTML = '<i class="bi bi-exclamation-triangle"></i> Error';
                     addToCartButton.classList.remove('btn-primary');
                     addToCartButton.classList.add('btn-danger');
+                    // show error flash message from server or fallback
+                    const msg = data?.message || 'Could not add to cart.';
+                    showFlashMessage(msg, 'danger');
                 }
                 setTimeout(() => {
                     addToCartButton.innerHTML = originalHTML;
@@ -114,6 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 addToCartButton.innerHTML = '<i class="bi bi-exclamation-triangle"></i> Error';
                 addToCartButton.classList.remove('btn-primary');
                 addToCartButton.classList.add('btn-danger');
+                showFlashMessage('Network error. Please try again.', 'danger');
                 setTimeout(() => {
                     addToCartButton.innerHTML = originalHTML;
                     addToCartButton.classList.remove('btn-danger');

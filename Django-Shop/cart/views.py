@@ -28,8 +28,15 @@ class CartActionMixin(View):
         return super().dispatch(request, *args, **kwargs)
 
     def respond(self, message, *, ok=True):
-        """Return JSON or HTML response based on request."""
-        if self.request.accepts("application/json"):
+        """Return JSON or HTML response based on request.
+
+        Prefer JSON for AJAX (Accept: application/json or X-Requested-With header).
+        """
+        # Prefer JSON for explicit Accept header or AJAX requests
+        wants_json = self.request.accepts("application/json") or (
+            self.request.headers.get("x-requested-with", "").lower() == "xmlhttprequest"
+        )
+        if wants_json:
             return JsonResponse(
                 {
                     "ok": ok,
@@ -56,7 +63,7 @@ class AddToCartView(CartActionMixin):
         try:
             quantity = self.cart._parse_quantity(request.POST.get("quantity", 1))
             item, info = self.cart.add_product(product, quantity)
-            message = f"Added {info['added_quantity']} × {product.name} to cart"
+            message = f"Added {info['added_quantity']} × {product.name} to cart."
             return self.respond(message)
         except CartError as e:
             return self.respond(str(e), ok=False)

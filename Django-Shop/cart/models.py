@@ -169,7 +169,7 @@ class Cart(models.Model):
             )
 
         if new_total > product.stock:
-            raise OutOfStock(f"Only {product.stock} available for '{product.name}'")
+            raise OutOfStock(f"Only {product.stock} available for '{product.name}'!")
 
         # Add to cart
         with transaction.atomic():
