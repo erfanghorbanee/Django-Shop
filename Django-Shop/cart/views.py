@@ -32,9 +32,9 @@ class CartActionMixin(View):
 
         Prefer JSON for AJAX (Accept: application/json or X-Requested-With header).
         """
-        # Prefer JSON for explicit Accept header or AJAX requests
-        wants_json = self.request.accepts("application/json") or (
-            self.request.headers.get("x-requested-with", "").lower() == "xmlhttprequest"
+        # Return JSON only for AJAX requests (detected via X-Requested-With)
+        wants_json = (
+            self.request.headers.get("X-Requested-With", "").lower() == "xmlhttprequest"
         )
         if wants_json:
             return JsonResponse(
