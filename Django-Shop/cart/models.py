@@ -186,7 +186,7 @@ class Cart(models.Model):
         if not (product.is_available and product.stock > 0):
             raise ProductUnavailable(f"Product '{product.name}' is not available")
 
-        # Clamp to stock and max per item
+        # Clamp to stock and max allowed per item
         max_allowed = getattr(settings, "CART_MAX_ITEM_QTY", 50)
         quantity = min(quantity, product.stock, max_allowed)
 

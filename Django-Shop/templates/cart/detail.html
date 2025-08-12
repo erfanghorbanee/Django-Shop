@@ -41,7 +41,7 @@
                     <img src="{{ first_image.image.url }}" class="img-thumbnail me-2 cart-thumb" width="60" height="60" alt="{{ item.product.name }}">
                   {% endif %}
                 {% endwith %}
-                <span>{{ item.product.name }}</span>
+                <a href="{% url 'products:product_detail' item.product.slug %}">{{ item.product.name }}</a>
               </div>
             </td>
             <td class="text-center">
