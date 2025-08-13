@@ -38,9 +38,12 @@ Django Shop is a modern, responsive e-commerce platform built with [Django](http
   - Multiple addresses per user with exactly one primary (DB-enforced partial unique constraint)
   - First address auto-set as primary
   - Safe primary switching (atomic demotion of previous primary)
-  - Cannot unset the only primary address (form validation)
-  - Cannot delete the only remaining address (domain exception)
+  - Cannot delete the only remaining address
   - Automatic promotion of a new primary (most recent address) after deleting the current one
+- Shopping Cart:
+  - Persistent carts for guests (session) and authenticated users; automatic merge on login
+  - Limit per item (`CART_MAX_ITEM_QTY` in `settings.py`)
+  - Cart icon in Navbar shows the total number of added items via `context processors`.
 - Use `pytest` + `pytest-django` and `model-bakery` for fast, expressive tests.
 
 ## Demo
@@ -48,6 +51,13 @@ Django Shop is a modern, responsive e-commerce platform built with [Django](http
 *Demo GIF goes here*
 
 ## Installation
+
+0. (Recommended) Use a virtual environment:
+
+    ```bash
+    python3 -m venv .venv
+    source .venv/bin/activate
+    ```
 
 1. Clone the repository:
 
@@ -121,7 +131,6 @@ SOCIALACCOUNT_PROVIDERS = {
 ## To-Do List
 
 - [ ] Add payment integration
-- [ ] Implement cart
 - [ ] Improve overall speed
 - [ ] Customize dashboard for admins
 - [ ] process and optimize pictures(static and media)

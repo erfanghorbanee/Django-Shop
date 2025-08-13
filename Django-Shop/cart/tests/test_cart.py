@@ -163,3 +163,105 @@ def test_remove_and_clear_redirect_and_effect(client, product_factory):
     assert r2.status_code in (302, 303)
     cart.refresh_from_db()
     assert cart.cart_items.count() == 0
+
+
+# --- Merge on login tests ---
+
+
+def test_merge_session_cart_into_user_cart_on_login(client, user, product_factory):
+    p1 = product_factory(name="M1", stock=10, price=Decimal("10.00"))
+    p2 = product_factory(name="M2", stock=10, price=Decimal("20.00"))
+
+    # Anonymous adds items to session cart
+    client.post(reverse("cart:add", args=[p1.id]), {"quantity": 2})
+    client.post(reverse("cart:add", args=[p2.id]), {"quantity": 3})
+
+    session_key = client.session.session_key
+    anon_cart = Cart.objects.get(session_key=session_key, user__isnull=True)
+    assert anon_cart.cart_items.count() == 2
+
+    # Login without rotating the session key to preserve the anon session cart
+    # (force_login/login may rotate the session; here we authenticate by setting session keys)
+    session = client.session
+    session["_auth_user_id"] = str(user.pk)
+    session["_auth_user_backend"] = "django.contrib.auth.backends.ModelBackend"
+    session["_auth_user_hash"] = user.get_session_auth_hash()
+    session.save()
+    # Hit cart page to trigger get_or_create_for_request merge logic
+    r = client.get(reverse("cart:detail"))
+    assert r.status_code == 200
+
+    user_cart = Cart.objects.get(user=user)
+    assert user_cart.cart_items.count() == 2
+    assert user_cart.cart_items.get(product=p1).quantity == 2
+    assert user_cart.cart_items.get(product=p2).quantity == 3
+
+    # Anonymous cart should be deleted after merge
+    assert not Cart.objects.filter(session_key=session_key, user__isnull=True).exists()
+
+
+def test_merge_adds_quantities_when_user_cart_already_has_items(
+    client, user, product_factory
+):
+    p = product_factory(stock=20, price=Decimal("15.00"))
+
+    # Anonymous adds 3 of the product
+    client.post(reverse("cart:add", args=[p.id]), {"quantity": 3})
+    anon_session_key = client.session.session_key
+
+    # Pre-create a user cart with 4 of the same product
+    user_cart = Cart.objects.create(user=user)
+    user_cart.add(product=p, quantity=4)
+
+    # Login without rotating the session key to preserve the anon session cart
+    session = client.session
+    session["_auth_user_id"] = str(user.pk)
+    session["_auth_user_backend"] = "django.contrib.auth.backends.ModelBackend"
+    session["_auth_user_hash"] = user.get_session_auth_hash()
+    session.save()
+    # Trigger merge
+    r = client.get(reverse("cart:detail"))
+    assert r.status_code == 200
+
+    user_cart.refresh_from_db()
+    item = user_cart.cart_items.get(product=p)
+    assert item.quantity == 7  # 4 existing + 3 from session cart
+
+    # Anonymous cart should be gone
+    assert not Cart.objects.filter(
+        session_key=anon_session_key, user__isnull=True
+    ).exists()
+
+
+def test_merge_survives_session_rotation_on_login(client, user, product_factory):
+    """Anon cart should merge even if session key rotates before login."""
+    p1 = product_factory(name="R1", stock=10, price=Decimal("11.00"))
+    p2 = product_factory(name="R2", stock=10, price=Decimal("22.00"))
+
+    # Anonymous adds items to session cart
+    client.post(reverse("cart:add", args=[p1.id]), {"quantity": 1})
+    client.post(reverse("cart:add", args=[p2.id]), {"quantity": 2})
+
+    session_key_before = client.session.session_key
+    anon_cart = Cart.objects.get(session_key=session_key_before, user__isnull=True)
+    # Our implementation stores a sticky cart_id in session
+    assert client.session.get("cart_id") == anon_cart.pk
+
+    # Perform a real login that rotates the session and preserves data
+    user.set_password("testpass123")
+    user.save()
+    ok = client.login(email=user.email, password="testpass123")
+    assert ok is True
+    session_key_after = client.session.session_key
+    assert session_key_after != session_key_before
+
+    # Trigger merge
+    r = client.get(reverse("cart:detail"))
+    assert r.status_code == 200
+
+    user_cart = Cart.objects.get(user=user)
+    assert user_cart.cart_items.count() == 2
+    assert user_cart.cart_items.get(product=p1).quantity == 1
+    assert user_cart.cart_items.get(product=p2).quantity == 2
+    # Old anon cart should be gone
+    assert not Cart.objects.filter(pk=anon_cart.pk).exists()

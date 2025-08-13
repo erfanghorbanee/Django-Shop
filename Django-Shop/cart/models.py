@@ -74,27 +74,52 @@ class Cart(models.Model):
         - Else: use/create session cart identified by request.session.session_key.
         """
         if request.user.is_authenticated:
-            cart, _ = cls.objects.select_related("user").get_or_create(
-                user=request.user
-            )
-            # Merge any session cart
-            session_key = request.session.session_key
-            if session_key:
+            cart, _ = cls.objects.get_or_create(user=request.user)
+            # Try to find an anonymous cart by a sticky cart_id first (survives session rotation),
+            # otherwise fall back to matching the current session_key.
+            anon_cart = None
+            cart_id = request.session.get("cart_id")
+            if cart_id:
                 try:
-                    anon_cart = cls.objects.get(
-                        session_key=session_key, user__isnull=True
-                    )
+                    anon_cart = cls.objects.get(pk=cart_id, user__isnull=True)
                 except cls.DoesNotExist:
-                    return cart
-                if anon_cart.pk != cart.pk:
-                    cart.merge_from(anon_cart)
-                    anon_cart.delete()
+                    anon_cart = None
+
+            if anon_cart is None:
+                session_key = request.session.session_key
+                if session_key:
+                    try:
+                        anon_cart = cls.objects.get(
+                            session_key=session_key, user__isnull=True
+                        )
+                    except cls.DoesNotExist:
+                        anon_cart = None
+
+            if anon_cart and anon_cart.pk != cart.pk:
+                cart.merge_from(anon_cart)
+                anon_cart.delete()
+                # Clear the sticky id from session after merge
+                request.session.pop("cart_id", None)
             return cart
         # anonymous path
         if not request.session.session_key:
             request.session.create()
         session_key = request.session.session_key
+        # Prefer a sticky cart id in session (so the same anon cart survives key rotation)
+        cart_id = request.session.get("cart_id")
+        if cart_id:
+            try:
+                cart = cls.objects.get(pk=cart_id, user__isnull=True)
+                if cart.session_key != session_key:
+                    cart.session_key = session_key
+                    cart.save(update_fields=["session_key", "updated_at"])
+                return cart
+            except cls.DoesNotExist:
+                pass
+
         cart, _ = cls.objects.get_or_create(session_key=session_key, user__isnull=True)
+        # Persist the cart id in session to survive session key rotation (e.g., on login)
+        request.session["cart_id"] = cart.pk
         return cart
 
     def merge_from(self, other: "Cart"):
