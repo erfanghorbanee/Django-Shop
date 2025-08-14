@@ -1,3 +1,29 @@
+/* Default (fallback) Theme — Light */
+:root {
+    --bg-color: #E5EFFF;
+    --text-color: #1B262C;
+    --primary-color: #2563eb;
+    --secondary-color: #f3f6fa;
+    --link-color: #1D4E89;
+    --dropdown-bg: #ffffff;
+    --dropdown-text-color: #1B262C;
+    --card-bg: #ffffff;
+    --card-border: #D6E6F2;
+    --table-bg: #ffffff;
+    --table-border: #D6E6F2;
+    --input-bg: #ffffff;
+    --input-border: #D6E6F2;
+    --input-text: #1B262C;
+    --navbar-bg: #f8fafc;
+    --footer-bg: #dbeafe;
+    --btn-primary-text: #fff;
+    --btn-secondary-text: #1B262C;
+    --btn-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    --theme-toggle-bg: #e0e7ef;
+    /* Brand color default for light */
+    --navbar-brand-color: #1D4E89;
+}
+
 /* Light Theme */
 .light-theme {
     --bg-color: #E5EFFF;
