@@ -27,14 +27,14 @@ Django Shop is a modern, responsive e-commerce platform built with [Django](http
 - Validating uploaded Files
 - Responsive design using [`Bootstrap`](https://getbootstrap.com/)
 - Clean UI with light/dark mode switcher
-- Product listing and details
-- Product Rating and Reviews
-- Discounts/Promotions
+- Products listing and details
+  - Product Rating and Reviews
+  - Discounts/Promotions
 - Order management
 - User wishlist functionality
 - Customer support page
 - Career application page
-- Advanced address management:
+- Advanced address management
   - Multiple addresses per user with exactly one primary (DB-enforced partial unique constraint)
   - First address auto-set as primary
   - Safe primary switching (atomic demotion of previous primary)
@@ -130,15 +130,16 @@ SOCIALACCOUNT_PROVIDERS = {
 
 ## To-Do List
 
-- [ ] Add payment integration
+- [ ] Add Async
 - [ ] Improve overall speed
 - [ ] Customize dashboard for admins
 - [ ] process and optimize pictures(static and media)
 - [ ] Optimize for SEO
 - [ ] Optimize caching
 - [ ] Improve security (2fa, ...)
-- [ ] Add tests for core functionalities
-- [ ] stress-test server and database under heavy load with concurrent requests
+- [ ] Test
+  - [ ] Add tests for core functionalities
+  - [ ] stress-test server and database under heavy load with concurrent requests
 - [ ] Support other languages (French, German, ...)
 
 ## License
