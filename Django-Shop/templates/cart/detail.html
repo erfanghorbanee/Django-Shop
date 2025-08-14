@@ -9,12 +9,26 @@
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h2>My Cart</h2>
     {% if cart.total_quantity %}
-      <form method="post" action="{% url 'cart:clear' %}" onsubmit="return confirm('Clear cart?');">
-        {% csrf_token %}
-        <button class="btn btn-outline-danger btn-sm">
-          <i class="bi bi-x-circle"></i> Clear Cart
-        </button>
-      </form>
+      <div class="d-flex gap-2">
+        <form method="post" action="{% url 'cart:clear' %}" onsubmit="return confirm('Clear cart?');">
+          {% csrf_token %}
+          <button class="btn btn-outline-danger btn-sm">
+            <i class="bi bi-x-circle"></i> Clear Cart
+          </button>
+        </form>
+        {% if request.user.is_authenticated %}
+        <form method="post" action="{% url 'orders:checkout' %}">
+          {% csrf_token %}
+          <button class="btn btn-primary btn-sm">
+            Checkout and Pay
+          </button>
+        </form>
+        {% else %}
+        <a class="btn btn-primary btn-sm" href="{% url 'account_login' %}?next={% url 'cart:detail' %}">
+          Sign in to Checkout
+        </a>
+        {% endif %}
+      </div>
     {% endif %}
   </div>
   {% if not cart.items %}

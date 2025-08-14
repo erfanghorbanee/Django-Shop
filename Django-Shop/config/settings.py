@@ -213,7 +213,7 @@ PHONENUMBER_DEFAULT_REGION = "IT"
 # The Payment model lives in orders app
 PAYMENT_MODEL = "orders.Payment"
 # Used by providers that construct absolute URLs (fallback only; prefer reverse + request)
-PAYMENT_HOST = os.getenv("PAYMENT_HOST", "localhost:8000")
+PAYMENT_HOST = os.getenv("PAYMENT_HOST", "127.0.0.1:8000")
 
 # Development configuration
 PAYMENT_VARIANTS = {

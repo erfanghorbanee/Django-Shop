@@ -6,6 +6,7 @@ from .views import (
     PaymentMethodDeleteView,
     PaymentMethodListView,
     SetDefaultPaymentMethodView,
+    checkout_from_cart,
     payment_failed,
     payment_success,
     start_payment,
@@ -17,6 +18,7 @@ urlpatterns = [
     path("<int:order_id>/pay/", start_payment, name="start_payment"),
     path("<int:order_id>/payment/success/", payment_success, name="payment_success"),
     path("<int:order_id>/payment/failed/", payment_failed, name="payment_failed"),
+    path("checkout/", checkout_from_cart, name="checkout"),
     path("payment-methods/", PaymentMethodListView.as_view(), name="payment_methods"),
     path(
         "payment-methods/add/",

@@ -1,5 +1,6 @@
 from decimal import Decimal
 
+from cart.models import Cart
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -82,11 +83,10 @@ class SetDefaultPaymentMethodView(LoginRequiredMixin, UpdateView):
 
 
 @login_required
-@require_POST
 def start_payment(request, order_id: int):
     order = get_object_or_404(Order, pk=order_id, user=request.user)
     Payment = get_payment_model()
-    # Reuse an existing in-progress payment to avoid duplicates
+    # GET should not create or mutate state; only reuse existing in-progress payment
     payment = (
         Payment.objects.filter(order=order, variant="stripe")
         .exclude(status="confirmed")
@@ -94,14 +94,11 @@ def start_payment(request, order_id: int):
         .first()
     )
     if not payment:
-        payment = Payment.objects.create(
-            variant="stripe",
-            description=f"Order #{order.order_number}",
-            total=Decimal(order.total_amount),
-            currency="USD",  # Adjust if needed
-            billing_email=getattr(order, "user", None) and order.user.email or "",
-            order=order,
+        messages.error(
+            request,
+            "No active payment session for this order. Please checkout again.",
         )
+        return redirect("cart:detail")
     try:
         form = payment.get_form(data=request.POST or None)
     except RedirectNeeded as redirect_to:
@@ -126,3 +123,33 @@ def payment_failed(request, order_id: int):
         request, f"Payment failed for Order #{order.order_number}. Please try again."
     )
     return render(request, "orders/payment_failed.html", {"order": order})
+
+
+@login_required
+@require_POST
+def checkout_from_cart(request):
+    cart = Cart.get_or_create_for_request(request)
+    if not cart.total_quantity:
+        messages.error(request, "Your cart is empty.")
+        return redirect("cart:detail")
+
+    order = Order.create_from_cart(cart=cart, user=request.user)
+    # Create a payment in POST (safe from CSRF); GET view will only present/redirect
+    Payment = get_payment_model()
+    payment = (
+        Payment.objects.filter(order=order, variant="stripe")
+        .exclude(status="confirmed")
+        .order_by("-created")
+        .first()
+    )
+    if not payment:
+        Payment.objects.create(
+            variant="stripe",
+            description=f"Order #{order.order_number}",
+            total=Decimal(order.total_amount),
+            currency="USD",  # Adjust if needed
+            billing_email=getattr(order, "user", None) and order.user.email or "",
+            order=order,
+        )
+    cart.clear()
+    return redirect("orders:start_payment", order_id=order.id)
