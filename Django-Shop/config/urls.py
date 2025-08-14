@@ -26,6 +26,7 @@ urlpatterns = [
     path("users/", include("users.urls", namespace="users")),
     path("products/", include("products.urls", namespace="products")),
     path("orders/", include("orders.urls", namespace="orders")),
+    path("payments/", include("payments.urls")),  # django-payments
     path("support/", include("support.urls", namespace="support")),
     path("careers/", include("careers.urls", namespace="careers")),
     path("cart/", include("cart.urls", namespace="cart")),

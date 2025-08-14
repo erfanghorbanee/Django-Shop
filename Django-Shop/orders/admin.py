@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Order, OrderItem, PaymentMethod
+from .models import Order, OrderItem, Payment, PaymentMethod
 
 
 class OrderItemInline(admin.TabularInline):
@@ -41,3 +41,10 @@ class PaymentMethodAdmin(admin.ModelAdmin):
     )
     list_filter = ("payment_type", "is_default", "created_at")
     search_fields = ("user__email", "card_holder_name")
+
+
+@admin.register(Payment)
+class PaymentAdmin(admin.ModelAdmin):
+    list_display = ("id", "order", "variant", "status", "total", "currency", "created")
+    list_filter = ("variant", "status", "currency", "created")
+    search_fields = ("id", "order__order_number", "description")

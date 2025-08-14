@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block title %}Payment Successful{% endblock title %}
+{% block content %}
+<div class="container py-5">
+  <div class="alert alert-success">Payment completed for Order #{{ order.order_number }}.</div>
+  <a href="{% url 'orders:order_list' %}" class="btn btn-outline-secondary">Back to orders</a>
+</div>
+{% endblock content %}

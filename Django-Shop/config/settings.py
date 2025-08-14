@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,7 +21,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-k%awlb#gsnaf_7r2^tbmlw7q=)i9k9)sii%h)08o8^u7t8b0_q"
+SECRET_KEY = os.getenv(
+    "DJANGO_SECRET_KEY",
+    "django-insecure-k%awlb#gsnaf_7r2^tbmlw7q=)i9k9)sii%h)08o8^u7t8b0_q",
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -35,6 +39,7 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
+    # Django
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -48,7 +53,9 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.google",
     "phonenumber_field",
     "rest_framework",
-    # custom apps
+    # django-payments
+    "payments",
+    # Custom apps
     "home",
     "users",
     "products",
@@ -201,3 +208,36 @@ ACCOUNT_FORMS = {
 
 # phonenumber_field settings
 PHONENUMBER_DEFAULT_REGION = "IT"
+
+# django-payments configuration
+# The Payment model lives in orders app
+PAYMENT_MODEL = "orders.Payment"
+# Used by providers that construct absolute URLs (fallback only; prefer reverse + request)
+PAYMENT_HOST = os.getenv("PAYMENT_HOST", "localhost:8000")
+
+# Development configuration
+PAYMENT_VARIANTS = {
+    "stripe": (
+        "payments.stripe.StripeProviderV3",
+        {
+            "api_key": os.getenv("STRIPE_API_KEY", "sk_test_123456"),
+            "use_token": True,
+            # If you run Stripe CLI with signature verification locally, you can set endpoint_secret in dev.
+            # "endpoint_secret": os.getenv("STRIPE_ENDPOINT_SECRET", "whsec_123456"),
+            "secure_endpoint": False,
+        },
+    )
+}
+
+# Production configuration
+# PAYMENT_VARIANTS = {
+#     "stripe": (
+#         "payments.stripe.StripeProviderV3",
+#         {
+#             "api_key": os.getenv("STRIPE_API_KEY", ""),  # live or test key via env
+#             "use_token": True,
+#             "endpoint_secret": os.getenv("STRIPE_ENDPOINT_SECRET", ""),
+#             "secure_endpoint": True,
+#         },
+#     )
+# }
