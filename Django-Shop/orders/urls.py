@@ -2,10 +2,6 @@ from django.urls import path
 
 from .views import (
     OrderListView,
-    PaymentMethodCreateView,
-    PaymentMethodDeleteView,
-    PaymentMethodListView,
-    SetDefaultPaymentMethodView,
     checkout_from_cart,
     payment_failed,
     payment_success,
@@ -19,20 +15,4 @@ urlpatterns = [
     path("<int:order_id>/payment/success/", payment_success, name="payment_success"),
     path("<int:order_id>/payment/failed/", payment_failed, name="payment_failed"),
     path("checkout/", checkout_from_cart, name="checkout"),
-    path("payment-methods/", PaymentMethodListView.as_view(), name="payment_methods"),
-    path(
-        "payment-methods/add/",
-        PaymentMethodCreateView.as_view(),
-        name="add_payment_method",
-    ),
-    path(
-        "payment-methods/<int:pk>/delete/",
-        PaymentMethodDeleteView.as_view(),
-        name="delete_payment_method",
-    ),
-    path(
-        "payment-methods/<int:pk>/set-default/",
-        SetDefaultPaymentMethodView.as_view(),
-        name="set_default_payment_method",
-    ),
 ]
