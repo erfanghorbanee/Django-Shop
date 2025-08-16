@@ -14,6 +14,7 @@ Django Shop is a modern, responsive e-commerce platform built with [Django](http
   - [Demo](#demo)
   - [Installation](#installation)
   - [Running the Project](#running-the-project)
+  - [Stripe Payments: Local Testing](#stripe-payments-local-testing)
   - [Google OAuth Setup (Login with Google)](#google-oauth-setup-login-with-google)
     - [1. Register your app with Google](#1-register-your-app-with-google)
     - [2. Configure Django settings](#2-configure-django-settings)
@@ -95,6 +96,60 @@ Django Shop is a modern, responsive e-commerce platform built with [Django](http
     ```
 
 4. Open your browser and go to `http://127.0.0.1:8000`.
+
+## Stripe Payments: Local Testing
+
+You can test the payment flow locally with Stripe (using `django-payments` + Stripe Provider V3).
+
+Prerequisites
+
+- A Stripe account (free).
+- Stripe CLI installed.
+
+Install Stripe CLI (macOS):
+
+```bash
+brew install stripe/stripe-cli/stripe
+```
+
+Login to Stripe from the CLI:
+
+```bash
+stripe login
+```
+
+Export your Stripe API key (test key) so the app can create sessions/intents:
+
+```bash
+export STRIPE_API_KEY="sk_test_..."
+```
+
+Forward webhooks to Django (required):
+
+```bash
+stripe listen --forward-to http://127.0.0.1:8000/payments/stripe/webhook/
+```
+
+This prints a signing secret like `whsec_...`.
+
+- Easiest path (no signature verification in dev): keep `secure_endpoint: False` in `PAYMENT_VARIANTS` (in `config/settings.py`) and just keep the CLI running to forward events.
+- With signature verification (optional, stricter):
+  1) Add the secret to your environment: `export STRIPE_ENDPOINT_SECRET="whsec_..."`
+  2) In `config/settings.py`, set the Stripe variant with `"endpoint_secret": os.getenv("STRIPE_ENDPOINT_SECRET")` and `"secure_endpoint": True`.
+
+Now, run the app and go through checkout.
+
+Test card for a successful payment:
+
+- Number: `4242 4242 4242 4242`
+- Expiry: any future date (e.g., 12/34)
+- CVC: any 3 digits (e.g., 123)
+
+Official references:
+
+- [Stripe CLI docs](https://stripe.com/docs/stripe-cli)
+- [Stripe CLI webhooks](https://stripe.com/docs/stripe-cli/webhooks)
+- [Stripe test cards](https://stripe.com/docs/testing?testing-method=card-numbers#cards)
 
 ## Google OAuth Setup (Login with Google)
 
