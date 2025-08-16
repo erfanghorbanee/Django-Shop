@@ -63,7 +63,11 @@
                                             <strong>Order Total:</strong> ${{ order.total_amount }}<br>
                                             <strong>Status:</strong> {{ order.get_status_display }}<br>
                                             <strong>Order Date:</strong> {{ order.created_at|date:"M d, Y" }}<br>
-                                            <strong>Payment Method:</strong> {{ order.payment_method }}
+                                            <strong>Payment:</strong>
+                                            <span class="text-success">{{ order.get_payment_status_display }}</span>
+                                            {% if order.paid_at %}
+                                                <span class="text-muted">• {{ order.paid_at|date:"M d, Y" }}</span>
+                                            {% endif %}
                                         </p>
                                         <h6 class="mt-3">Shipping Address</h6>
                                         <p class="card-text">

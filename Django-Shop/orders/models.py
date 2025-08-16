@@ -5,7 +5,7 @@ from typing import Optional
 from django.conf import settings
 from django.db import models, transaction
 from django.urls import reverse
-from payments import PurchasedItem
+from payments import PaymentStatus, PurchasedItem
 from payments.models import BasePayment
 from products.models import Product
 
@@ -47,6 +47,10 @@ class Order(models.Model):
         related_name="order_billing_set",
     )
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    payment_status = models.CharField(
+        max_length=20, choices=PaymentStatus.CHOICES, default=PaymentStatus.WAITING
+    )
+    paid_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -60,6 +64,10 @@ class Order(models.Model):
     def total(self) -> Decimal:
         # Keep a convenient property aligning with payments API naming
         return self.total_amount
+
+    @property
+    def is_paid(self) -> bool:
+        return self.payment_status == PaymentStatus.CONFIRMED
 
     # --- Domain operations (fat model pattern) ---
     @classmethod
