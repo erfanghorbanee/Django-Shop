@@ -14,12 +14,14 @@ class OrderAdmin(admin.ModelAdmin):
         "order_number",
         "user",
         "status",
+        "payment_status",
+        "paid_at",
         "shipping_address",
         "billing_address",
         "total_amount",
         "created_at",
     )
-    list_filter = ("status", "created_at")
+    list_filter = ("status", "payment_status", "created_at")
     search_fields = (
         "order_number",
         "user__email",
