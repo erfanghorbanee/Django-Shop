@@ -195,7 +195,7 @@ SOCIALACCOUNT_PROVIDERS = {
 - [ ] Test
   - [ ] Add tests for core functionalities and edge cases(duplicate/parallel payment creation, etc.)
   - [ ] stress-test server and database under heavy load with concurrent requests
-- [ ] Support other languages (French, German, ...)
+- [ ] Support other languages (Italian, German, ...)
 
 ## License
 
