@@ -190,17 +190,32 @@ SOCIALACCOUNT_PROVIDERS = {
 
 ## To-Do List
 
-- [ ] Add Async
-- [ ] Improve overall speed
-- [ ] Customize dashboard for admins
-- [ ] process and optimize pictures(static and media)
-- [ ] Optimize for SEO
-- [ ] Optimize caching
-- [ ] Improve security (2fa, ...)
-- [ ] Test
-  - [ ] Add tests for core functionalities and edge cases(duplicate/parallel payment creation, etc.)
-  - [ ] stress-test server and database under heavy load with concurrent requests
-- [ ] Support other languages (Italian, German, ...)
+- **Async & Performance**
+  - Add async support for views and background tasks
+  - Optimize database queries and overall speed
+  - Implement caching for products, categories, and frequently accessed data
+
+- **Admin & Dashboard**
+  - Customize admin dashboard for management and template
+
+- **Product Discovery & Media**
+  - Add advanced product search with filters (category, price, rating, etc.)
+  - Process and optimize images (static and media)
+
+- **Payments & Orders**
+  - Add support for additional payment providers (PayPal, Apple Pay, etc.)
+  - Improve payment error handling and user feedback
+  - Add more tests for payment/inventory edge cases
+
+- **User Experience & Security**
+  - Improve security (2FA, rate limiting, etc.)
+  - Add user notifications (email, in-app) for order/payment status
+  - Support multiple languages (i18n: Italian, German, ...)
+  - Optimize for SEO and accessibility
+
+- **Testing & Quality**
+  - Increase test coverage for all core features
+  - Stress-test server and database under heavy load with concurrent requests
 
 ## License
 
