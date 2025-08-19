@@ -4,7 +4,7 @@
   <img src="Django-Shop/static/shared/images/icon.png" alt="Logo" width="200"/>
 </p>
 
-Django Shop is a modern, responsive e-commerce platform built with [Django](https://www.djangoproject.com/) and [Bootstrap](https://getbootstrap.com/). It allows users to browse, search for products, manage shopping carts, and make purchases. The platform uses [Django Allauth](https://docs.allauth.org/) for authentication and supports social login.
+Django Shop is a modern, responsive e-commerce platform built with [Django](https://www.djangoproject.com/) and [Bootstrap](https://getbootstrap.com/). It allows users to browse, search for products, manage shopping cart, and make purchases.
 
 ## Table of Contents
 
@@ -23,29 +23,34 @@ Django Shop is a modern, responsive e-commerce platform built with [Django](http
 
 ## Features
 
-- User Authentication, Registration, Account management, and Social login (via [`Django Allauth`](https://docs.allauth.org/))
+- Modern, responsive UI with light/dark mode switcher (Bootstrap 5)
+- User authentication, registration, account management, and social login (via [`Django Allauth`](https://docs.allauth.org/))
 - Phone number validation (via [`Django-PhoneNumberField`](https://django-phonenumber-field.readthedocs.io/))
-- Validating uploaded Files
-- Responsive design using [`Bootstrap`](https://getbootstrap.com/)
-- Clean UI with light/dark mode switcher
-- Products listing and details
-  - Product Rating and Reviews
-  - Discounts/Promotions
-- Order management
+- Secure file uploads with validation
+- Products:
+  - Listing, detail pages, and search
+  - Product ratings and reviews
+  - Discounts and promotions
+  - Robust inventory management: stock is atomically decremented on successful payment confirmation
+- Shopping cart:
+  - Persistent carts for guests (session) and authenticated users; automatic merge on login
+  - Per-item quantity limits (`CART_MAX_ITEM_QTY` in `settings.py`)
+  - Cart icon in Navbar shows total items (via context processors)
+- Order management:
+  - Decoupled order and payment status for accurate tracking
+  - Payment via Stripe (powered by [`django-payments`](https://github.com/mirumee/django-payments))
+  - Orders are only marked as paid and processed after Stripe/Admin confirms payment
+  - Automatic cancellation and error messaging if stock is insufficient at payment time
 - User wishlist functionality
-- Customer support page
+- Customer support and contact page
 - Career application page
-- Advanced address management
-  - Multiple addresses per user with exactly one primary (DB-enforced partial unique constraint)
+- Advanced address management:
+  - Multiple addresses per user with exactly one primary (DB-enforced)
   - First address auto-set as primary
   - Safe primary switching (atomic demotion of previous primary)
   - Cannot delete the only remaining address
-  - Automatic promotion of a new primary (most recent address) after deleting the current one
-- Shopping Cart:
-  - Persistent carts for guests (session) and authenticated users; automatic merge on login
-  - Limit per item (`CART_MAX_ITEM_QTY` in `settings.py`)
-  - Cart icon in Navbar shows the total number of added items via `context processors`.
-- Use `pytest` + `pytest-django` and `model-bakery` for fast, expressive tests.
+  - Automatic promotion of a new primary after deleting the current one
+- Use `pytest`, `pytest-django`, and `model-bakery` for fast, expressive tests
 
 ## Demo
 
