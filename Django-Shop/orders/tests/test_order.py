@@ -1,7 +1,8 @@
 import pytest
 from model_bakery import baker
-from orders.models import Order, Payment
 from payments import PaymentStatus
+
+from orders.models import Order, Payment
 
 pytestmark = pytest.mark.django_db
 

@@ -1,5 +1,7 @@
 from django.contrib import admin
+
 from .models import Category, Product, ProductImage, Review
+
 
 class ProductImageInline(admin.TabularInline):
     model = ProductImage

@@ -1,4 +1,5 @@
 from django.urls import path
+
 from .views import CareerApplicationView, career_success
 
 app_name = 'careers'

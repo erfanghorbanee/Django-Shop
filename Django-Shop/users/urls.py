@@ -1,17 +1,19 @@
 from django.urls import path
+
+from users.api.views import WishlistToggleAPIView
+
 from .views import (
-    ProfileView,
+    AddAddressView,
+    AddressesView,
+    DeleteAddressView,
+    EditAddressView,
     PrivacySettingsView,
+    ProfileView,
+    RemoveFromWishlistView,
+    SetPrimaryAddressView,
     TwoFactorAuthView,
     WishlistView,
-    AddressesView,
-    AddAddressView,
-    EditAddressView,
-    DeleteAddressView,
-    SetPrimaryAddressView,
-    RemoveFromWishlistView,
 )
-from users.api.views import WishlistToggleAPIView
 
 app_name = 'users'
 urlpatterns = [

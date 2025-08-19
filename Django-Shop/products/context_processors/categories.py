@@ -1,5 +1,6 @@
 from products.models import Category
 
+
 def categories_processor(request):
     """
     Context processor that adds categories to the context of all templates.

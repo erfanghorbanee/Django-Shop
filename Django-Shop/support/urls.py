@@ -1,4 +1,5 @@
 from django.urls import path
+
 from .views import SupportRequestView, support_success
 
 app_name = 'support'

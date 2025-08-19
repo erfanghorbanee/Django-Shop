@@ -1,11 +1,16 @@
+import os
+from decimal import Decimal
+
+from django.conf import settings
+from django.core.exceptions import ValidationError
+from django.core.validators import (
+    FileExtensionValidator,
+    MaxValueValidator,
+    MinValueValidator,
+)
 from django.db import models
 from django.utils.text import slugify
-from django.core.validators import MinValueValidator, MaxValueValidator
-from django.core.exceptions import ValidationError
-from django.core.validators import FileExtensionValidator
-from django.conf import settings
-from decimal import Decimal
-import os
+
 
 # Custom validator for image size
 def validate_image_size(image):

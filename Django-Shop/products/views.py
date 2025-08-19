@@ -1,12 +1,13 @@
-from django.views.generic import ListView, DetailView
-from django.views.decorators.http import require_POST
-from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
-from django.http import HttpResponseForbidden
-from django.core.paginator import EmptyPage
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import EmptyPage
 from django.db.models import Q
-from .models import Product, Category, Review
+from django.http import HttpResponseForbidden
+from django.shortcuts import get_object_or_404, redirect
+from django.views.decorators.http import require_POST
+from django.views.generic import DetailView, ListView
+
+from .models import Category, Product, Review
 
 
 class ProductListView(ListView):

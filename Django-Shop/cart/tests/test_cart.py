@@ -1,6 +1,9 @@
 from decimal import Decimal
 
 import pytest
+from django.test import override_settings
+from django.urls import reverse
+
 from cart.exceptions import (
     MaxPerItemExceeded,
     OutOfStock,
@@ -8,8 +11,6 @@ from cart.exceptions import (
     QuantityNotPositive,
 )
 from cart.models import Cart, CartItem
-from django.test import override_settings
-from django.urls import reverse
 
 # Use module-level django_db so individual tests don't need the decorator
 pytestmark = pytest.mark.django_db

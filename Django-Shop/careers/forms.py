@@ -1,6 +1,8 @@
 from django import forms
-from .models import CareerApplication
 from phonenumber_field.formfields import SplitPhoneNumberField
+
+from .models import CareerApplication
+
 
 class CareerApplicationForm(forms.ModelForm):
     phone = SplitPhoneNumberField(required=False)

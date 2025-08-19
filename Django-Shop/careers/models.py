@@ -1,8 +1,8 @@
+import magic
+from django.core.exceptions import ValidationError
+from django.core.validators import FileExtensionValidator
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
-from django.core.validators import FileExtensionValidator
-from django.core.exceptions import ValidationError
-import magic
 
 
 def validate_pdf(file):
