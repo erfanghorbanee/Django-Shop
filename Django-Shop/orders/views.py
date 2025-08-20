@@ -1,14 +1,15 @@
 from decimal import Decimal
 
+from cart.models import Cart
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView
 from payments import RedirectNeeded, get_payment_model
-
-from cart.models import Cart
+from users.models import Address
 
 from .models import Order
 
@@ -74,6 +75,14 @@ def checkout_from_cart(request):
     if not cart.total_quantity:
         messages.error(request, "Your cart is empty.")
         return redirect("cart:detail")
+
+    # Require at least one address
+    user_addresses = Address.objects.filter(user=request.user)
+    if not user_addresses.exists():
+        messages.error(
+            request, ("You need to add at least one address before checking out.")
+        )
+        return redirect("users:addresses")
 
     order = Order.create_from_cart(cart=cart, user=request.user)
     # Create a payment in POST (safe from CSRF); GET view will only present/redirect
