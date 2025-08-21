@@ -211,37 +211,11 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Star Rating functionality
     if (starRatingInputs.length && starRatingLabels.length) {
-        // Initialize rating UI
-        const updateStarDisplay = (rating) => {
-            starRatingLabels.forEach((label, index) => {
-                // The labels are in reverse order in the HTML (5 to 1)
-                const starValue = 5 - index;
-                if (starValue <= rating) {
-                    label.querySelector('i').classList.add('text-warning');
-                } else {
-                    label.querySelector('i').classList.remove('text-warning');
-                }
-            });
-        };
-        
-        // Handle clicking on stars
+        // Only ensure clicking a label checks the correct input (for accessibility)
         starRatingLabels.forEach(label => {
+            const starValue = parseInt(label.getAttribute('for').replace('rating', ''));
             label.addEventListener('click', () => {
-                const rating = label.getAttribute('for').replace('rating', '');
-                document.getElementById(`rating${rating}`).checked = true;
-                updateStarDisplay(rating);
-            });
-            
-            // Hover effects
-            label.addEventListener('mouseenter', () => {
-                const rating = label.getAttribute('for').replace('rating', '');
-                updateStarDisplay(rating);
-            });
-            
-            label.addEventListener('mouseleave', () => {
-                // When mouse leaves, show the selected rating
-                const selectedRating = Array.from(starRatingInputs).find(input => input.checked)?.value || 0;
-                updateStarDisplay(selectedRating);
+                document.getElementById(`rating${starValue}`).checked = true;
             });
         });
     }
