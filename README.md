@@ -196,7 +196,7 @@ SOCIALACCOUNT_PROVIDERS = {
   - Implement caching for products, categories, and frequently accessed data
 
 - **Admin & Dashboard**
-  - Customize admin dashboard for management and template
+  - Customize admin dashboard for management
 
 - **Product Discovery & Media**
   - Add advanced product search with filters (category, price, rating, etc.)
@@ -212,6 +212,8 @@ SOCIALACCOUNT_PROVIDERS = {
   - Add user notifications (email, in-app) for order/payment status
   - Support multiple languages (i18n: Italian, German, ...)
   - Optimize for SEO and accessibility
+  - Separate settings for dev and prod
+  - Follow cookiecutter practices
 
 - **Testing & Quality**
   - Increase test coverage for all core features
