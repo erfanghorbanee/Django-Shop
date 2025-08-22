@@ -14,6 +14,7 @@ Django Shop is a modern, responsive e-commerce platform built with [Django](http
   - [Demo](#demo)
   - [Installation](#installation)
   - [Running the Project](#running-the-project)
+  - [Seeding / Creating Products (management command)](#seeding--creating-products-management-command)
   - [Stripe Payments: Local Testing](#stripe-payments-local-testing)
   - [Google OAuth Setup (Login with Google)](#google-oauth-setup-login-with-google)
     - [1. Register your app with Google](#1-register-your-app-with-google)
@@ -101,6 +102,26 @@ Django Shop is a modern, responsive e-commerce platform built with [Django](http
     ```
 
 4. Open your browser and go to `http://127.0.0.1:8000`.
+
+## Seeding / Creating Products (management command)
+
+You can create sample products, categories, and product images using the built-in management command `seed_products`.
+
+Example usage (from the project root):
+
+```bash
+python manage.py seed_products
+```
+
+Options:
+
+- `--products` N (default: `50`) — total number of products to create
+- `--images` M (default: `2`) — number of images to attach per product
+
+Notes:
+
+- The command removes existing `Category`, `Product`, and `ProductImage` records before seeding, so use with care.
+- Product images are fetched from [picsum.photos](https://picsum.photos) at runtime; an internet connection is required and the `requests` package must be available.
 
 ## Stripe Payments: Local Testing
 
@@ -206,7 +227,6 @@ SOCIALACCOUNT_PROVIDERS = {
 - **Payments & Orders**
   - Add support for additional payment providers (PayPal, Apple Pay, etc.)
   - Improve payment error handling and user feedback
-  - Add more tests for payment/inventory edge cases
 
 - **User Experience & Security**
   - Improve security (2FA, rate limiting, etc.)
