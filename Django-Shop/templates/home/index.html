@@ -35,53 +35,26 @@
         <!-- Special Discounts Section -->
         <section class="discount-section mb-5">
             <h2 class="mb-4">Special Discounts</h2>
+            {% if special_discounts %}
             <div id="discountCarousel" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
                     <div class="carousel-item active">
                         <div class="row">
+                            {% for product in special_discounts %}
                             <div class="col-12 col-md-6 col-lg-3">
                                 <div class="card">
-                                    <img src="https://via.placeholder.com/300?text=Product+1" class="card-img-top" alt="Product 1">
+                                    <img src="{{ product.images.first.image.url }}" class="card-img-top" alt="{{ product.name }}">
                                     <div class="card-body">
-                                        <h5 class="card-title">Product 1</h5>
-                                        <p class="card-text">Discounted Price: $20</p>
-                                        <a href="#" class="btn btn-primary">Buy Now</a>
+                                        <h5 class="card-title">{{ product.name }}</h5>
+                                        <p class="card-text">Discounted Price: ${{ product.discounted_price|floatformat:2 }}</p>
+                                        <p class="card-text text-muted"><del>${{ product.price|floatformat:2 }}</del> <span class="badge bg-danger">-{{ product.discount_percent|floatformat:0 }}%</span></p>
+                                        <a href="{% url 'products:product_detail' product.slug %}" class="btn btn-primary">Buy Now</a>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-12 col-md-6 col-lg-3">
-                                <div class="card">
-                                    <img src="https://via.placeholder.com/300?text=Product+2" class="card-img-top" alt="Product 2">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Product 2</h5>
-                                        <p class="card-text">Discounted Price: $30</p>
-                                        <a href="#" class="btn btn-primary">Buy Now</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-6 col-lg-3">
-                                <div class="card">
-                                    <img src="https://via.placeholder.com/300?text=Product+3" class="card-img-top" alt="Product 3">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Product 3</h5>
-                                        <p class="card-text">Discounted Price: $25</p>
-                                        <a href="#" class="btn btn-primary">Buy Now</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-6 col-lg-3">
-                                <div class="card">
-                                    <img src="https://via.placeholder.com/300?text=Product+4" class="card-img-top" alt="Product 4">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Product 4</h5>
-                                        <p class="card-text">Discounted Price: $15</p>
-                                        <a href="#" class="btn btn-primary">Buy Now</a>
-                                    </div>
-                                </div>
-                            </div>
+                            {% endfor %}
                         </div>
                     </div>
-                    <!-- Add more carousel items for additional product rows if needed -->
                 </div>
                 <button class="carousel-control-prev" type="button" data-bs-target="#discountCarousel" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -92,6 +65,9 @@
                     <span class="visually-hidden">Next</span>
                 </button>
             </div>
+            {% else %}
+            <p class="text-muted text-center">No discounted products available right now.</p>
+            {% endif %}
         </section>
 
         <!-- Popular Brands Section -->
@@ -119,53 +95,25 @@
         <!-- Most Bought Products Section -->
         <section class="popular-products-section mb-5">
             <h2 class="mb-4">Most Bought Products</h2>
+            {% if most_bought_products %}
             <div id="popularProductsCarousel" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
                     <div class="carousel-item active">
                         <div class="row">
+                            {% for product in most_bought_products %}
                             <div class="col-12 col-md-6 col-lg-3">
                                 <div class="card">
-                                    <img src="https://via.placeholder.com/300?text=Product+1" class="card-img-top" alt="Product 1">
+                                    <img src="{{ product.images.first.image.url }}" class="card-img-top" alt="{{ product.name }}">
                                     <div class="card-body">
-                                        <h5 class="card-title">Product 1</h5>
-                                        <p class="card-text">Price: $20</p>
-                                        <a href="#" class="btn btn-primary">Buy Now</a>
+                                        <h5 class="card-title">{{ product.name }}</h5>
+                                        <p class="card-text">Price: ${{ product.price|floatformat:2 }}</p>
+                                        <a href="{% url 'products:product_detail' product.slug %}" class="btn btn-primary">Buy Now</a>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-12 col-md-6 col-lg-3">
-                                <div class="card">
-                                    <img src="https://via.placeholder.com/300?text=Product+2" class="card-img-top" alt="Product 2">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Product 2</h5>
-                                        <p class="card-text">Price: $30</p>
-                                        <a href="#" class="btn btn-primary">Buy Now</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-6 col-lg-3">
-                                <div class="card">
-                                    <img src="https://via.placeholder.com/300?text=Product+3" class="card-img-top" alt="Product 3">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Product 3</h5>
-                                        <p class="card-text">Price: $25</p>
-                                        <a href="#" class="btn btn-primary">Buy Now</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-6 col-lg-3">
-                                <div class="card">
-                                    <img src="https://via.placeholder.com/300?text=Product+4" class="card-img-top" alt="Product 4">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Product 4</h5>
-                                        <p class="card-text">Price: $15</p>
-                                        <a href="#" class="btn btn-primary">Buy Now</a>
-                                    </div>
-                                </div>
-                            </div>
+                            {% endfor %}
                         </div>
                     </div>
-                    <!-- Add more carousel items for additional product rows if needed -->
                 </div>
                 <button class="carousel-control-prev" type="button" data-bs-target="#popularProductsCarousel" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -176,5 +124,8 @@
                     <span class="visually-hidden">Next</span>
                 </button>
             </div>
+            {% else %}
+            <p class="text-muted text-center">No popular products yet.</p>
+            {% endif %}
         </section>
 {% endblock %}
