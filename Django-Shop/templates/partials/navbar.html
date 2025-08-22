@@ -7,8 +7,9 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarNav">
-            <form class="d-flex me-auto my-2 my-lg-0">
-                <input class="form-control me-2 search-input" type="search" placeholder="Search" aria-label="Search">
+            <form class="d-flex me-auto my-2 my-lg-0" method="get" action="{% url 'products:index' %}">
+                <input class="form-control me-2 search-input" type="search" name="q" placeholder="Search"
+                       aria-label="Search" value="{{ search_query|default_if_none:'' }}">
                 <button class="btn btn-primary search-btn" type="submit">
                     <i class="bi bi-search"></i>
                 </button>

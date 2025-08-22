@@ -194,12 +194,13 @@ SOCIALACCOUNT_PROVIDERS = {
   - Add async support for views and background tasks
   - Optimize database queries and overall speed
   - Implement caching for products, categories, and frequently accessed data
+  - Move DB to PostgreSQL
 
 - **Admin & Dashboard**
   - Customize admin dashboard for management
 
 - **Product Discovery & Media**
-  - Add advanced product search with filters (category, price, rating, etc.)
+  - Add product filters (category, price, rating, etc.)
   - Process and optimize images (static and media)
 
 - **Payments & Orders**
