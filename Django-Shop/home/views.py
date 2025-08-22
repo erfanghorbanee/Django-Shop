@@ -25,16 +25,13 @@ class HomePageView(TemplateView):
         # Most Bought Products: cache for 10 minutes
         most_bought_products = cache.get("most_bought_products")
         if most_bought_products is None:
-            most_bought = (
+            ids = (
                 OrderItem.objects.values("product")
                 .annotate(total_sold=Sum("quantity"))
-                .order_by("-total_sold")[:8]
+                .order_by("-total_sold")
+                .values_list("product", flat=True)[:8]
             )
-            ids = [x["product"] for x in most_bought]
-            product_map = Product.objects.in_bulk(ids)
-            most_bought_products = [
-                product_map[pid] for pid in ids if pid in product_map
-            ]
+            most_bought_products = list(Product.objects.filter(id__in=ids))
             cache.set("most_bought_products", most_bought_products, 600)
         context["most_bought_products"] = most_bought_products
 
