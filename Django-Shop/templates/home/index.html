@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load product_extras %}
 
 {% block title %}Home - Django Shop{% endblock %}
 {% block description %}Django Shop{% endblock %}
@@ -38,9 +39,10 @@
             {% if special_discounts %}
             <div id="discountCarousel" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
-                    <div class="carousel-item active">
+                    {% for chunk in special_discounts|chunked:4 %}
+                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
                         <div class="row">
-                            {% for product in special_discounts %}
+                            {% for product in chunk %}
                             <div class="col-12 col-md-6 col-lg-3">
                                 <div class="card">
                                     <img src="{{ product.images.first.image.url }}" class="card-img-top" alt="{{ product.name }}">
@@ -55,6 +57,7 @@
                             {% endfor %}
                         </div>
                     </div>
+                    {% endfor %}
                 </div>
                 <button class="carousel-control-prev" type="button" data-bs-target="#discountCarousel" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -98,9 +101,10 @@
             {% if most_bought_products %}
             <div id="popularProductsCarousel" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
-                    <div class="carousel-item active">
+                    {% for chunk in most_bought_products|chunked:4 %}
+                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
                         <div class="row">
-                            {% for product in most_bought_products %}
+                            {% for product in chunk %}
                             <div class="col-12 col-md-6 col-lg-3">
                                 <div class="card">
                                     <img src="{{ product.images.first.image.url }}" class="card-img-top" alt="{{ product.name }}">
@@ -114,6 +118,7 @@
                             {% endfor %}
                         </div>
                     </div>
+                    {% endfor %}
                 </div>
                 <button class="carousel-control-prev" type="button" data-bs-target="#popularProductsCarousel" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
