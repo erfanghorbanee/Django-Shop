@@ -214,6 +214,7 @@ SOCIALACCOUNT_PROVIDERS = {
   - Optimize for SEO and accessibility
   - Separate settings for dev and prod
   - Follow cookiecutter practices
+  - Dockerize the project
 
 - **Testing & Quality**
   - Increase test coverage for all core features
