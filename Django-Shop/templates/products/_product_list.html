@@ -1,0 +1,68 @@
+{% for product in products %}
+<div class="col-12 col-md-6 col-lg-3 product-item">
+    <div class="card">
+        <div class="image-container">
+            <img src="{{ product.images.first.image.url }}" alt="{{ product.name }}" class="card-img-top product-image">
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">{{ product.name }}</h5>
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="price-container">
+                    {% if product.has_discount %}
+                        <p class="card-text mb-0 d-flex align-items-center">
+                            <span class="text-danger fw-bold">${{ product.discounted_price|floatformat:2 }}</span>
+                            <span class="text-muted text-decoration-line-through ms-2">${{ product.price|floatformat:2 }}</span>
+                            <span class="badge bg-danger ms-2">-{{ product.discount_percent|floatformat:0 }}%</span>
+                        </p>
+                    {% else %}
+                        <p class="card-text mb-0">Price: ${{ product.price|floatformat:2 }}</p>
+                    {% endif %}
+                </div>
+                <div class="d-flex align-items-center gap-1">
+                    {% if product.is_available %}
+                        <i class="bi bi-check-circle-fill text-success"></i>
+                        <span class="text-success">Available</span>
+                    {% else %}
+                        <i class="bi bi-x-circle-fill text-danger"></i>
+                        <span class="text-danger">Finished</span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="product-rating mb-2">
+                {% if product.average_rating > 0 %}
+                    {% with ''|center:product.average_rating|stringformat:'s' as stars %}
+                        {% for _ in stars %}
+                            <i class="bi bi-star-fill text-warning"></i>
+                        {% endfor %}
+                    {% endwith %}
+                    {% with ''|center:5|stringformat:'s' as stars %}
+                        {% for _ in stars %}
+                            {% if forloop.counter > product.average_rating %}
+                                <i class="bi bi-star text-warning"></i>
+                            {% endif %}
+                        {% endfor %}
+                    {% endwith %}
+                    <small class="text-muted ms-1">({{ product.reviews.count }})</small>
+                {% else %}
+                    {% for _ in '12345' %}
+                        <i class="bi bi-star text-secondary"></i>
+                    {% endfor %}
+                    <small class="text-muted ms-1">(0)</small>
+                {% endif %}
+            </div>
+            <div class="d-flex justify-content-between align-items-center mt-2">
+                <a href="{% url 'products:product_detail' product.slug %}" class="btn btn-primary">View Details</a>
+                {% if user.is_authenticated %}
+                    <button class="wishlist-toggle-btn btn-link border-0 bg-transparent p-0 ms-2" style="font-size: 1.25rem;" data-product-id="{{ product.id }}" title="{% if product.id in wishlist_product_ids %}Already in Wishlist{% else %}Add to Wishlist{% endif %}">
+                        <i class="wishlist-heart-icon bi {% if product.id in wishlist_product_ids %}bi-heart-fill text-danger{% else %}bi-heart text-danger{% endif %}" data-product-id="{{ product.id }}"></i>
+                    </button>
+                {% else %}
+                    <a href="{% url 'account_login' %}?next={{ request.path }}" class="text-decoration-none" style="font-size: 1.25rem;" title="Add to Wishlist">
+                        <i class="bi bi-heart text-danger"></i>
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}

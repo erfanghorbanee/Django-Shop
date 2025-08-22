@@ -3,13 +3,15 @@ document.addEventListener('DOMContentLoaded', () => {
     let loading = false;
     const spinner = document.getElementById('loading-spinner');
     const container = document.getElementById('products-container');
+    let hasMore = container.dataset.hasMore === "true";
 
     // Throttled Scroll Event Listener for Efficiency
-    window.addEventListener('scroll', throttle(() => {
+    const onScroll = throttle(() => {
         if (isNearBottom() && !loading) {
             fetchMoreProducts();
         }
-    }, 200)); // Throttle time set to 200ms
+    }, 200);
+    window.addEventListener('scroll', onScroll); // Throttle time set to 200ms
 
     function throttle(callback, delay) {
         let throttleTimeout;
@@ -39,26 +41,40 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function fetchMoreProducts() {
-        loading = true;
-        spinner.classList.remove('d-none');
-        currentPage++;
+    if (!hasMore) return;
+    loading = true;
+    spinner.classList.remove('d-none');
+    const nextPage = currentPage + 1;
 
         try {
-            // Get URL with all current query parameters plus updated page
-            const url = getUrlWithUpdatedParams(currentPage);
-            const response = await fetch(url);
-            
+            const url = getUrlWithUpdatedParams(nextPage);
+            const response = await fetch(url, {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            });
+
             if (!response.ok) throw new Error(`Failed to load page ${currentPage}.`);
 
             const html = await response.text();
             if (html.trim()) {
                 container.insertAdjacentHTML('beforeend', html);
+                // advance currentPage only after successful insert
+                currentPage = nextPage;
+                // Count how many product items were just fetched
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = html;
+                const fetchedItems = tempDiv.querySelectorAll('.product-item').length;
+                console.log('Fetched HTML:', html);
+                console.log('Fetched product items:', fetchedItems);
+                if (fetchedItems < 12) {
+                    hasMore = false;
+                    window.removeEventListener('scroll', onScroll);
+                }
             } else {
-                console.warn("No more products available.");
-                window.removeEventListener('scroll', fetchMoreProducts);
+                hasMore = false;
+                window.removeEventListener('scroll', onScroll);
             }
         } catch (error) {
-            console.error(`Error fetching products: ${error.message}`);
+            // Suppress error if it's just a missing page
         } finally {
             loading = false;
             spinner.classList.add('d-none');

@@ -2,8 +2,9 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import EmptyPage
 from django.db.models import Q
-from django.http import HttpResponseForbidden
+from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect
+from django.template.loader import render_to_string
 from django.views.decorators.http import require_POST
 from django.views.generic import DetailView, ListView
 
@@ -47,6 +48,18 @@ class ProductListView(ListView):
             ).distinct()
 
         return queryset
+
+    def render_to_response(self, context, **response_kwargs):
+        # Use the same AJAX detection as in cart views (for pagination)
+        wants_json = (
+            self.request.headers.get("X-Requested-With", "").lower() == "xmlhttprequest"
+        )
+        if wants_json:
+            html = render_to_string(
+                "products/_product_list.html", context, request=self.request
+            )
+            return HttpResponse(html)
+        return super().render_to_response(context, **response_kwargs)
 
     def get_context_data(self, **kwargs):
         """Provide context data including pagination info and search query."""
