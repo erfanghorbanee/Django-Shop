@@ -55,7 +55,25 @@ Django Shop is a modern, responsive e-commerce platform built with [Django](http
 
 ## Demo
 
-![Demo Gif](demo.gif)
+![Demo Gif](Gallary/demo.gif)
+
+Below are screenshots demonstrating some of the key pages and features (image files are in `Gallary/`):
+
+- Homepage — Carousel and featured discounts
+
+  ![Homepage screenshot](Gallary/home.png)
+
+- Product detail
+
+  ![Product detail screenshot](Gallary/product-detail.png)
+
+- Cart
+
+  ![Cart screenshot](Gallary/cart.png)
+
+- Sign in — Authentication page with Google option
+
+  ![Sign in screenshot](Gallary/signin.png)
 
 ## Installation
 
