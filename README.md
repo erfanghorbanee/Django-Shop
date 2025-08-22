@@ -55,7 +55,7 @@ Django Shop is a modern, responsive e-commerce platform built with [Django](http
 
 ## Demo
 
-*Demo GIF goes here*
+![Demo Gif](demo.gif)
 
 ## Installation
 
