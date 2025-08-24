@@ -1,5 +1,8 @@
 # Django Shop
 
+[![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+
 <p align="center">
   <img src="Django-Shop/static/shared/images/icon.png" alt="Logo" width="200"/>
 </p>
