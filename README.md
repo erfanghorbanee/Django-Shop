@@ -258,6 +258,7 @@ SOCIALACCOUNT_PROVIDERS = {
   - Separate settings for dev and prod
   - Follow cookiecutter practices
   - Dockerize the project
+  - Check Idempotency and where it's needed.
 
 - **Testing & Quality**
   - Increase test coverage for all core features
