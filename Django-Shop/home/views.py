@@ -1,6 +1,7 @@
 from django.core.cache import cache
 from django.db.models import Sum
 from django.views.generic import TemplateView
+
 from orders.models import OrderItem
 from products.models import Product
 

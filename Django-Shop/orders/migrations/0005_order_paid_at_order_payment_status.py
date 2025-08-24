@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("orders", "0004_remove_order_payment_method_delete_paymentmethod"),
     ]

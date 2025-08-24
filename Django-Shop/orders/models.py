@@ -117,9 +117,11 @@ class Order(models.Model):
         total = sum((oi.price * oi.quantity for oi in order.items.all()), Decimal("0"))
         if total != order.total_amount:
             order.total_amount = total
-            order.save(update_fields=["total_amount", "updated_at"]) if hasattr(
-                order, "updated_at"
-            ) else order.save(update_fields=["total_amount"])  # pragma: no cover
+            (
+                order.save(update_fields=["total_amount", "updated_at"])
+                if hasattr(order, "updated_at")
+                else order.save(update_fields=["total_amount"])
+            )  # pragma: no cover
 
         return order
 

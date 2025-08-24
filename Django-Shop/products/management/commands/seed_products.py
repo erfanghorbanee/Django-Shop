@@ -5,6 +5,7 @@ from django.core.files.base import ContentFile
 from django.core.management.base import BaseCommand
 from faker import Faker
 from model_bakery import baker
+
 from products.models import Category, Product, ProductImage
 
 fake = Faker()

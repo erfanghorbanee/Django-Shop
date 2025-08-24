@@ -8,10 +8,9 @@ def categories_processor(request):
     """
     # Get all parent categories (categories with no parent)
     parent_categories = Category.objects.filter(
-        parent=None,
-        is_active=True
-    ).prefetch_related('children')
-    
+        parent=None, is_active=True
+    ).prefetch_related("children")
+
     # Create a dictionary of parent categories with their children
     categories_hierarchy = {}
     for parent in parent_categories:
@@ -19,7 +18,5 @@ def categories_processor(request):
         children = parent.children.filter(is_active=True)
         if parent.is_active or children.exists():
             categories_hierarchy[parent] = children
-    
-    return {
-        'categories_menu': categories_hierarchy
-    } 
+
+    return {"categories_menu": categories_hierarchy}

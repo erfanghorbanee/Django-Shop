@@ -7,7 +7,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("products", "0002_alter_category_options_category_is_active_and_more"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),

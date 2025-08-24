@@ -5,7 +5,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("users", "0003_remove_orderitem_order_remove_orderitem_product_and_more"),
     ]

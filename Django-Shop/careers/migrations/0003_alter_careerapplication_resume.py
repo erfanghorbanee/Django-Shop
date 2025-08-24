@@ -7,7 +7,6 @@ import careers.models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("careers", "0002_alter_careerapplication_phone"),
     ]

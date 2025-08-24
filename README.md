@@ -248,6 +248,7 @@ SOCIALACCOUNT_PROVIDERS = {
 
 - **User Experience & Security**
   - Improve security (2FA, rate limiting, etc.)
+  - Integrate other allauth functionalites (passkeys, etc.)
   - Add user notifications (email, in-app) for order/payment status
   - Support multiple languages (i18n: Italian, German, ...)
   - Optimize for SEO and accessibility

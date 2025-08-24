@@ -6,7 +6,6 @@ import orders.models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("orders", "0002_payment"),
     ]

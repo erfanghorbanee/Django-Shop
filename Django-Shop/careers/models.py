@@ -29,7 +29,7 @@ def validate_pdf(file):
     mime = magic.from_buffer(sample, mime=True)
 
     # Check if the detected MIME type is PDF
-    if mime != 'application/pdf':
+    if mime != "application/pdf":
         raise ValidationError("Uploaded file is not a valid PDF.")
 
 
@@ -38,11 +38,8 @@ class CareerApplication(models.Model):
     email = models.EmailField()
     phone = PhoneNumberField(blank=True)
     resume = models.FileField(
-        upload_to='resumes/',
-        validators=[
-            FileExtensionValidator(allowed_extensions=['pdf']),
-            validate_pdf
-        ]
+        upload_to="resumes/",
+        validators=[FileExtensionValidator(allowed_extensions=["pdf"]), validate_pdf],
     )
     cover_letter = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
