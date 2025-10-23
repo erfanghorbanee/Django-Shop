@@ -1,40 +1,41 @@
+{% load i18n %}
 <div class="footer py-5">
     <div class="container">
         <div class="row">
             <div class="col-6 col-md-3">
-                <h5>Get to Know Us</h5>
+                <h5>{% trans "Get to Know Us" %}</h5>
                 <ul class="list-unstyled">
-                    <li><a href="{% url 'home:about' %}">About Us</a></li>
-                    <li><a href="{% url 'careers:apply' %}">Careers</a></li>
-                    <li><a href="{% url 'home:privacy' %}">Privacy Policy</a></li>
+                    <li><a href="{% url 'home:about' %}">{% trans "About Us" %}</a></li>
+                    <li><a href="{% url 'careers:apply' %}">{% trans "Careers" %}</a></li>
+                    <li><a href="{% url 'home:privacy' %}">{% trans "Privacy Policy" %}</a></li>
                 </ul>
             </div>
             <div class="col-6 col-md-3">
-                <h5>Customer Service</h5>
+                <h5>{% trans "Customer Service" %}</h5>
                 <ul class="list-unstyled">
-                    <li><a href="{% url 'home:faq' %}">FAQ</a></li>
-                    <li><a href="#">Shipping Info</a></li>
-                    <li><a href="#">Returns</a></li>
+                    <li><a href="{% url 'home:faq' %}">{% trans "FAQ" %}</a></li>
+                    <li><a href="#">{% trans "Shipping Info" %}</a></li>
+                    <li><a href="#">{% trans "Returns" %}</a></li>
                 </ul>
             </div>
             <div class="col-6 col-md-3">
-                <h5>Connect With Us</h5>
+                <h5>{% trans "Connect With Us" %}</h5>
                 <ul class="list-unstyled">
-                    <li><a href="#">Facebook</a></li>
-                    <li><a href="#">Instagram</a></li>
-                    <li><a href="#">Twitter</a></li>
+                    <li><a href="#">{% trans "Facebook" %}</a></li>
+                    <li><a href="#">{% trans "Instagram" %}</a></li>
+                    <li><a href="#">{% trans "Twitter" %}</a></li>
                 </ul>
             </div>
             <div class="col-6 col-md-3">
-                <h5>Contact Us</h5>
+                <h5>{% trans "Contact Us" %}</h5>
                 <ul class="list-unstyled">
-                    <li><a href="{% url 'support:submit' %}">Support</a></li>
-                    <li><a href="#">Live Chat</a></li>
+                    <li><a href="{% url 'support:submit' %}">{% trans "Support" %}</a></li>
+                    <li><a href="#">{% trans "Live Chat" %}</a></li>
                 </ul>
             </div>
         </div>
         <div class="text-center mt-4">
-            <p>&copy; 2024 My E-commerce Site. All rights reserved.</p>
+            <p>&copy; 2024 {% trans "My E-commerce Site. All rights reserved." %}</p>
         </div>
     </div>
 </div>

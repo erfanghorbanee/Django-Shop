@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load i18n %}
 {% load product_extras %}
 
-{% block title %}{{ product.name }} - Django Shop{% endblock %}
+{% block title %}{{ product.name }} - {% trans "Django Shop" %}{% endblock %}
 {% block description %}{{ product.name }} - {{ product.description|truncatechars:160 }}{% endblock %}
 {% block extra_styles %}<link rel="stylesheet" href="{% static 'products/css/product_detail.css' %}">{% endblock %}
 
@@ -11,8 +12,8 @@
     <!-- Breadcrumb -->
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'home:index' %}">Home</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'products:index' %}">Products</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'home:index' %}">{% trans "Home" %}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'products:index' %}">{% trans "Products" %}</a></li>
             {% if parent_category %}
                 <li class="breadcrumb-item"><a href="{% url 'products:index' %}?category={{ parent_category.slug }}">{{ parent_category.name }}</a></li>
             {% endif %}
@@ -28,7 +29,7 @@
                 <div class="image-container">
                     <img src="{{ product.images.first.image.url }}" alt="{{ product.name }}" class="product-main-image" id="mainImage">
                     {% if product.is_available == False %}
-                    <div class="out-of-stock-badge">Out of Stock</div>
+                    <div class="out-of-stock-badge">{% trans "Out of Stock" %}</div>
                     {% endif %}
                 </div>
                 
@@ -73,8 +74,8 @@
                                         {% endfor %}
                                     {% endwith %}
                                 </div>
-                                <span class="ms-2">{{ product.average_rating|floatformat:1 }} out of 5</span>
-                                <span class="ms-2 text-muted">({{ review_count }} customer reviews)</span>
+                                <span class="ms-2">{% blocktrans with rating=product.average_rating|floatformat:1 %}{{ rating }} out of 5{% endblocktrans %}</span>
+                                <span class="ms-2 text-muted">{% blocktrans with count=review_count %}({{ count }} customer reviews){% endblocktrans %}</span>
                             </div>
                         {% else %}
                             <span class="text-muted">No reviews yet</span>
@@ -83,12 +84,12 @@
                     
                     <div class="product-price-container">
                         {% if product.has_discount %}
-                            <div class="discount-badge">{{ product.discount_percent|floatformat:0 }}% OFF</div>
+                            <div class="discount-badge">{{ product.discount_percent|floatformat:0 }}% {% trans "OFF" %}</div>
                             <div class="price-wrapper">
                                 <span class="product-price text-danger">${{ product.discounted_price|floatformat:2 }}</span>
                                 <span class="original-price text-muted text-decoration-line-through">${{ product.price|floatformat:2 }}</span>
                             </div>
-                            <div class="saving-text">You save: ${{ product.price|sub:product.discounted_price|floatformat:2 }}</div>
+                            <div class="saving-text">{% blocktrans with save=product.price|sub:product.discounted_price|floatformat:2 %}You save: ${{ save }}{% endblocktrans %}</div>
                         {% else %}
                             <span class="product-price">${{ product.price|floatformat:2 }}</span>
                         {% endif %}
@@ -97,20 +98,20 @@
                     <div class="availability-container">
                         {% if product.is_available %}
                             <div class="availability in-stock">
-                                <i class="bi bi-check-circle-fill"></i> In Stock
+                                <i class="bi bi-check-circle-fill"></i> {% trans "In Stock" %}
                                 {% if product.stock > 0 %}
-                                <span class="stock-count">({{ product.stock }} available)</span>
+                                <span class="stock-count">{% blocktrans with stock=product.stock %}({{ stock }} available){% endblocktrans %}</span>
                                 {% endif %}
                             </div>
                         {% else %}
                             <div class="availability out-of-stock">
-                                <i class="bi bi-x-circle-fill"></i> Out of Stock
+                                <i class="bi bi-x-circle-fill"></i> {% trans "Out of Stock" %}
                             </div>
                         {% endif %}
                     </div>
                     
                     <div class="product-description">
-                        <h5>Description</h5>
+                        <h5>{% trans "Description" %}</h5>
                         <p>{{ product.description|linebreaks }}</p>
                     </div>
                     
@@ -126,16 +127,16 @@
                                 {% csrf_token %}
                                 <input type="hidden" name="quantity" id="addToCartHiddenQty" value="1">
                                 <button type="submit" class="btn btn-primary btn-lg add-to-cart-btn" id="addToCartButton" {% if not product.is_available %}disabled{% endif %}>
-                                    <i class="bi bi-cart-plus"></i> Add to Cart
+                                    <i class="bi bi-cart-plus"></i> {% trans "Add to Cart" %}
                                 </button>
                             </form>
                             
                             {% if user.is_authenticated %}
-                                <button id="wishlistToggleBtn" class="btn-link border-0 bg-transparent p-0 ms-3" style="font-size: 1.75rem;" data-product-id="{{ product.id }}" title="{% if in_wishlist %}Already in Wishlist{% else %}Add to Wishlist{% endif %}">
+                                <button id="wishlistToggleBtn" class="btn-link border-0 bg-transparent p-0 ms-3" style="font-size: 1.75rem;" data-product-id="{{ product.id }}" title="{% if in_wishlist %}{% trans 'Already in Wishlist' %}{% else %}{% trans 'Add to Wishlist' %}{% endif %}">
                                     <i id="wishlistHeartIcon" class="bi {% if in_wishlist %}bi-heart-fill text-danger{% else %}bi-heart text-danger{% endif %}"></i>
                                 </button>
                             {% else %}
-                                <a href="{% url 'account_login' %}?next={{ request.path }}" class="text-decoration-none ms-3 fs-3" title="Add to Wishlist">
+                                <a href="{% url 'account_login' %}?next={{ request.path }}" class="text-decoration-none ms-3 fs-3" title="{% trans 'Add to Wishlist' %}">
                                     <i class="bi bi-heart text-danger"></i>
                                 </a>
                             {% endif %}
@@ -149,7 +150,7 @@
     <!-- Related Products -->
     {% if related_products %}
     <section class="related-products mt-5">
-        <h2 class="section-title">Related Products</h2>
+    <h2 class="section-title">{% trans "Related Products" %}</h2>
         <div class="row">
             {% for related in related_products %}
             <div class="col-md-3">
@@ -161,7 +162,7 @@
                         <h5 class="card-title">{{ related.name }}</h5>
                         <p class="card-text product-price">${{ related.price }}</p>
                         <div class="d-flex justify-content-between align-items-center">
-                            <a href="{% url 'products:product_detail' related.slug %}" class="btn btn-outline-primary">View Details</a>
+                            <a href="{% url 'products:product_detail' related.slug %}" class="btn btn-outline-primary">{% trans "View Details" %}</a>
                             
                             {% if user.is_authenticated %}
                                 <button class="wishlist-toggle-btn btn-link border-0 bg-transparent p-0 ms-2" data-product-id="{{ related.id }}" title="{% if related.id in wishlist_product_ids %}Already in Wishlist{% else %}Add to Wishlist{% endif %}">
@@ -183,7 +184,7 @@
     
     <!-- Reviews Section -->
     <section class="reviews-section mt-5">
-        <h2 class="section-title mb-4">Customer Reviews ({{ review_count }})</h2>
+    <h2 class="section-title mb-4">{% blocktrans with count=review_count %}Customer Reviews ({{ count }}){% endblocktrans %}</h2>
         
         {% if reviews %}
             <div class="reviews-container">
@@ -192,7 +193,7 @@
                         <div class="review-header d-flex justify-content-between">
                             <div>
                                 <div class="reviewer-name fw-bold">{{ review.user.get_full_name|default:review.user.email }}</div>
-                                <div class="review-date text-muted small">{{ review.created_at|date:"F j, Y" }}</div>
+                                <div class="review-date text-muted small">{{ review.created_at|date:"DATE_FORMAT" }}</div>
                             </div>
                             <div class="rating-stars">
                                 {% with ""|center:review.rating|stringformat:'s' as stars %}
@@ -217,8 +218,9 @@
                             <div class="review-actions mt-2">
                                 <form action="{% url 'products:delete_review' review.id %}" method="post" class="d-inline">
                                     {% csrf_token %}
-                                    <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure you want to delete your review?')">
-                                        <i class="bi bi-trash"></i> Delete
+                                    {% translate "Are you sure you want to delete your review?" as confirm_delete_msg %}
+                                    <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('{{ confirm_delete_msg|escapejs }}')">
+                                        <i class="bi bi-trash"></i> {% trans "Delete" %}
                                     </button>
                                 </form>
                             </div>
@@ -228,7 +230,7 @@
             </div>
         {% else %}
             <div class="alert alert-info">
-                No reviews yet. Be the first to review this product!
+                {% trans "No reviews yet. Be the first to review this product!" %}
             </div>
         {% endif %}
         
@@ -240,11 +242,11 @@
                 </div>
             {% else %}
                 <div class="review-form-container mt-5">
-                    <h3 class="mb-3">Write a Review</h3>
+                    <h3 class="mb-3">{% trans "Write a Review" %}</h3>
                     <form action="{% url 'products:add_review' product.slug %}" method="post" class="review-form">
                         {% csrf_token %}
                         <div class="mb-3">
-                            <label for="rating" class="form-label">Rating</label>
+                            <label for="rating" class="form-label">{% trans "Rating" %}</label>
                             <div class="rating-input">
                                 <div class="star-rating">
                                     {% for i in '54321' %}
@@ -255,16 +257,16 @@
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label for="comment" class="form-label">Review</label>
-                            <textarea class="form-control" id="comment" name="comment" rows="4" required placeholder="Share your experience with this product..."></textarea>
+                            <label for="comment" class="form-label">{% trans "Review" %}</label>
+                            <textarea class="form-control" id="comment" name="comment" rows="4" required placeholder="{% trans 'Share your experience with this product...' %}"></textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary">Submit Review</button>
+                        <button type="submit" class="btn btn-primary">{% trans "Submit Review" %}</button>
                     </form>
                 </div>
             {% endif %}
         {% else %}
             <div class="alert alert-info mt-4">
-                <a href="{% url 'account_login' %}?next={{ request.path }}" class="alert-link">Sign in</a> to leave a review.
+                <a href="{% url 'account_login' %}?next={{ request.path }}" class="alert-link">{% trans "Sign in" %}</a> {% trans "to leave a review." %}
             </div>
         {% endif %}
     </section>

@@ -1,12 +1,13 @@
 {% load static %}
+{% load i18n %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Django Shop{% endblock title %}</title>
-    <meta name="description" content="{% block description %}Django Shop{% endblock description %}">
+    <title>{% block title %}{% trans "Django Shop" %}{% endblock title %}</title>
+    <meta name="description" content="{% block description %}{% trans "Django Shop" %}{% endblock description %}">
     {% block extra_meta %}{% endblock extra_meta %}
     <script src="{% static 'shared/js/theme-init.js' %}"></script>
     <link rel="icon" href="{% static 'shared/images/icon.png' %}" type="image/png">

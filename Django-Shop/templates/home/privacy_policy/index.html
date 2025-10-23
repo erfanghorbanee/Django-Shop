@@ -1,16 +1,17 @@
 {% extends 'base.html' %}
-{% block title %}Privacy Policy - Django Shop{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Privacy Policy" %} - {% trans "Django Shop" %}{% endblock %}
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-md-8">
-        <h1 class="mb-4">Privacy Policy</h1>
-        <p class="lead">Your privacy is important to us. This policy explains how we collect, use, and protect your information.</p>
+        <h1 class="mb-4">{% trans "Privacy Policy" %}</h1>
+        <p class="lead">{% trans "Your privacy is important to us. This policy explains how we collect, use, and protect your information." %}</p>
         <ul>
-            <li>We only collect necessary information to process your orders.</li>
-            <li>Your data is stored securely and never shared with third parties without your consent.</li>
-            <li>You can contact us anytime to request or delete your data.</li>
+            <li>{% trans "We only collect necessary information to process your orders." %}</li>
+            <li>{% trans "Your data is stored securely and never shared with third parties without your consent." %}</li>
+            <li>{% trans "You can contact us anytime to request or delete your data." %}</li>
         </ul>
-        <p>For more details, please contact our support team.</p>
+        <p>{% trans "For more details, please contact our support team." %}</p>
     </div>
 </div>
 {% endblock %} 

@@ -14,3 +14,10 @@ Faker==37.5.3
 # ------------------------------------------------------------------------------
 ruff==0.12.7
 djlint==1.36.4
+
+# Windows compatibility and i18n helper
+# ------------------------------------------------------------------------------
+# Provide libmagic on Windows via python-magic-bin (import as `magic`).
+python-magic-bin==0.4.14; platform_system == "Windows"
+# Compile .po -> .mo without system gettext using polib
+polib==1.2.0

@@ -1,9 +1,10 @@
 {% extends "base.html" %}
 {% load static %}
 {% load allauth account %}
+{% load i18n %}
 
-{% block title %}Sign Up{% endblock %}
-{% block description %}Create an account{% endblock %}
+{% block title %}{% trans "Sign Up" %}{% endblock %}
+{% block description %}{% trans "Create an account" %}{% endblock %}
 
 {% block extra_meta %}
     <meta name="robots" content="noindex, nofollow">
@@ -18,13 +19,13 @@
     <div class="row">
         <!-- Left Side - Image -->
         <div class="col-md-6 d-none d-md-flex align-items-center justify-content-center">
-            <img src="{% static 'signup/images/signup-image.svg' %}" alt="Sign up Illustration" class="img-fluid">
+            <img src="{% static 'signup/images/signup-image.svg' %}" alt="{% trans 'Sign up Illustration' %}" class="img-fluid">
         </div>
 
         <!-- Right Side - Form -->
         <div class="col-md-6 d-flex align-items-center justify-content-center">
             <div class="signup-form-container">
-                <h1 class="mb-4 text-center">Sign up</h1>
+                <h1 class="mb-4 text-center">{% trans "Sign up" %}</h1>
 
                 <!-- Display non-field errors -->
                 {% for error in form.non_field_errors %}
@@ -38,7 +39,7 @@
                         {% csrf_token %}
                         <!-- Email Field -->
                         <div class="mb-3">
-                            <input type="email" name="email" class="form-control" placeholder="Email" autocomplete="email" maxlength="320" required="" id="id_email">
+                            <input type="email" name="email" class="form-control" placeholder="{% trans 'Email' %}" autocomplete="email" maxlength="320" required="" id="id_email">
                             <!-- Display errors for email field -->
                             {% if form.email.errors %}
                                 <div class="text-danger">
@@ -66,7 +67,7 @@
 
                         <!-- Password Field -->
                         <div class="mb-3">
-                            <input type="password" name="password1" class="form-control" placeholder="Password" autocomplete="new-password" required="" id="id_password1">
+                            <input type="password" name="password1" class="form-control" placeholder="{% trans 'Password' %}" autocomplete="new-password" required="" id="id_password1">
                             <!-- Display errors for password field -->
                             {% if form.password1.errors %}
                                 <div class="text-danger">
@@ -79,7 +80,7 @@
 
                         <!-- Password Confirmation Field -->
                         <div class="mb-3">
-                            <input type="password" name="password2" class="form-control" placeholder="Password (again)" autocomplete="new-password" required="" id="id_password2">
+                            <input type="password" name="password2" class="form-control" placeholder="{% trans 'Password (again)' %}" autocomplete="new-password" required="" id="id_password2">
                             <!-- Display errors for password confirmation field -->
                             {% if form.password2.errors %}
                                 <div class="text-danger">
@@ -94,7 +95,7 @@
                         {{ redirect_field }}
 
                         <!-- Submit Button -->
-                        <button type="submit" class="btn btn-primary btn-block w-100">Sign Up</button>
+                        <button type="submit" class="btn btn-primary btn-block w-100">{% trans "Sign Up" %}</button>
                     </form>
                 {% endif %}
 
@@ -105,7 +106,7 @@
                 {% endif %}
 
                 <p class="mt-4 text-center">
-                    Already have an account? <a href="{{ login_url }}" class="signin-link">Log in</a>
+                    {% trans "Already have an account?" %} <a href="{{ login_url }}" class="signin-link">{% trans "Log in" %}</a>
                 </p>
             </div>
         </div>

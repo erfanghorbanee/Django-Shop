@@ -1,6 +1,7 @@
+{% load i18n %}
 <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
-        <a class="navbar-brand" href="{% url 'home:index' %}">Django Shop</a>
+    <a class="navbar-brand" href="{% url 'home:index' %}">{% trans "Django Shop" %}</a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -8,8 +9,8 @@
 
         <div class="collapse navbar-collapse" id="navbarNav">
             <form class="d-flex me-auto my-2 my-lg-0" method="get" action="{% url 'products:index' %}">
-                <input class="form-control me-2 search-input" type="search" name="q" placeholder="Search"
-                       aria-label="Search" value="{{ search_query|default_if_none:'' }}">
+                <input class="form-control me-2 search-input" type="search" name="q" placeholder="{% trans "Search" %}"
+                       aria-label="{% trans "Search" %}" value="{{ search_query|default_if_none:'' }}">
                 <button class="btn btn-primary search-btn" type="submit">
                     <i class="bi bi-search"></i>
                 </button>
@@ -18,10 +19,10 @@
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item dropdown me-3">
                     <a class="nav-link dropdown-toggle" href="#" id="dropdownCategories" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Categories
+                        {% trans "Categories" %}
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="dropdownCategories">
-                        <li><a class="dropdown-item fw-bold" href="{% url 'products:index' %}">All Products</a></li>
+                        <li><a class="dropdown-item fw-bold" href="{% url 'products:index' %}">{% trans "All Products" %}</a></li>
                         {% if categories_menu %}
                             <li><hr class="dropdown-divider"></li>
                         {% endif %}
@@ -44,17 +45,17 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a href="{% url 'home:about' %}" class="nav-link">About Us</a>
+                    <a href="{% url 'home:about' %}" class="nav-link">{% trans "About Us" %}</a>
                 </li>
                 <li class="nav-item">
-                    <a href="{% url 'home:faq' %}" class="nav-link">FAQ</a>
+                    <a href="{% url 'home:faq' %}" class="nav-link">{% trans "FAQ" %}</a>
                 </li>
                 <li class="nav-item">
-                    <a href="{% url 'home:privacy' %}" class="nav-link">Privacy Policy</a>
+                    <a href="{% url 'home:privacy' %}" class="nav-link">{% trans "Privacy Policy" %}</a>
                 </li>
                 <li class="nav-item position-relative me-2">
                     <a href="{% url 'cart:detail' %}" class="nav-link">
-                        <i class="bi bi-cart" aria-label="Cart"></i>
+                        <i class="bi bi-cart" aria-label="{% trans "Cart" %}"></i>
                         {% if cart_total_quantity %}
                         <span id="cartBadgeCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary small">
                             {{ cart_total_quantity }}
@@ -63,30 +64,61 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle theme">
+                    <button id="themeToggle" class="theme-toggle-btn" aria-label="{% trans "Toggle theme" %}">
                         <i class="bi bi-brightness-high" id="themeIcon"></i>
                     </button>
+                </li>
+                <li class="nav-item dropdown d-flex align-items-center me-2">
+                    {% get_current_language as LANGUAGE_CODE %}
+                    {% get_available_languages as LANGUAGES %}
+                    {% get_language_info_list for LANGUAGES as languages %}
+                    <button class="lang-toggle-btn nav-link dropdown-toggle" id="langDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="{% trans 'Language' %}">
+                        <i class="bi bi-globe"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="langDropdown">
+                        {% for language in languages %}
+                            <li>
+                                <a class="dropdown-item d-flex justify-content-between align-items-center" href="#" onclick="return submitLanguage('{{ language.code }}')">
+                                    <span>{{ language.name_local|capfirst }}</span>
+                                    {% if language.code == LANGUAGE_CODE %}<i class="bi bi-check2"></i>{% endif %}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <form id="langForm" action="{% url 'set_language' %}" method="post" class="d-none">
+                        {% csrf_token %}
+                        <input name="next" type="hidden" value="{{ request.get_full_path }}">
+                        <input id="langInput" name="language" type="hidden" value="{{ LANGUAGE_CODE }}">
+                    </form>
+                    <script>
+                        function submitLanguage(code) {
+                            const input = document.getElementById('langInput');
+                            input.value = code;
+                            document.getElementById('langForm').submit();
+                            return false;
+                        }
+                    </script>
                 </li>
                 <li class="nav-item">
                     {% if user.is_authenticated %}
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle profile-icon" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="{{ user.profile_picture.url }}" alt="Profile" class="profile-picture" width="40" height="40">
+                                <img src="{{ user.profile_picture.url }}" alt="{% trans 'Profile' %}" class="profile-picture" width="40" height="40">
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-                                <li><a class="dropdown-item" href="{% url 'users:profile' %}"><i class="bi bi-person"></i> Profile</a></li>
-                                <li><a class="dropdown-item" href="{% url 'orders:order_list' %}"><i class="bi bi-bag"></i> Orders</a></li>
-                                <li><a class="dropdown-item" href="{% url 'users:wishlist' %}"><i class="bi bi-heart"></i> Wishlist</a></li>
-                                <li><a class="dropdown-item" href="{% url 'users:addresses' %}"><i class="bi bi-geo-alt"></i> Addresses</a></li>
+                                <li><a class="dropdown-item" href="{% url 'users:profile' %}"><i class="bi bi-person"></i> {% trans "Profile" %}</a></li>
+                                <li><a class="dropdown-item" href="{% url 'orders:order_list' %}"><i class="bi bi-bag"></i> {% trans "Orders" %}</a></li>
+                                <li><a class="dropdown-item" href="{% url 'users:wishlist' %}"><i class="bi bi-heart"></i> {% trans "Wishlist" %}</a></li>
+                                <li><a class="dropdown-item" href="{% url 'users:addresses' %}"><i class="bi bi-geo-alt"></i> {% trans "Addresses" %}</a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="{% url 'users:privacy_settings' %}"><i class="bi bi-shield-lock"></i> Privacy Settings</a></li>
-                                <li><a class="dropdown-item" href="{% url 'account_change_password' %}"><i class="bi bi-key"></i> Change Password</a></li>
+                                <li><a class="dropdown-item" href="{% url 'users:privacy_settings' %}"><i class="bi bi-shield-lock"></i> {% trans "Privacy Settings" %}</a></li>
+                                <li><a class="dropdown-item" href="{% url 'account_change_password' %}"><i class="bi bi-key"></i> {% trans "Change Password" %}</a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item text-danger" href="{% url 'account_logout' %}"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+                                <li><a class="dropdown-item text-danger" href="{% url 'account_logout' %}"><i class="bi bi-box-arrow-right"></i> {% trans "Logout" %}</a></li>
                             </ul>
                         </li>
                     {% else %}
-                        <a href="{% url 'account_login' %}" class="btn btn-primary login-button">Login</a>
+                        <a href="{% url 'account_login' %}" class="btn btn-primary login-button">{% trans "Login" %}</a>
                     {% endif %}
                 </li>
             </ul>

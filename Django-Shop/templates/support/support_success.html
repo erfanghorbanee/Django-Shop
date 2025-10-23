@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
 {% block content %}
 <div class="container mt-5">
-    <h2>Thank You!</h2>
-    <p>Your support request has been submitted. Our team will get back to you soon.</p>
-    <a href="/" class="btn btn-secondary mt-3">Return Home</a>
+    <h2>{% trans "Thank You!" %}</h2>
+    <p>{% trans "Your support request has been submitted. Our team will get back to you soon." %}</p>
+    <a href="/" class="btn btn-secondary mt-3">{% trans "Return Home" %}</a>
 </div>
 {% endblock %} 

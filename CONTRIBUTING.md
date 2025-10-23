@@ -17,6 +17,7 @@ The project is licensed under GPL-3.0. By contributing, you agree your contribut
 
 - **Environment and installation**: see README “Installation”
 - **Running the project**: see README “Running the Project”
+- **Internationalization (i18n)**: see README “Translations (i18n)”
 - **Seeding sample data**: see README “Seeding / Creating Products (management command)”
 - **Stripe local testing**: see README “Stripe Payments: Local Testing”
 - **Google OAuth**: see README “Google OAuth Setup (Login with Google)”
@@ -27,6 +28,17 @@ Python style: PEP 8, enforced by Ruff
 
 Always run Ruff before committing: `ruff check .` and `ruff format`.
 
+### i18n / l10n guidelines
+
+- Use Django’s gettext for all user‑facing strings
+  - Python: `from django.utils.translation import gettext_lazy as _` and wrap labels/help texts
+  - Templates: `{% load i18n %}`, then `{% trans %}` or `{% blocktrans %}`
+- Don’t build sentences by concatenating translated fragments; prefer `blocktrans` for variable interpolation
+- For JS inline strings in templates, translate into a variable and use `|escapejs` when injecting into scripts
+- Add new strings by running makemessages and updating `.po` files for `en`, `it`, `de`
+- Windows devs: if GNU gettext isn’t installed, use our helper script `scripts/compile_messages.py` (polib) to compile `.po` ➜ `.mo`
+- Re‑run compile after any `.po` changes and restart the dev server if needed
+
 ## Running tests
 
 We use pytest, pytest-django, and model-bakery. From the project root: `pytest -q` (or run a specific test path when needed).
@@ -36,6 +48,7 @@ Guidelines:
 - Add tests for any new feature or bug fix
 - Prefer fast, isolated unit tests; use model-bakery for fixtures
 - Keep database state explicit; avoid relying on implicit data
+- Include at least one i18n assertion if your change touches user‑visible text (e.g., activate `de` and assert a translated label renders)
 
 ## Database changes and migrations
 
@@ -70,6 +83,7 @@ Please ensure the following before requesting review:
 - [ ] Tests added/updated and passing locally (`pytest -q`)
 - [ ] Lint passes (`ruff check .`) and code formatted (`ruff format` if applicable)
 - [ ] Database migrations added (if models changed) and applied locally
+- [ ] i18n: new/changed strings are wrapped; `.po` files updated; messages compiled
 - [ ] Docs updated (README/inline docs/changelog snippets if relevant)
 - [ ] No secrets, tokens, or personal data committed
 - [ ] UI changes include screenshots/GIFs when helpful

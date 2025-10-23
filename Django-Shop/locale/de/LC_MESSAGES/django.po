@@ -1,0 +1,459 @@
+# German translations for Django Shop
+msgid ""
+msgstr ""
+"Project-Id-Version: Django Shop\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-22 00:00+0000\n"
+"PO-Revision-Date: 2025-10-22 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: German\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: templates/base.html
+msgid "Django Shop"
+msgstr "Django Shop"
+
+#: templates/partials/navbar.html
+msgid "Search"
+msgstr "Suche"
+
+#: templates/partials/navbar.html
+msgid "Categories"
+msgstr "Kategorien"
+
+#: templates/partials/navbar.html
+msgid "All Products"
+msgstr "Alle Produkte"
+
+#: templates/partials/navbar.html templates/partials/footer.html
+msgid "About Us"
+msgstr "Über uns"
+
+#: templates/partials/navbar.html templates/partials/footer.html
+msgid "FAQ"
+msgstr "FAQ"
+
+#: templates/partials/navbar.html templates/partials/footer.html
+msgid "Privacy Policy"
+msgstr "Datenschutzrichtlinie"
+
+#: templates/partials/navbar.html
+msgid "Cart"
+msgstr "Warenkorb"
+
+#: templates/partials/navbar.html
+msgid "Toggle theme"
+msgstr "Theme umschalten"
+
+#: templates/partials/navbar.html
+msgid "Language"
+msgstr "Sprache"
+
+#: templates/partials/navbar.html
+msgid "Profile"
+msgstr "Profil"
+
+#: templates/partials/navbar.html
+msgid "Orders"
+msgstr "Bestellungen"
+
+#: templates/partials/navbar.html
+msgid "Wishlist"
+msgstr "Wunschliste"
+
+#: templates/partials/navbar.html
+msgid "Addresses"
+msgstr "Adressen"
+
+#: templates/partials/navbar.html
+msgid "Privacy Settings"
+msgstr "Datenschutzeinstellungen"
+
+#: templates/partials/navbar.html
+msgid "Change Password"
+msgstr "Passwort ändern"
+
+#: templates/partials/navbar.html
+msgid "Logout"
+msgstr "Abmelden"
+
+#: templates/partials/navbar.html
+msgid "Login"
+msgstr "Anmelden"
+
+#: templates/partials/footer.html
+msgid "Get to Know Us"
+msgstr "Lernen Sie uns kennen"
+
+#: templates/partials/footer.html
+msgid "Careers"
+msgstr "Karriere"
+
+#: templates/partials/footer.html
+msgid "Customer Service"
+msgstr "Kundenservice"
+
+#: templates/partials/footer.html
+msgid "Shipping Info"
+msgstr "Versandinformationen"
+
+#: templates/partials/footer.html
+msgid "Returns"
+msgstr "Retouren"
+
+#: templates/partials/footer.html
+msgid "Connect With Us"
+msgstr "Folgen Sie uns"
+
+#: templates/partials/footer.html
+msgid "Facebook"
+msgstr "Facebook"
+
+#: templates/partials/footer.html
+msgid "Instagram"
+msgstr "Instagram"
+
+#: templates/partials/footer.html
+msgid "Twitter"
+msgstr "Twitter"
+
+#: templates/partials/footer.html
+msgid "Contact Us"
+msgstr "Kontakt"
+
+#: templates/partials/footer.html
+msgid "Support"
+msgstr "Support"
+
+#: templates/partials/footer.html
+msgid "Live Chat"
+msgstr "Live-Chat"
+
+#: templates/partials/footer.html
+msgid "My E-commerce Site. All rights reserved."
+msgstr "Meine E-Commerce-Website. Alle Rechte vorbehalten."
+
+#: settings.LANGUAGES
+msgid "English"
+msgstr "Englisch"
+
+#: settings.LANGUAGES
+msgid "Italian"
+msgstr "Italienisch"
+
+#: settings.LANGUAGES
+msgid "German"
+msgstr "Deutsch"
+
+# Additional content translations
+#: templates/home/faq/index.html
+msgid "Frequently Asked Questions"
+msgstr "Häufig gestellte Fragen"
+
+#: templates/home/faq/index.html
+msgid "How do I place an order?"
+msgstr "Wie gebe ich eine Bestellung auf?"
+
+#: templates/home/faq/index.html
+msgid "Simply browse our products, add items to your cart, and proceed to checkout."
+msgstr "Stöbern Sie in unseren Produkten, legen Sie Artikel in den Warenkorb und gehen Sie zur Kasse."
+
+#: templates/home/faq/index.html
+msgid "What payment methods do you accept?"
+msgstr "Welche Zahlungsmethoden akzeptieren Sie?"
+
+#: templates/home/faq/index.html
+msgid "We accept credit cards, debit cards, PayPal, and more."
+msgstr "Wir akzeptieren Kreditkarten, Debitkarten, PayPal und mehr."
+
+#: templates/home/faq/index.html
+msgid "How can I contact support?"
+msgstr "Wie kann ich den Support kontaktieren?"
+
+#: templates/home/faq/index.html
+msgid "You can reach us via the contact form or live chat on our website."
+msgstr "Sie erreichen uns über das Kontaktformular oder den Live-Chat auf unserer Website."
+
+#: templates/home/about/index.html
+msgid "Welcome to Django Shop! We are committed to providing the best online shopping experience with a wide range of products, fast shipping, and excellent customer service."
+msgstr "Willkommen bei Django Shop! Wir bieten das beste Online-Einkaufserlebnis mit einer großen Produktvielfalt, schneller Lieferung und hervorragendem Kundenservice."
+
+#: templates/home/about/index.html
+msgid "Our mission is to make shopping easy, enjoyable, and secure for everyone. Thank you for choosing us!"
+msgstr "Unsere Mission ist es, Einkaufen für alle einfach, angenehm und sicher zu machen. Vielen Dank, dass Sie sich für uns entschieden haben!"
+
+#: templates/home/privacy_policy/index.html
+msgid "Your privacy is important to us. This policy explains how we collect, use, and protect your information."
+msgstr "Ihre Privatsphäre ist uns wichtig. Diese Richtlinie erklärt, wie wir Ihre Daten erfassen, verwenden und schützen."
+
+#: templates/home/privacy_policy/index.html
+msgid "We only collect necessary information to process your orders."
+msgstr "Wir erheben nur die notwendigen Informationen, um Ihre Bestellungen zu bearbeiten."
+
+#: templates/home/privacy_policy/index.html
+msgid "Your data is stored securely and never shared with third parties without your consent."
+msgstr "Ihre Daten werden sicher gespeichert und niemals ohne Ihre Zustimmung an Dritte weitergegeben."
+
+#: templates/home/privacy_policy/index.html
+msgid "You can contact us anytime to request or delete your data."
+msgstr "Sie können uns jederzeit kontaktieren, um Ihre Daten anzufordern oder zu löschen."
+
+#: templates/home/privacy_policy/index.html
+msgid "For more details, please contact our support team."
+msgstr "Für weitere Details kontaktieren Sie bitte unser Support-Team."
+
+# Products module translations
+#: templates/products/index.html templates/products/_product_list.html templates/products/product_detail.html
+msgid "Products"
+msgstr "Produkte"
+
+msgid "Explore our wide range of products"
+msgstr "Entdecken Sie unser umfangreiches Produktsortiment"
+
+msgid "All Products"
+msgstr "Alle Produkte"
+
+msgid "Price:"
+msgstr "Preis:"
+
+msgid "Available"
+msgstr "Verfügbar"
+
+msgid "Finished"
+msgstr "Ausverkauft"
+
+msgid "View Details"
+msgstr "Details ansehen"
+
+msgid "Already in Wishlist"
+msgstr "Bereits auf der Wunschliste"
+
+msgid "Add to Wishlist"
+msgstr "Zur Wunschliste hinzufügen"
+
+msgid "No products found."
+msgstr "Keine Produkte gefunden."
+
+msgid "Loading..."
+msgstr "Laden..."
+
+msgid "Home"
+msgstr "Startseite"
+
+# Home page
+#: templates/home/index.html
+msgid "Banner 1"
+msgstr "Banner 1"
+
+#: templates/home/index.html
+msgid "Banner 2"
+msgstr "Banner 2"
+
+#: templates/home/index.html
+msgid "Banner 3"
+msgstr "Banner 3"
+
+#: templates/home/index.html
+msgid "Previous"
+msgstr "Zurück"
+
+#: templates/home/index.html
+msgid "Next"
+msgstr "Weiter"
+
+#: templates/home/index.html
+msgid "Special Discounts"
+msgstr "Sonderangebote"
+
+#: templates/home/index.html
+msgid "Discounted Price:"
+msgstr "Reduzierter Preis:"
+
+#: templates/home/index.html
+msgid "Buy Now"
+msgstr "Jetzt kaufen"
+
+#: templates/home/index.html
+msgid "No discounted products available right now."
+msgstr "Derzeit sind keine reduzierten Produkte verfügbar."
+
+#: templates/home/index.html
+msgid "Popular Brands"
+msgstr "Beliebte Marken"
+
+#: templates/home/index.html
+msgid "Most Bought Products"
+msgstr "Meistgekaufte Produkte"
+
+#: templates/home/index.html
+msgid "No popular products yet."
+msgstr "Noch keine beliebten Produkte."
+
+# Support page
+#: templates/support/support_form.html
+msgid "Contact Support"
+msgstr "Support kontaktieren"
+
+#: templates/support/support_form.html
+msgid "Submit"
+msgstr "Senden"
+
+#: templates/support/support_success.html
+msgid "Thank You!"
+msgstr "Vielen Dank!"
+
+#: templates/support/support_success.html
+msgid "Your support request has been submitted. Our team will get back to you soon."
+msgstr "Ihre Supportanfrage wurde übermittelt. Unser Team wird sich bald bei Ihnen melden."
+
+#: templates/support/support_success.html
+msgid "Return Home"
+msgstr "Zur Startseite"
+
+#: support/forms.py
+msgid "Name"
+msgstr "Name"
+
+#: support/forms.py
+msgid "Subject"
+msgstr "Betreff"
+
+#: support/forms.py
+msgid "Message"
+msgstr "Nachricht"
+
+#: support/forms.py
+msgid "Enter your name"
+msgstr "Geben Sie Ihren Namen ein"
+
+#: support/forms.py
+msgid "Enter your email"
+msgstr "Geben Sie Ihre E-Mail ein"
+
+#: support/forms.py
+msgid "How can we help?"
+msgstr "Wie können wir helfen?"
+
+#: support/forms.py
+msgid "Describe your issue..."
+msgstr "Beschreiben Sie Ihr Problem..."
+
+msgid "OFF"
+msgstr "RABATT"
+
+msgid "You save: ${{ save }}"
+msgstr "Sie sparen: ${{ save }}"
+
+msgid "In Stock"
+msgstr "Auf Lager"
+
+msgid "Out of Stock"
+msgstr "Nicht auf Lager"
+
+msgid "Description"
+msgstr "Beschreibung"
+
+msgid "Add to Cart"
+msgstr "In den Warenkorb"
+
+msgid "Related Products"
+msgstr "Ähnliche Produkte"
+
+msgid "Customer Reviews ({{ count }})"
+msgstr "Kundenbewertungen ({{ count }})"
+
+msgid "Are you sure you want to delete your review?"
+msgstr "Möchten Sie Ihre Bewertung wirklich löschen?"
+
+msgid "Delete"
+msgstr "Löschen"
+
+msgid "No reviews yet. Be the first to review this product!"
+msgstr "Noch keine Bewertungen. Seien Sie der Erste, der dieses Produkt bewertet!"
+
+msgid "Write a Review"
+msgstr "Bewertung schreiben"
+
+msgid "Rating"
+msgstr "Bewertung"
+
+msgid "Review"
+msgstr "Rezension"
+
+msgid "Share your experience with this product..."
+msgstr "Teilen Sie Ihre Erfahrungen mit diesem Produkt..."
+
+msgid "Submit Review"
+msgstr "Bewertung absenden"
+
+msgid "Sign in"
+msgstr "Anmelden"
+
+msgid "to leave a review."
+msgstr "um eine Bewertung abzugeben."
+
+# Login page
+#: templates/account/login.html
+msgid "Sign In"
+msgstr "Anmelden"
+
+#: templates/account/login.html
+msgid "Sign in to your account"
+msgstr "Melden Sie sich bei Ihrem Konto an"
+
+#: templates/account/login.html
+msgid "Login Illustration"
+msgstr "Login-Illustration"
+
+#: templates/account/login.html
+msgid "Email"
+msgstr "E-Mail"
+
+#: templates/account/login.html
+msgid "Password"
+msgstr "Passwort"
+
+#: templates/account/login.html
+msgid "Remember Me:"
+msgstr "Angemeldet bleiben:"
+
+#: templates/account/login.html
+msgid "Log in"
+msgstr "Anmelden"
+
+#: templates/account/login.html
+msgid "Forgot Password?"
+msgstr "Passwort vergessen?"
+
+#: templates/account/login.html
+msgid "Don't have an account?"
+msgstr "Sie haben noch kein Konto?"
+
+#: templates/account/login.html
+msgid "Sign up"
+msgstr "Registrieren"
+
+# Signup page
+#: templates/account/signup.html
+msgid "Sign Up"
+msgstr "Registrieren"
+
+#: templates/account/signup.html
+msgid "Create an account"
+msgstr "Konto erstellen"
+
+#: templates/account/signup.html
+msgid "Sign up Illustration"
+msgstr "Registrierungs-Illustration"
+
+#: templates/account/signup.html
+msgid "Password (again)"
+msgstr "Passwort (nochmals)"
+
+#: templates/account/signup.html
+msgid "Already have an account?"
+msgstr "Sie haben bereits ein Konto?"
