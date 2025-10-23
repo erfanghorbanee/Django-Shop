@@ -1,4 +1,12 @@
 from uuid import uuid4
+import os
+import sys
+
+# Ensure the Django project ('Django-Shop' folder containing manage.py) is on PYTHONPATH
+_ROOT = os.path.dirname(__file__)
+_PROJECT_DIR = os.path.join(_ROOT, "Django-Shop")
+if os.path.isdir(_PROJECT_DIR) and _PROJECT_DIR not in sys.path:
+    sys.path.insert(0, _PROJECT_DIR)
 
 import pytest
 from cart.models import Cart

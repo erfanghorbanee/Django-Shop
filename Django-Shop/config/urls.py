@@ -32,6 +32,8 @@ urlpatterns = [
     path("cart/", include("cart.urls", namespace="cart")),
     # allauth
     path("accounts/", include("allauth.urls")),
+    # i18n: language switching endpoint
+    path("i18n/", include("django.conf.urls.i18n")),
 ]
 
 if settings.DEBUG:

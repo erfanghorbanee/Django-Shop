@@ -1,4 +1,7 @@
-import magic
+try:
+    import magic  # type: ignore
+except Exception:  # ImportError or libmagic load errors on Windows
+    magic = None  # Fallback to signature check when libmagic isn't available
 from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
 from django.db import models
@@ -25,12 +28,16 @@ def validate_pdf(file):
     # Reset the file pointer to the beginning, so Django can process the file later
     file.seek(0)
 
-    # Detect file's actual MIME type based on content
-    mime = magic.from_buffer(sample, mime=True)
-
-    # Check if the detected MIME type is PDF
-    if mime != "application/pdf":
-        raise ValidationError("Uploaded file is not a valid PDF.")
+    # Detect file's actual MIME type based on content using python-magic when available
+    if magic is not None:
+        mime = magic.from_buffer(sample, mime=True)
+        if mime != "application/pdf":
+            raise ValidationError("Uploaded file is not a valid PDF.")
+    else:
+        # Fallback: basic signature check for PDF files
+        # PDF files start with '%PDF-' header
+        if not sample.startswith(b"%PDF-"):
+            raise ValidationError("Uploaded file is not a valid PDF.")
 
 
 class CareerApplication(models.Model):

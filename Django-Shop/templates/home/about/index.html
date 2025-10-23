@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
-{% block title %}About Us - Django Shop{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "About Us" %} - {% trans "Django Shop" %}{% endblock %}
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-md-8">
-        <h1 class="mb-4">About Us</h1>
-        <p class="lead">Welcome to Django Shop! We are committed to providing the best online shopping experience with a wide range of products, fast shipping, and excellent customer service.</p>
-        <p>Our mission is to make shopping easy, enjoyable, and secure for everyone. Thank you for choosing us!</p>
+        <h1 class="mb-4">{% trans "About Us" %}</h1>
+        <p class="lead">{% trans "Welcome to Django Shop! We are committed to providing the best online shopping experience with a wide range of products, fast shipping, and excellent customer service." %}</p>
+        <p>{% trans "Our mission is to make shopping easy, enjoyable, and secure for everyone. Thank you for choosing us!" %}</p>
     </div>
 </div>
 {% endblock %} 

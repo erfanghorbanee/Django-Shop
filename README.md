@@ -1,3 +1,41 @@
+## Internationalization (i18n) / Localization (l10n)
+
+This project supports English (en), Italian (it), and German (de).
+
+What’s enabled:
+
+- LocaleMiddleware with session/cookie persistence
+- Translated templates and Python strings using gettext
+- Language switcher in the navbar
+
+Basic usage:
+
+1. Switch language using the selector in the navbar. It posts to `/i18n/setlang/` and persists your choice.
+2. Localize dates/numbers using Django’s `localize` and `l10n` utilities.
+
+Managing translations:
+
+- Extract messages
+  - Windows PowerShell:
+    ```powershell
+    cd Django-Shop
+    django-admin makemessages -l it -l de
+    ```
+  - Or to update all locales:
+    ```powershell
+    django-admin makemessages -a
+    ```
+- Edit translations in `Django-Shop/locale/<lang>/LC_MESSAGES/django.po`.
+- Compile messages:
+  ```powershell
+  django-admin compilemessages
+  ```
+
+Notes:
+
+- Ensure `gettext` is available on your system for `makemessages/compilemessages`.
+- Add `django-admin compilemessages` to CI before collectstatic/tests.
+
 # Django Shop
 
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
