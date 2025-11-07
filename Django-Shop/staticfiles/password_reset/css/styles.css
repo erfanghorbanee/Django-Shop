@@ -1,0 +1,49 @@
+/* Input fields and buttons */
+.form-control {
+    width: 100%; /* Ensure inputs are always full width within the form */
+    box-sizing: border-box; /* Ensure padding doesn’t affect the width */
+}
+
+.btn-block {
+    display: block;
+    width: 100%;
+}
+
+/* Error message styling */
+.text-danger {
+    font-size: 0.875rem; /* Slightly smaller font size */
+    max-width: 100%; /* Ensure it doesn't exceed the form's width */
+    word-wrap: break-word; /* Ensure long error messages wrap to new lines */
+    color: #d9534f; /* Standard Bootstrap error color */
+}
+
+/* Links (Reset Password Link) */
+.reset-password-link {
+    color: var(--primary-color);
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.reset-password-link:hover {
+    text-decoration: underline;
+}
+
+/* Container for the form to ensure consistent width */
+.reset-password-form-container {
+    max-width: 400px; /* Define a max width for the form */
+    width: 100%; /* Ensure responsiveness using Bootstrap grid */
+    margin: 0 auto; /* Center the form */
+}
+
+.reset-password-form p {
+    margin-bottom: 1rem;
+    font-size: 14px;
+}
+
+/* Style for the reset password illustration image */
+.reset-password-container img.img-fluid {
+    max-width: 80%; /* Ensure the image is responsive */
+    height: auto; /* Maintain aspect ratio */
+    display: block;
+    margin: 0 auto; /* Center the image */
+}

@@ -1,0 +1,87 @@
+/* Input fields and buttons */
+.form-control {
+    width: 100%; /* Ensure inputs are always full width within the form */
+    box-sizing: border-box; /* Ensure padding doesn’t affect the width */
+}
+
+.btn-block {
+    display: block;
+    width: 100%;
+}
+
+/* Error message styling */
+.text-danger {
+    font-size: 0.875rem; /* Slightly smaller font size */
+    max-width: 100%; /* Ensure it doesn't exceed the form's width */
+    word-wrap: break-word; /* Ensure long error messages wrap to new lines */
+    color: #d9534f; /* Standard Bootstrap error color */
+}
+
+/* Forgot password link */
+.forgot-password {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+/* Sign-up link */
+.sign-up-link {
+    color: var(--primary-color);
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.sign-up-link:hover,
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+/* Social login */
+.social-login {
+    text-align: center;
+}
+
+.social-login a {
+    color: var(--primary-color);
+    display: inline-block;
+    margin: 5px;
+    padding: 10px;
+    border-radius: 4px;
+    text-decoration: none;
+}
+
+.social-login a:hover {
+    text-decoration: underline;
+}
+
+/* Remove list-style (bullets) and center the links */
+.social-login ul {
+    list-style: none; /* Removes the bullet points */
+    padding: 0; /* Removes default padding */
+    display: flex; /* Aligns the items horizontally */
+    justify-content: center; /* Centers the items horizontally */
+}
+
+/* Style each social login item */
+.social-login li {
+    margin: 0 10px; /* Adds space between items */
+}
+
+/* Container for the form to ensure consistent width */
+.login-form-container {
+    max-width: 400px; /* Define a max width for the form */
+    width: 100%; /* Ensure responsiveness using Bootstrap grid */
+    margin: 0 auto; /* Center the form */
+}
+
+.login-form p {
+    margin-bottom: 1rem;
+    font-size: 14px;
+}
+
+/* Style for the login illustration image */
+.login-container img.img-fluid {
+    max-width: 80%; /* Ensure the image is responsive */
+    height: auto; /* Maintain aspect ratio */
+    display: block;
+    margin: 0 auto; /* Center the image */
+}
