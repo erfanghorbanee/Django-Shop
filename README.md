@@ -17,6 +17,7 @@ Django Shop is a modern, responsive e-commerce platform built with [Django](http
   - [Demo](#demo)
   - [Installation](#installation)
   - [Running the Project](#running-the-project)
+  - [Docker](#docker)
   - [Seeding / Creating Products (management command)](#seeding--creating-products-management-command)
   - [Stripe Payments: Local Testing](#stripe-payments-local-testing)
   - [Google OAuth Setup (Login with Google)](#google-oauth-setup-login-with-google)
@@ -124,6 +125,61 @@ Below are screenshots demonstrating some of the key pages and features (image fi
 
 4. Open your browser and go to `http://127.0.0.1:8000`.
 
+## Docker
+
+The project includes a multi-stage Dockerfile (production & development targets) and a Compose file for local development with Postgres (and optional Redis).
+
+### Local development with Docker Compose
+
+1. Update `docker/dev.env` with any overrides (it contains sensible defaults such as `DJANGO_DEBUG=1`, Postgres credentials, and Stripe test keys).
+2. Build and start the stack:
+
+    ```bash
+    docker compose up --build
+    ```
+
+   This launches the Django development server on `http://localhost:18000` (mapped from container port 8000), a Postgres 16 instance, and mounts your local source tree for hot reload. Media uploads persist in the `media_data` named volume. If you enable Google login locally, add your credentials to `docker/dev.env` (`GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`) so the container can read them.
+
+3. (Optional) Enable Redis-backed features when needed:
+
+    ```bash
+    docker compose --profile redis up
+    ```
+
+4. Common tasks:
+
+    - Django shell: `docker compose run --rm web python manage.py shell`
+    - Run tests: `docker compose run --rm web pytest`
+    - Make migrations: `docker compose run --rm web python manage.py makemigrations`
+
+The bundled `docker/entrypoint.sh` waits for the database, applies migrations on start, and skips `collectstatic` in dev (`DJANGO_COLLECTSTATIC=0` by default). For Stripe webhook testing, forward to `http://127.0.0.1:18000/payments/stripe/webhook/` (the host port mapped from the container).
+
+### Production image
+
+Build the production image with the default target:
+
+```bash
+docker build -t django-shop:prod .
+```
+
+Before running the container, provide production-ready environment variables (secret key, allowed hosts, database credentials, Stripe keys, Google OAuth keys, etc.). Example run:
+
+```bash
+docker run \
+  --env DJANGO_DEBUG=0 \
+  --env DJANGO_ALLOWED_HOSTS=yourdomain.com \
+  --env DJANGO_SECRET_KEY="change-me" \
+  --env DATABASE_URL="postgresql://user:password@db-host:5432/django_shop" \
+  --env DJANGO_COLLECTSTATIC=1 \
+  --env GOOGLE_CLIENT_ID="your-google-client-id" \
+  --env GOOGLE_CLIENT_SECRET="your-google-client-secret" \
+  -v django_media:/app/media \
+  -p 8000:8000 \
+  django-shop:prod
+```
+
+`entrypoint.sh` waits for the database, runs migrations, and executes `collectstatic` when `DJANGO_COLLECTSTATIC=1`. Static assets end up in `STATIC_ROOT` (baked into the image), while user uploads should live on a mounted volume (e.g., `django_media`). Pair the container with a reverse proxy (e.g., Nginx) to terminate TLS and surface health checks.
+
 ## Seeding / Creating Products (management command)
 
 You can create sample products, categories, and product images using the built-in management command `seed_products`.
@@ -174,10 +230,19 @@ export STRIPE_API_KEY="sk_test_..."
 Forward webhooks to Django (required):
 
 ```bash
+# For local development (non-Docker):
 stripe listen --forward-to http://127.0.0.1:8000/payments/stripe/webhook/
+
+# For Docker Compose (port 18000):
+stripe listen --forward-to http://127.0.0.1:18000/payments/stripe/webhook/
 ```
 
 This prints a signing secret like `whsec_...`.
+
+**Note:** The port depends on how you're running the app:
+- Standard local development: `8000`
+- Docker Compose: `18000` (as configured in `docker-compose.yml`)
+- Custom port: use the port you've mapped in your Docker setup
 
 - Easiest path (no signature verification in dev): keep `secure_endpoint: False` in `PAYMENT_VARIANTS` (in `config/settings.py`) and just keep the CLI running to forward events.
 - With signature verification (optional, stricter):
@@ -210,7 +275,8 @@ To enable users to log in or register using their Google account, follow these s
 - Click **Create Credentials > OAuth client ID**.
 - Set the application type to **Web application**.
 - Add the following to **Authorized redirect URIs**:
-  - `http://127.0.0.1:8000/accounts/google/login/callback/`
+- `http://127.0.0.1:8000/accounts/google/login/callback/`
+- If you run the container on a different port (e.g., `18000`), add the matching callback `http://localhost:18000/accounts/google/login/callback/` as well.
   - This is for when we run the app locally.
 - Save and copy the **Client ID** and **Client Secret**.
 

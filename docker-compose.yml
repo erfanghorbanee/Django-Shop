@@ -1,0 +1,45 @@
+services:
+  web:
+    build:
+      context: .
+      target: development
+    command: python manage.py runserver 0.0.0.0:8000
+    env_file:
+      - docker/dev.env
+    environment:
+      DJANGO_WAIT_FOR_DB: "1"
+    ports:
+      - "18000:8000"
+    volumes:
+      - ./Django-Shop:/app
+      - media_data:/app/media
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: django_shop
+      POSTGRES_USER: django
+      POSTGRES_PASSWORD: django
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "no"]
+    ports:
+      - "6379:6379"
+    profiles: ["redis"]
+
+volumes:
+  postgres_data:
+  media_data:
+
