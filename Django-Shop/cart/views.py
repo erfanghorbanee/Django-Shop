@@ -1,3 +1,4 @@
+import logging
 from django.contrib import messages
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
@@ -65,7 +66,10 @@ class AddToCartView(CartActionMixin):
             message = f"Added {info['added_quantity']} × {product.name} to cart."
             return self.respond(message)
         except CartError as e:
-            return self.respond(str(e), ok=False)
+            logging.exception("AddToCartView: Error adding product to cart")
+            return self.respond(
+                "An error occurred while adding the product to your cart.", ok=False
+            )
 
 
 class RemoveFromCartView(CartActionMixin):
@@ -90,7 +94,10 @@ class SetQuantityView(CartActionMixin):
                 message = f"Updated {product.name} quantity"
             return self.respond(message)
         except CartError as e:
-            return self.respond(str(e), ok=False)
+            logging.exception("SetQuantityView: Error updating product quantity")
+            return self.respond(
+                "An error occurred while updating the cart item.", ok=False
+            )
 
 
 class ClearCartView(CartActionMixin):
