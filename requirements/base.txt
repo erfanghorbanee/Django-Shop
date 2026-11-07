@@ -1,15 +1,15 @@
-python-slugify==8.0.4
-pillow==11.3.0
+python-slugify==9.1.3
+pillow==13.0.0
 python-magic==0.4.27
-whitenoise==6.9.0
-django-phonenumber-field[phonenumbers]==8.4.0
-babel==2.17.0  # The SplitPhoneNumberField requires the babel package.
+whitenoise==6.12.0
+django-phonenumber-field[phonenumbers]==9.0.0
+babel==2.18.0  # The SplitPhoneNumberField requires the babel package.
 
 # Payments
-django-payments[stripe] == 3.1.0
+django-payments[stripe] == 4.1.0
 
 # Django
 # ------------------------------------------------------------------------------
-Django==5.2.14
-djangorestframework==3.17.1
-django-allauth[socialaccount]==65.17.0
+Django==6.1.3
+djangorestframework==3.18.3
+django-allauth[socialaccount]==65.21.1

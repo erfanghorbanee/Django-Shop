@@ -1,16 +1,14 @@
 -r production.txt
 
-psycopg==3.2.9
-
 # Testing
 # ------------------------------------------------------------------------------
-pytest==8.4.1
-pytest-django==4.11.1
-pytest-cov==6.2.1
-model-bakery==1.20.5
-Faker==37.5.3
+pytest==9.2.0
+pytest-django==4.14.0
+pytest-cov==7.1.0
+model-bakery==1.24.2
+Faker==40.44.0
 
 # Code quality
 # ------------------------------------------------------------------------------
-ruff==0.12.7
-djlint==1.36.4
+ruff==0.17.4
+djlint==1.49.9

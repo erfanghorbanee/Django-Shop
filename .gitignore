@@ -167,3 +167,6 @@ cython_debug/
 
 # user-uploaded media files
 Django-Shop/media/
+
+# Claude Code
+CLAUDE.md
